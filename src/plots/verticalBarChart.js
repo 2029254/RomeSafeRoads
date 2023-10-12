@@ -23,7 +23,11 @@ function drawVerticalBarChart(csvFileName) {
       return d.NaturaIncidente;
     }));
 
-    yScale.domain([0, 12000]);
+    MinMax = dataAboutYearSorted.map(function (d) {
+      return d.NumeroIncidenti;
+    })
+    console.log("Min = " + MinMax[0] + "  MAx = " + MinMax[MinMax.length-1])
+    yScale.domain([MinMax[0], MinMax[MinMax.length-1]]);
 
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
