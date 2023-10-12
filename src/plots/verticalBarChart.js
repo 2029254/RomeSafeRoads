@@ -18,30 +18,40 @@ function drawVerticalBarChart(csvFileName) {
   var g = svg.append("g")
     .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-  d3.csv("dataset/processed/verticalBarChartData2022.csv", function (error, data) {
-    if (error) {
-      throw error;
-    }
+  d3.csv(csvFileName, function(data) {
+    let dataAboutYear = data.filter(function (row) {
+      return row['NaturaIncidente'];
+    });
+    console.log(dataAboutYear)
+    let dataAboutYearSorted = dataAboutYear.sort(function (a, b) {
+      return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+    });
+    console.log(dataAboutYearSorted)
 
     xScale.domain(data.map(function (d) {
-      return d.year;
+      return d.NaturaIncidente;
     }));
-    yScale.domain([0, d3.max(data, function (d) {
-      return d.value;
-    })]);
+    yScale.domain([0, 12000]);
 
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xScale));
 
     g.append("g")
-      .call(d3.axisLeft(yScale).tickFormat(function (d) {
-        return "$" + d;
-      }).ticks(10))
+      .call(d3.axisLeft(yScale))
       .append("text")
       .attr("y", 6)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
       .text("value");
+
+    g.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return xScale(d.NaturaIncidente); })
+      .attr("y", function(d) { return yScale(d.NumeroIncidenti); })
+      .attr("width", xScale.bandwidth())
+      .attr("height", function(d) { return height - yScale(d.NumeroIncidenti); });
   });
 }
