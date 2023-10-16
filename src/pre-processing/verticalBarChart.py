@@ -25,11 +25,41 @@ dataset_columns = dataset[columns]
 # select the rows of interest
 dataset_rows = dataset_columns
 
-# group by NaturaIncidente and compute the number of accidents for each nature
-processed_dataset = dataset_rows.groupby(['NaturaIncidente'])['Protocollo'].count()
+# creation of dictionary to group natures
+groups = {
+    'Run-off-road collision': ['Fuoriuscita dalla sede stradale'],
+    'Injury': ['Infortunio per sola frenata improvvisa', 'Infortunio per caduta del veicolo'],
+    'Pedestrian investment': ['Investimento di pedone'],
+    'Overturning': ['Ribaltamento senza urto contro ostacolo fisso'],
+    'Vehicles collision': ['Scontro frontale fra veicoli in marcia',
+                           'Scontro laterale fra veicoli in marcia',
+                           'Scontro frontale/laterale SX fra veicoli in marcia',
+                           'Scontro frontale/laterale DX fra veicoli in marcia',
+                           'Veicolo in marcia contro veicolo in sosta',
+                           'Veicolo in marcia contro veicolo fermo',
+                           'Veicolo in marcia contro veicolo arresto'],
+    'Rear-end collision': ['Tamponamento', 'Tamponamento Multiplo'],
+    'Road conditions': ['Veicolo in marcia che urta buche nella carreggiata',
+                        'Veicolo in marcia contro ostacolo fisso',
+                        'Veicolo in marcia contro ostacolo accidentale'],
+    'Other nature': ['Veicolo in marcia contro treno',
+                     'Veicolo in marcia contro animale']
+}
+
+# function to assign nature to a group
+def groupNature(x):
+    for key, values in groups.items():
+        if x in values:
+            return key
+
+# creation of new columns calling function groupNature
+dataset_rows['NaturaIncidente'] = dataset_rows['NaturaIncidente'].apply(groupNature)
+
+# count of natures for each group
+natures_count = dataset_rows.groupby('NaturaIncidente')['Protocollo'].count()
 
 # creation of dataframe (two-dimensional data structure) to organize a table with rows and columns
-accidents_data_frame = pandas.DataFrame(processed_dataset)
+accidents_data_frame = pandas.DataFrame(natures_count)
 
 # renames of columns
 accidents_data_frame.rename(columns={"Protocollo": "NumeroIncidenti"}, inplace=True)

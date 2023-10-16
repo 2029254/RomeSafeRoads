@@ -1,23 +1,9 @@
 NaturaIncidente,NumeroIncidenti
-Fuoriuscita dalla sede stradale,214
-Infortunio per caduta del veicolo,230
-Infortunio per sola frenata improvvisa,449
-Investimento di pedone,2796
-Ribaltamento senza urto contro ostacolo fisso,263
-Scontro frontale fra veicoli in marcia,1204
-Scontro frontale/laterale DX fra veicoli in marcia,6109
-Scontro frontale/laterale SX fra veicoli in marcia,5873
-Scontro laterale fra veicoli in marcia,11248
-Tamponamento,5890
-Tamponamento Multiplo,3386
-Veicolo in marcia che urta buche nella carreggiata,208
-Veicolo in marcia contro animale,80
-Veicolo in marcia contro ostacolo accidentale,692
-Veicolo in marcia contro ostacolo fisso,1361
-Veicolo in marcia contro treno,2
-Veicolo in marcia contro veicoli fermi,32
-Veicolo in marcia contro veicoli in arresto,98
-Veicolo in marcia contro veicoli in sosta,2393
-Veicolo in marcia contro veicolo arresto,498
-Veicolo in marcia contro veicolo fermo,1070
-Veicolo in marcia contro veicolo in sosta,2952
+Injury,679
+Other nature,82
+Overturning,263
+Pedestrian investment,2796
+Rear-end collision,9276
+Road conditions,2261
+Run-off-road collision,214
+Vehicles collision,28954

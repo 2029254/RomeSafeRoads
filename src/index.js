@@ -14,8 +14,11 @@ function updatePlotsBasingOnSelectedYear(){
     case '2020':
       csvFileName = csvFileName.concat("verticalBarChartData2020.csv")
       break;
-    default:
+    case '2019':
       csvFileName = csvFileName.concat("verticalBarChartData2019.csv")
+      break;
+    default:
+      csvFileName = csvFileName.concat("verticalBarChartData2022.csv")
   }
 /*
   // retrieve current year
