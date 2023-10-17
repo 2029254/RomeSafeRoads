@@ -27,23 +27,25 @@ dataset_rows = dataset_columns
 
 # creation of dictionary to group natures
 groups = {
-    'Run-off-road collision': ['Fuoriuscita dalla sede stradale'],
-    'Injury': ['Infortunio per sola frenata improvvisa', 'Infortunio per caduta del veicolo'],
-    'Pedestrian investment': ['Investimento di pedone'],
-    'Overturning': ['Ribaltamento senza urto contro ostacolo fisso'],
-    'Vehicles collision': ['Scontro frontale fra veicoli in marcia',
-                           'Scontro laterale fra veicoli in marcia',
-                           'Scontro frontale/laterale SX fra veicoli in marcia',
-                           'Scontro frontale/laterale DX fra veicoli in marcia',
-                           'Veicolo in marcia contro veicolo in sosta',
-                           'Veicolo in marcia contro veicolo fermo',
-                           'Veicolo in marcia contro veicolo arresto'],
-    'Rear-end collision': ['Tamponamento', 'Tamponamento Multiplo'],
-    'Road conditions': ['Veicolo in marcia che urta buche nella carreggiata',
-                        'Veicolo in marcia contro ostacolo fisso',
-                        'Veicolo in marcia contro ostacolo accidentale'],
-    'Other nature': ['Veicolo in marcia contro treno',
-                     'Veicolo in marcia contro animale']
+    'C1': ['Investimento di pedone'],
+    'C2': ['Scontro frontale fra veicoli in marcia',
+           'Scontro laterale fra veicoli in marcia'],
+    'C3': ['Veicolo in marcia contro veicolo in sosta',
+           'Veicolo in marcia contro veicolo fermo',
+           'Veicolo in marcia contro veicolo arresto'],
+    'C4': ['Tamponamento',
+           'Tamponamento Multiplo'],
+    'C5': ['Veicolo in marcia che urta buche nella carreggiata',
+           'Veicolo in marcia contro ostacolo fisso',
+           'Veicolo in marcia contro ostacolo accidentale'],
+    'C6': ['Infortunio per sola frenata improvvisa',
+           'Infortunio per caduta del veicolo'],
+    'C7': ['Fuoriuscita dalla sede stradale',
+           'Ribaltamento senza urto contro ostacolo fisso'],
+    'C8': ['Veicolo in marcia contro treno',
+           'Veicolo in marcia contro animale',
+           'Scontro frontale/laterale SX fra veicoli in marcia',
+           'Scontro frontale/laterale DX fra veicoli in marcia']
 }
 
 # function to assign nature to a group
