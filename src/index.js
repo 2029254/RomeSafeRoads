@@ -23,4 +23,9 @@ function updatePlotsBasingOnSelectedYear(){
   drawVerticalBarChart(csvFileName);
 
 
+  let removeAllButtons = document.querySelectorAll(".circular-button");
+  removeAllButtons.forEach(function(button) {button.remove();});
+  createHTMLButtons();
+
+
 }

@@ -153,3 +153,13 @@ svg {
 .axis text {
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
+
+button.circular-button {
+    width: 40px; /* Diametro */
+    height: 40px; /* Diametro */
+    border-radius: 50%; /* Rende il bordo circolare */
+    margin: 0; /* Nessun margine */
+    padding: 0; /* Nessun padding */
+    display: block; /* Posizionamento verticale */
+    line-height: 40px; /* Regola la distanza tra i bottoni */
+}
