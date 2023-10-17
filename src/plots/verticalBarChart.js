@@ -1,7 +1,7 @@
-const barChartSvg = d3.select("#barChartSvg"),
-  margin = 230,
-  width = 600 - margin,
-  height = barChartSvg.attr("height") - margin;
+const barChartSvg = d3.select("#barChartSvg");
+let margin = 230;
+let width = 600 - margin;
+let  height = barChartSvg.attr("height") - margin;
 
 let xScale, yScale, g, dataAboutYearSorted;
 

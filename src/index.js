@@ -27,5 +27,8 @@ function updatePlotsBasingOnSelectedYear(){
   removeAllButtons.forEach(function(button) {button.remove();});
   createHTMLButtons();
 
+  choroplethMapSvg.selectAll("*").remove();
+  drawChoroplethMap();
+
 
 }

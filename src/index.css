@@ -81,7 +81,7 @@ div.tooltip {
     padding: .2rem;
     background: #313639;
     color: #f9f9f9;
-    border: 0px;
+    border: 0;
     border-radius: 8px;
     pointer-events: none;
     font-size: .7rem;
@@ -162,4 +162,12 @@ button.circular-button {
     padding: 0; /* Nessun padding */
     display: block; /* Posizionamento verticale */
     line-height: 40px; /* Regola la distanza tra i bottoni */
+}
+
+#choroplethMap {
+    position: fixed; /* Fissa la posizione */
+    top: 5px; /* Distanza dalla parte superiore */
+    right: 20px; /* Distanza dalla parte destra */
+    left: 20px; /* Distanza dalla parte destra */
+    pointer-events: none; /* Disabilita la gestione degli eventi sulla mappa */
 }
