@@ -1,26 +1,30 @@
 import pandas
 
-# paths of csv files about 2022
-csv_2022 = [
-    'dataset/source/accidents-2022/02-Febbraio.csv',
-    'dataset/source/accidents-2022/03-Marzo.csv',
-    'dataset/source/accidents-2022/04-Aprile.csv',
-    'dataset/source/accidents-2022/05-Maggio.csv',
-    'dataset/source/accidents-2022/06-Giugno.csv',
-    'dataset/source/accidents-2022/07-Luglio.csv',
-    'dataset/source/accidents-2022/08-Agosto.csv',
+# paths of csv files about 2019
+csv_2019 = [
+    'dataset/source/accidents-2019/02-Febbraio.csv',
+    'dataset/source/accidents-2019/03-Marzo.csv',
+    'dataset/source/accidents-2019/04-Aprile.csv',
+    'dataset/source/accidents-2019/05-Maggio.csv',
+    'dataset/source/accidents-2019/06-Giugno.csv',
+    'dataset/source/accidents-2019/07-Luglio.csv',
+    'dataset/source/accidents-2019/08-Agosto.csv',
+    'dataset/source/accidents-2019/09-Settembre.csv',
+    'dataset/source/accidents-2019/10-Ottobre.csv',
+    'dataset/source/accidents-2019/11-Novembre.csv',
+    'dataset/source/accidents-2019/12-Dicembre.csv'
 ]
 
 # import the first csv file
-dataset = pandas.read_csv('dataset/source/accidents-2022/01-Gennaio.csv', sep=';', encoding='latin-1')
+dataset_2019 = pandas.read_csv('dataset/source/accidents-2019/01-Gennaio.csv', sep=';', encoding='latin-1')
 
 # import and concat all following csv files
-for file in csv_2022:
-    dataset = pandas.concat([dataset, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
+for file in csv_2019:
+    dataset_2019 = pandas.concat([dataset_2019, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # select the columns of interest
 columns = ['NaturaIncidente', 'Protocollo']
-dataset_columns = dataset[columns]
+dataset_columns = dataset_2019[columns]
 
 # select the rows of interest
 dataset_rows = dataset_columns
@@ -48,14 +52,16 @@ groups = {
            'Scontro frontale/laterale DX fra veicoli in marcia']
 }
 
+
 # function to assign nature to a group
-def groupNature(x):
+def group_nature(x):
     for key, values in groups.items():
         if x in values:
             return key
 
+
 # creation of new columns calling function groupNature
-dataset_rows['NaturaIncidente'] = dataset_rows['NaturaIncidente'].apply(groupNature)
+dataset_rows['NaturaIncidente'] = dataset_rows['NaturaIncidente'].apply(group_nature)
 
 # count of natures for each group
 natures_count = dataset_rows.groupby('NaturaIncidente')['Protocollo'].count()
@@ -67,4 +73,4 @@ accidents_data_frame = pandas.DataFrame(natures_count)
 accidents_data_frame.rename(columns={"Protocollo": "NumeroIncidenti"}, inplace=True)
 
 # export results in a new csv
-accidents_data_frame.to_csv('dataset/processed/verticalBarChartData2022.csv', header=True)
+accidents_data_frame.to_csv('dataset/processed/verticalBarChartData2019.csv', header=True)

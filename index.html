@@ -31,10 +31,12 @@
 </div>
 
 <!-- Create a div where the graph will take place -->
-<div class="container" style="max-width: 90vw;">
+<div class="container" style="max-width:5000vw;">
     <div class="row">
         <div class="col">
-            <div id="verticalBarChart"></div>
+            <div id="verticalBarChart">
+                <svg width="710" height="500" id="barChartSvg"></svg>
+            </div>
         </div>
         <div class="col">
             <div id="choroplethMap"></div>
@@ -53,7 +55,6 @@
 <!-- reference to the javascript file that draws the barchart -->
 <script src="src/index.js"></script>
 <script src="src/plots/verticalBarChart.js"></script>
-<svg width="600" height="500"></svg>
-<svg id="my_dataviz3" height=300 width=450></svg>
+
 
 </body>
