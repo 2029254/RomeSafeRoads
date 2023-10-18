@@ -169,3 +169,8 @@ button.circular-button {
     right: 20px; /* Distanza dalla parte destra */
     left: 20px; /* Distanza dalla parte destra */
 }
+#timeSeries {
+    top: 0px; /* Distanza dalla parte superiore */
+    right: 10px; /* Distanza dalla parte destra */
+    left: 0px; /* Distanza dalla parte destra */
+}

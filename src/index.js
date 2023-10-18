@@ -30,5 +30,8 @@ function updatePlotsBasingOnSelectedYear(){
   choroplethMapSvg.selectAll("*").remove();
   drawChoroplethMap();
 
+  timeSeriesSvg.selectAll("*").remove();
+  drawTimeSeriesChart();
+
 
 }
