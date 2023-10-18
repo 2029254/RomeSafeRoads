@@ -1,7 +1,7 @@
 const timeSeriesSvg = d3.select("#timeSeries")
   .append("svg")
   .attr("width", 800)
-  .attr("height", 280)
+  .attr("height", 232)
   //.attr("x", 200)
  // .attr("y", -200);
 
@@ -50,10 +50,10 @@ function drawTimeSeriesChart(){
   const yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(150, ${heightTimeSeries + 20})`)
+    .attr("transform", `translate(150, ${heightTimeSeries - 0})`)
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(150, 20)`)
+    .attr("transform", `translate(150, 0)`)
     .call(yAxisTimeSeries);
 }

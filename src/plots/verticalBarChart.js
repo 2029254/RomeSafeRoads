@@ -94,8 +94,8 @@ function drawAxesAndBars(csvFileName){
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xScale))
       .append("text")
-      .attr("y", height - 231)
-      .attr("x", width - 148)
+      .attr("y", 37)
+      .attr("x", width - 278)
       .attr("text-anchor", "end")
       .attr("fill", "black")
       .text("Accidents' nature");

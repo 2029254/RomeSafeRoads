@@ -1,26 +1,34 @@
 
 function updatePlotsBasingOnSelectedYear(){
   let selectedYear = document.getElementById("yearMenu").value;
-  let csvFileName = "dataset/processed/";
+  let csvFileNameVerticalBarChart = "dataset/processed/";
+  let csvFileNameChoroplethMap = "dataset/processed/";
+
   switch(selectedYear) {
     case '2022':
-      csvFileName = csvFileName.concat("verticalBarChartData2022.csv")
+      csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
+      csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
       break;
     case '2021':
-      csvFileName = csvFileName.concat("verticalBarChartData2021.csv")
+      csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2021.csv")
+      csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2021.csv")
       break;
     case '2020':
-      csvFileName = csvFileName.concat("verticalBarChartData2020.csv")
+      csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2020.csv")
+      csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2020.csv")
       break;
     case '2019':
-      csvFileName = csvFileName.concat("verticalBarChartData2019.csv")
+      csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2019.csv")
+      csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2019.csv")
       break;
     default:
-      csvFileName = csvFileName.concat("verticalBarChartData2022.csv")
+      csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
+      csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
+
   }
 
   barChartSvg.selectAll("*").remove();
-  drawVerticalBarChart(csvFileName);
+  drawVerticalBarChart(csvFileNameVerticalBarChart);
 
 
   let removeAllButtons = document.querySelectorAll(".circular-button");
@@ -28,7 +36,7 @@ function updatePlotsBasingOnSelectedYear(){
   createHTMLButtons();
 
   choroplethMapSvg.selectAll("*").remove();
-  drawChoroplethMap();
+  drawChoroplethMap(csvFileNameChoroplethMap);
 
   timeSeriesSvg.selectAll("*").remove();
   drawTimeSeriesChart();

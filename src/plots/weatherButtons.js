@@ -11,7 +11,7 @@ function createHTMLButtons() {
     const button = document.createElement("button");
     button.id = "Button" + (i + 1); // Assegna un ID univoco
     button.className = "circular-button"; // Applica la classe CSS per i bottoni circolari
-    button.style.marginTop = (buttonRadius * 0.5 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
+    button.style.marginTop = (buttonRadius * 0.9 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
     button.addEventListener("click", function () {
       console.log("ID del bottone:", this.id);
     });

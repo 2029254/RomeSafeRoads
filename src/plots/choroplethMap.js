@@ -6,8 +6,16 @@ var choroplethMapSvg = d3.select("#choroplethMap")
   .attr("x", 50)
   .attr("y", 50);
 
+let dataAboutTownHall;
 
-function drawChoroplethMap() {
+function drawChoroplethMap(csvFileNameChoroplethMap) {
+
+  // function to get and filter csv data
+  d3.csv(csvFileNameChoroplethMap, function (data) {
+    dataAboutTownHall = data.filter(function (row) {
+      return row['Municipio'];
+    });
+
 // Definisci la proiezione geografica
   let projection = d3.geoMercator()
     .center([12.4964, 41.9028]) // Coordinata centrale per Roma
@@ -27,9 +35,10 @@ function drawChoroplethMap() {
       .enter()
       .append("path")
       .attr("d", path)
-      .style("fill", "steelblue") // Colore di riempimento
+      .style("stroke", "black")
+      .style("stroke-width", 1)
+  .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
-      //  document.querySelector(".map-container").classList.add("disable-events");
         console.log(d.properties.nome)
       })
       .on("mouseover",  function(d) {
@@ -42,22 +51,20 @@ function drawChoroplethMap() {
           .style("font-size", "12px");
       })
       .on("mouseout", handleMouseOutChoroplethMap);
-    //  document.querySelector("#choroplethMap").style.pointerEvents = "auto"
-    // document.querySelector("#choroplethMap").style.pointerEvents = "none"
   });
 
   const scale = d3.scaleLinear()
     .domain([0, 100]) // Imposta il dominio
     .range([0, 200]); // Imposta l'intervallo
 
-choroplethMapSvg
+  choroplethMapSvg
   .append("svg")
     .attr("width", 100)
     .attr("height", 250)
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [5, 10, 15, 20, 25, 30]; // Valori per le celle
+  const legendCells = [7, 14, 21, 28, 35, 42]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -68,7 +75,7 @@ choroplethMapSvg
     .attr("y",  (d,i) => 70 + 31 * i)
     .attr("width", 8) // Larghezza delle celle
     .attr("height", 30)
-    .style("fill", "steelblue"); // Colora le celle in base al valore
+    .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
 
   choroplethMapSvg.selectAll("text")
     .data(legendCells)
@@ -88,10 +95,51 @@ choroplethMapSvg
     .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
     .style("stroke-width", 1);
-}
+  });
+  }
+
 
 function handleMouseOutChoroplethMap() {
   d3.select(this)
-    .style("fill", "steelblue");
+    .style("fill", function (d) { return setBarColorChoroplethMap(d)});
   choroplethMapSvg.select(".bar-label").remove();
+}
+
+function setBarColorChoroplethMap(d) {
+  const townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
+
+  if (townHallAndAccidentsNumber !== undefined) {
+    let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
+
+    if (accidentsNumber > 0 && accidentsNumber <= 7)
+      return "#fef0d9"
+    else if (accidentsNumber > 7 && accidentsNumber <= 14)
+      return "#fdd49e";
+    else if (accidentsNumber > 14 && accidentsNumber <= 21)
+      return "#fdbb84";
+    else if (accidentsNumber > 21 && accidentsNumber <= 28)
+      return "#fc8d59";
+    else if (accidentsNumber > 28 && accidentsNumber <= 35)
+      return "#e34a33";
+    else
+      return "#b30000";
+  } else
+    return "#fef0d9"
+}
+
+function setLegendColorsChoroplethMap(accidentsNumber) {
+
+  if (accidentsNumber > 0 && accidentsNumber <= 7)
+    return "#fef0d9"
+  else if (accidentsNumber > 7 && accidentsNumber <= 14)
+    return "#fdd49e";
+  else if (accidentsNumber > 14 && accidentsNumber <= 21)
+    return "#fdbb84";
+  else if (accidentsNumber > 21 && accidentsNumber <= 28)
+    return "#fc8d59";
+  else if (accidentsNumber > 28 && accidentsNumber <= 35)
+    return "#e34a33";
+  else
+    return "#b30000";
+
 }
