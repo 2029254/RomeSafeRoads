@@ -165,9 +165,7 @@ button.circular-button {
 }
 
 #choroplethMap {
-    position: fixed; /* Fissa la posizione */
     top: 5px; /* Distanza dalla parte superiore */
     right: 20px; /* Distanza dalla parte destra */
     left: 20px; /* Distanza dalla parte destra */
-    pointer-events: none; /* Disabilita la gestione degli eventi sulla mappa */
 }
