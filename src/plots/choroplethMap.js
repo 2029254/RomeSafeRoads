@@ -1,6 +1,6 @@
 const choroplethMapSvg = d3.select("#choroplethMap")
   .append("svg")
-  .attr("width", 340)
+  .attr("width", 470)
   .attr("height", 350)
   .attr("x", 50)
   .attr("y", 50);
@@ -11,7 +11,7 @@ function drawChoroplethMap() {
   let projection = d3.geoMercator()
     .center([12.4964, 41.9028]) // Coordinata centrale per Roma
     .scale(30000)
-    .translate([340 / 2, 350 / 2]);
+    .translate([500 / 2, 350 / 2]);
 
 // Crea un generatore di percorsi geografici
   let path = d3.geoPath().projection(projection);
@@ -35,7 +35,7 @@ function drawChoroplethMap() {
         d3.select(this).style("fill", "grey");
         choroplethMapSvg.append("text")
           .attr("class", "bar-label")
-          .attr("x", 190)
+          .attr("x", 300)
           .attr("y", 30)
           .text(d.properties.nome)
           .style("font-size", "12px");
