@@ -73,7 +73,7 @@ function drawAxesAndBars(csvFileName){
     // definition of axes domain
     xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
     let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-    yScale.domain([0, MinMax[MinMax.length-1]]);
+    yScale.domain([0, 23000]);
 
     // bars creation
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
