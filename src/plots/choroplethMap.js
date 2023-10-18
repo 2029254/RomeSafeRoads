@@ -57,7 +57,7 @@ choroplethMapSvg
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [0, 20, 40, 60, 80, 100]; // Valori per le celle
+  const legendCells = [5, 10, 15, 20, 25, 30]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -75,16 +75,19 @@ choroplethMapSvg
     .enter()
     .append("text")
     .attr("x", 508 ) // Posiziona le etichette al centro delle celle
-    .attr("y", (d, i) => i * 32 + 86 )
+    .attr("y", (d, i) => i * 30.7 + 104 )
     .text((d) => `${d}`); // Testo dell'etichetta
 
-  choroplethMapSvg.append("line")
-    .attr("x1", 499)
-    .attr("y1", 70)
-    .attr("x2", 499)
-    .attr("y2", 255)
+  choroplethMapSvg.selectAll("line")
+    .data(legendCells) // Ignora l'ultimo valore
+    .enter()
+    .append("line")
+    .attr("x1", 490)
+    .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
+    .attr("x2", 501)
+    .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
-    .style("stroke-width", 1.5);
+    .style("stroke-width", 1);
 }
 
 function handleMouseOutChoroplethMap() {
