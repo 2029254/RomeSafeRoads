@@ -20,13 +20,13 @@
         <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <span class="fs-3">Rome Road Insights</span>
         </a>
-        <label for="yearMenu" style=" position: absolute; left: 1139px; top: 24px;"  >Choose a year of interest:</label>
-        <select id="yearMenu" class="form-select w-auto" onclick="updatePlotsBasingOnSelectedYear()">
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-        </select>
+        <p id="sliderValues" style="margin-top: 14px; margin-bottom: 1rem; margin-right: 10px; ">2019 </p>
+        <div class="slider-container">
+            <button class="button" id="decrementButton"><p style="margin-top: -8px; margin-left: -2px;">-</p></button>
+            <input type="range" class="slider" id="yearSlider" min="2019" max="2022" step="1" value="2020">
+            <button class="button" id="incrementButton"><p style="margin-top: -7.8px; margin-left: -3.8px;">+</p></button>
+        </div>
+        <p style=" margin-top: 14px; margin-bottom: 1rem; margin-left: 10px;"id="sliderValue">2022</p>
     </header>
 </div>
 

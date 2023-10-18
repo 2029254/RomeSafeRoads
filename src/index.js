@@ -1,6 +1,47 @@
+const slider = document.getElementById("yearSlider");
+const sliderValue = document.getElementById("sliderValue");
+const decrementButton = document.getElementById("decrementButton");
+const incrementButton = document.getElementById("incrementButton");
+const ticks = document.querySelectorAll(".slider-tick");
+
+// Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
+function updateSliderValue() {
+  sliderValue.textContent = slider.value;
+}
+
+// Aggiorna il valore del Range Slider quando si cambia il valore del Range Slider manualmente
+slider.addEventListener("input", updateSliderValue);
+
+// Gestisce il clic sul pulsante +
+incrementButton.addEventListener("click", () => {
+  const currentValue = parseInt(slider.value);
+  if (currentValue < 2022) {
+    slider.value = (currentValue + 1).toString();
+    updateSliderValue();
+  }
+  updatePlotsBasingOnSelectedYear()
+});
+
+decrementButton.addEventListener("click", () => {
+  const currentValue = parseInt(slider.value);
+  if (currentValue > 2019) {
+    slider.value = (currentValue - 1).toString();
+    updateSliderValue();
+  }
+  updatePlotsBasingOnSelectedYear()
+});
+
+// Posiziona i punti dei ticks sugli anni
+ticks.forEach((tick, index) => {
+  tick.style.left = `${(index / (ticks.length - 1)) * 100}%`;
+});
 
 function updatePlotsBasingOnSelectedYear(){
-  let selectedYear = document.getElementById("yearMenu").value;
+
+
+  let selectedYear = document.getElementById("yearSlider").value;
+  console.log(selectedYear)
+
   let csvFileNameVerticalBarChart = "dataset/processed/";
   let csvFileNameChoroplethMap = "dataset/processed/";
 

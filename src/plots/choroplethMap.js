@@ -42,12 +42,17 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         console.log(d.properties.nome)
       })
       .on("mouseover",  function(d) {
+        let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
+        if (townHallAndAccidentsNumber !== undefined)
+           accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
+          else
+           accidentsNumber = 0
         d3.select(this).style("fill", "grey");
         choroplethMapSvg.append("text")
           .attr("class", "bar-label")
           .attr("x", 300)
           .attr("y", 30)
-          .text(d.properties.nome)
+          .text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
           .style("font-size", "12px");
       })
       .on("mouseout", handleMouseOutChoroplethMap);
@@ -106,7 +111,7 @@ function handleMouseOutChoroplethMap() {
 }
 
 function setBarColorChoroplethMap(d) {
-  const townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
+  let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
 
   if (townHallAndAccidentsNumber !== undefined) {
     let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
