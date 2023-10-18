@@ -1,6 +1,7 @@
-const choroplethMapSvg = d3.select("#choroplethMap")
+
+var choroplethMapSvg = d3.select("#choroplethMap")
   .append("svg")
-  .attr("width", 470)
+  .attr("width", 600)
   .attr("height", 350)
   .attr("x", 50)
   .attr("y", 50);
@@ -44,6 +45,46 @@ function drawChoroplethMap() {
     //  document.querySelector("#choroplethMap").style.pointerEvents = "auto"
     // document.querySelector("#choroplethMap").style.pointerEvents = "none"
   });
+
+  const scale = d3.scaleLinear()
+    .domain([0, 100]) // Imposta il dominio
+    .range([0, 200]); // Imposta l'intervallo
+
+choroplethMapSvg
+  .append("svg")
+    .attr("width", 100)
+    .attr("height", 250)
+    .attr("x", 150)
+    .attr("y", 250);
+
+  const legendCells = [0, 20, 40, 60, 80, 100]; // Valori per le celle
+
+  choroplethMapSvg.selectAll("rect")
+    .data(legendCells)
+    .enter()
+    .append("rect")
+    .attr("x",  490) // Posiziona le celle orizzontalmente
+    //.attr("y",  (d, i) => i * 31)
+    .attr("y",  (d,i) => 70 + 31 * i)
+    .attr("width", 8) // Larghezza delle celle
+    .attr("height", 30)
+    .style("fill", "steelblue"); // Colora le celle in base al valore
+
+  choroplethMapSvg.selectAll("text")
+    .data(legendCells)
+    .enter()
+    .append("text")
+    .attr("x", 508 ) // Posiziona le etichette al centro delle celle
+    .attr("y", (d, i) => i * 32 + 86 )
+    .text((d) => `${d}`); // Testo dell'etichetta
+
+  choroplethMapSvg.append("line")
+    .attr("x1", 499)
+    .attr("y1", 70)
+    .attr("x2", 499)
+    .attr("y2", 255)
+    .style("stroke", "black")
+    .style("stroke-width", 1.5);
 }
 
 function handleMouseOutChoroplethMap() {
