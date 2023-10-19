@@ -158,10 +158,12 @@ button.circular-button {
     width: 40px; /* Diametro */
     height: 40px; /* Diametro */
     border-radius: 50%; /* Rende il bordo circolare */
-    margin: 0; /* Nessun margine */
-    padding: 0; /* Nessun padding */
-    display: block; /* Posizionamento verticale */
-    line-height: 40px; /* Regola la distanza tra i bottoni */
+    color: white;
+    line-height: 40px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-size:cover;
 }
 
 #choroplethMap {
