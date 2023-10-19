@@ -69,7 +69,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [7, 14, 21, 28, 35, 42]; // Valori per le celle
+  const legendCells = [2, 5, 10, 20, 30, 45]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -116,15 +116,15 @@ function setBarColorChoroplethMap(d) {
   if (townHallAndAccidentsNumber !== undefined) {
     let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
 
-    if (accidentsNumber > 0 && accidentsNumber <= 7)
+    if (accidentsNumber > 0 && accidentsNumber <= 2)
       return "#fef0d9"
-    else if (accidentsNumber > 7 && accidentsNumber <= 14)
+    else if (accidentsNumber > 2 && accidentsNumber <= 5)
       return "#fdd49e";
-    else if (accidentsNumber > 14 && accidentsNumber <= 21)
+    else if (accidentsNumber > 5 && accidentsNumber <= 10)
       return "#fdbb84";
-    else if (accidentsNumber > 21 && accidentsNumber <= 28)
+    else if (accidentsNumber > 10 && accidentsNumber <= 20)
       return "#fc8d59";
-    else if (accidentsNumber > 28 && accidentsNumber <= 35)
+    else if (accidentsNumber > 20 && accidentsNumber <= 30)
       return "#e34a33";
     else
       return "#b30000";
@@ -134,15 +134,15 @@ function setBarColorChoroplethMap(d) {
 
 function setLegendColorsChoroplethMap(accidentsNumber) {
 
-  if (accidentsNumber > 0 && accidentsNumber <= 7)
+  if (accidentsNumber > 0 && accidentsNumber <= 2)
     return "#fef0d9"
-  else if (accidentsNumber > 7 && accidentsNumber <= 14)
+  else if (accidentsNumber > 2 && accidentsNumber <= 5)
     return "#fdd49e";
-  else if (accidentsNumber > 14 && accidentsNumber <= 21)
+  else if (accidentsNumber > 5 && accidentsNumber <= 10)
     return "#fdbb84";
-  else if (accidentsNumber > 21 && accidentsNumber <= 28)
+  else if (accidentsNumber > 10 && accidentsNumber <= 20)
     return "#fc8d59";
-  else if (accidentsNumber > 28 && accidentsNumber <= 35)
+  else if (accidentsNumber > 20 && accidentsNumber <= 30)
     return "#e34a33";
   else
     return "#b30000";

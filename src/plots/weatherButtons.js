@@ -3,11 +3,11 @@ let buttonRadius = 20;
 let buttonPadding = 0; // Spazio tra i bottoni
 
 const imagePaths = [
-  "dataset/img/nuvoloso.png",
-  "dataset/img/sole.png",
-  "dataset/img/pioggia.png",
-  "dataset/img/neve.png",
-  "dataset/img/no-meteo.png"
+  "dataset/img/cloudy.png",
+  "dataset/img/sunny.png",
+  "dataset/img/rainy.png",
+  "dataset/img/snowy.png",
+  "dataset/img/none.png"
 ];
 // Funzione per creare bottoni HTML
 function createHTMLButtons() {

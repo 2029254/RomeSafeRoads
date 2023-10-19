@@ -123,17 +123,17 @@ function drawVerticalBarChart(csvFileName) {
 
 function setBarColor(accidentNumber) {
     if(accidentNumber > 0 && accidentNumber <= 5000)
-      return "green"
+      return "#d9ef8b"
     else if (accidentNumber > 5000 && accidentNumber <= 10000)
-      return "steelblue";
+      return "#fee08b";
     else if (accidentNumber > 10000)
-      return "red";
+      return "#fc8d59";
     else if (accidentNumber.toString() === "> 0 and <= 5000")
-      return "green"
+      return "#d9ef8b"
     else if (accidentNumber.toString() === "> 5000 and <= 10000")
-      return "steelblue"
+      return "#fee08b"
     else
-      return "red";
+      return "#fc8d59";
 }
 
 function handleMouseOver(d) {

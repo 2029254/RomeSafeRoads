@@ -3,12 +3,19 @@ const sliderValue = document.getElementById("sliderValue");
 const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
+let periodValue = document.getElementById("period");
+
 
 const ticks = document.querySelectorAll(".slider-tick");
 
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
 function updateSliderValue() {
-  titleValue.textContent = "Rome Road Insights " + slider.value;
+  titleValue.textContent = "Rome Road Insights " + slider.value
+  if (slider.value === "2022")
+    periodValue.textContent = " (Jan - Aug)";
+  else
+    periodValue.textContent = " (Jan - Dic)";
+
 }
 
 // Aggiorna il valore del Range Slider quando si cambia il valore del Range Slider manualmente
@@ -24,8 +31,9 @@ incrementButton.addEventListener("click", () => {
   if (currentValue < 2022) {
     slider.value = (currentValue + 1).toString();
     updateSliderValue();
+    updatePlotsBasingOnSelectedYear()
+
   }
-  updatePlotsBasingOnSelectedYear()
 });
 
 decrementButton.addEventListener("click", () => {
@@ -33,8 +41,8 @@ decrementButton.addEventListener("click", () => {
   if (currentValue > 2019) {
     slider.value = (currentValue - 1).toString();
     updateSliderValue();
+    updatePlotsBasingOnSelectedYear()
   }
-  updatePlotsBasingOnSelectedYear()
 });
 
 
