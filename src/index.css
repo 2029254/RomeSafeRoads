@@ -232,6 +232,7 @@ button.circular-button {
     margin: 5px;
     stroke: black;
     stroke-width: 1;
+    background-size:cover;
 }
 
 p {
