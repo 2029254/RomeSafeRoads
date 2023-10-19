@@ -2,15 +2,21 @@ const slider = document.getElementById("yearSlider");
 const sliderValue = document.getElementById("sliderValue");
 const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
+let titleValue = document.getElementById("title");
+
 const ticks = document.querySelectorAll(".slider-tick");
 
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
 function updateSliderValue() {
-  sliderValue.textContent = slider.value;
+  titleValue.textContent = "Rome Road Insights " + slider.value;
 }
 
 // Aggiorna il valore del Range Slider quando si cambia il valore del Range Slider manualmente
-slider.addEventListener("input", updateSliderValue);
+slider.addEventListener("input", () => {
+  updateSliderValue();
+  updatePlotsBasingOnSelectedYear()
+});
+
 
 // Gestisce il clic sul pulsante +
 incrementButton.addEventListener("click", () => {
@@ -31,13 +37,8 @@ decrementButton.addEventListener("click", () => {
   updatePlotsBasingOnSelectedYear()
 });
 
-// Posiziona i punti dei ticks sugli anni
-ticks.forEach((tick, index) => {
-  tick.style.left = `${(index / (ticks.length - 1)) * 100}%`;
-});
 
 function updatePlotsBasingOnSelectedYear(){
-
 
   let selectedYear = document.getElementById("yearSlider").value;
   console.log(selectedYear)
