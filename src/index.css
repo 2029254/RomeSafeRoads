@@ -164,6 +164,7 @@ button.circular-button {
     margin-top: 10px;
     cursor: pointer;
     background-size:cover;
+    align-content:center;
 }
 
 #choroplethMap {
