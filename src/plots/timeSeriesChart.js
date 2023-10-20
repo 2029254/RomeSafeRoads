@@ -9,8 +9,8 @@ function drawTimeSeriesChart(){
 
   const timeSeriesData = [
     { date: "2023-01-01", value: 10 },
-    { date: "2023-02-01", value: 15 },
-    { date: "2023-03-01", value: 12 }];
+    { date: "2023-02-01", value: 20 },
+    { date: "2023-08-01", value: 12 }];
 
   // Definisci il parser per le date
   const parseTime = d3.timeParse("%Y-%m-%d");
@@ -30,8 +30,9 @@ function drawTimeSeriesChart(){
 
 
   const line = d3.line()
-    .x(d => xScale(d.date))
-    .y(d => yScale(d.value));
+    .x(d => xScaleTimeSeries(d.date))
+    .y(d => yScaleTimeSeries(d.value));
+
 
   const yScaleTimeSeries = d3.scaleLinear()
     .domain([0, d3.max(timeSeriesData, d => d.value)])
@@ -43,17 +44,54 @@ function drawTimeSeriesChart(){
     .datum(timeSeriesData)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
-    .attr("stroke-width", 2)
-    .attr("d", line);
+    .attr("stroke-width", 1.5)
+    .attr("d", line)
+    .attr("transform", `translate(148, 5)`);
 
-  const xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries);
+  // Trova la data minima e massima nei tuoi dati
+  const minDate = d3.min(timeSeriesData, d => d.date);
+  const maxDate = d3.max(timeSeriesData, d => d.date);
+
+  const tickValues = [];
+  let currentDate = d3.timeMonth.floor(minDate);
+  while (currentDate <= maxDate) {
+    tickValues.push(currentDate);
+    for (let i = 1; i < 3; i++) {
+      const nextDate = d3.timeDay.offset(currentDate, i * 10);
+      if (nextDate <= maxDate) {
+        tickValues.push(nextDate);
+      }
+    }
+    currentDate = d3.timeMonth.offset(currentDate, 1);
+  }
+
+// Aggiungi i trattini per ogni 10 giorni senza etichette
+  console.log(minDate)
+  currentDate = d3.timeDay.offset(minDate, 10);
+  while (currentDate < maxDate) {
+    tickValues.push(currentDate);
+    currentDate = d3.timeDay.offset(currentDate, 200);
+  }
+
+// Crea l'asse x con i tickValues
+  const xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
+    .tickValues(tickValues)
+    .tickFormat(date => {
+      const day = d3.timeFormat("%d")(date);
+      if (day === "01") {
+        return d3.timeFormat("%b")(date);
+      }
+      return "";
+    });
+
+
   const yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(150, ${heightTimeSeries - 0})`)
+    .attr("transform", `translate(148, ${heightTimeSeries + 5})`)
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(150, 0)`)
+    .attr("transform", `translate(148, 5)`)
     .call(yAxisTimeSeries);
 }
