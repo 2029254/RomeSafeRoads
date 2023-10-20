@@ -7,6 +7,7 @@ var choroplethMapSvg = d3.select("#choroplethMap")
   .attr("y", 50);
 
 let dataAboutTownHall;
+let path;
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -23,7 +24,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .translate([500 / 2, 350 / 2]);
 
 // Crea un generatore di percorsi geografici
-  let path = d3.geoPath().projection(projection);
+  path = d3.geoPath().projection(projection);
 
 // Carica i dati GeoJSON dei comuni
   d3.json("dataset/source/choropleth-map/municipi.geojson", function (error, data) {
@@ -37,7 +38,8 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .attr("d", path)
       .style("stroke", "black")
       .style("stroke-width", 0.5)
-  .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
+      .attr("id",function (d) {return d.properties.nome })
+      .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
         console.log(d.properties.nome)
       })
@@ -147,4 +149,25 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
   else
     return "#b30000";
 
+}
+
+function showNumberOfAccidents(townHall, number){
+  console.log("number" +  number)
+  choroplethMapSvg.select(`path[id='${townHall}']`)
+    .style("fill", "black")
+
+  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
+  selectedPath.style("fill", "black");
+
+  choroplethMapSvg.append("text")
+    .text(number)
+    .attr("x", 100) // Coordinata x del testo
+    .attr("y", 190) // Coordinata y del testo
+    .style("font-size", "12px");
+
+  // Aggiungiamo un ritardo di 5 secondi prima di rimuovere il testo e la linea
+  setTimeout(function () {
+    selectedPath.style("fill", function (d) { return setBarColorChoroplethMap(d); });
+    //choroplethMapSvg.selectAll("text").remove();
+  }, 5000);
 }

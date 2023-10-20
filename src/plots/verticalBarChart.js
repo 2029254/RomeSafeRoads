@@ -37,7 +37,7 @@ function drawColorsLegend(){
                         "[C4] Rear-end collision",
                         "[C5] Road conditions",
                         "[C6] Injury",
-                        "[C7] Injury",
+                        "[C7] Overturning and run-off-road",
                         "[C8] Other nature"];
 
   barChartSvg.selectAll("mylabels")
@@ -86,6 +86,7 @@ function drawAxesAndBars(csvFileName){
       .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
       .style("stroke", "black") // Aggiungi un bordo nero
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
+      .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut);
 
@@ -152,6 +153,63 @@ function handleMouseOut() {
     barChartSvg.select(".bar-label").remove();
   }
 
+function onclickBar(d) {
+  let result;
+  switch (d.NaturaIncidente.toString()) {
+    case 'C1':
+      result = "Pedestrian investment";
+      break;
+    case 'C2':
+      result = "Vehicles collision (moving)";
+      break;
+    case 'C3':
+      result = "Vehicles collision (stationary vehicle)";
+      break;
+    case 'C4':
+      result = "Rear-end collision";
+      break;
+    case 'C5':
+      result = "Road conditions";
+      break;
+    case 'C6':
+      result = "Injury";
+      break;
+    case 'C7':
+      result = "Overturning and run-off-road";
+      break;
+    default:
+      result = "Other nature";
+  }
+
+  d3.csv("dataset/processed/choroplethMap/choroplethMapNature" + slider.value + ".csv", function (data) {
+    let dataAboutNature = data.filter(function (row) {
+      return row['NaturaIncidente'] === d.NaturaIncidente.toString();
+    });
+
+    let groupedByTownHall = new Map();
+    dataAboutNature.forEach(item => {
+      let municipio = item.Municipio;
+      if (!groupedByTownHall.has(municipio)) {
+        groupedByTownHall.set(municipio, []);
+      }
+      groupedByTownHall.get(municipio).push(item);
+    });
+
+    let incidentCounts = new Map();
+    groupedByTownHall.forEach((data, municipio) => {
+      const count = data.length;
+      incidentCounts.set(municipio, count);
+    });
+    console.log(incidentCounts);
+
+    for (const [key, value] of incidentCounts) {
+      showNumberOfAccidents(key, value)
+    }
+
+  });
+
+}
+
 function setAccidentsNumberAndNatureAndYear(d) {
   let result = '[' + d.NumeroIncidenti + '] of '
   switch(d.NaturaIncidente.toString()) {
@@ -168,7 +226,7 @@ function setAccidentsNumberAndNatureAndYear(d) {
     case 'C6':
       return result.concat("Injury")
     case 'C7':
-      return result.concat("Injury")
+      return result.concat("Overturning and run-off-road")
     default:
       return result.concat("Other nature")
   }
