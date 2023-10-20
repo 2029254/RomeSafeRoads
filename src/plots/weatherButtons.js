@@ -1,7 +1,7 @@
 // Dimensioni dei bottoni
 let buttonRadius = 20;
 let buttonPadding = 0; // Spazio tra i bottoni
-let buttonWeatherValue
+let buttonWeatherValue = "First"
 let buttonFlag = false;
 
 const imagePaths = [
@@ -13,7 +13,7 @@ const imagePaths = [
 ];
 // Funzione per creare bottoni HTML
 function createHTMLButtons() {
-  let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "None"];
+  let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "None", "First"];
   const buttonsContainer = document.getElementById("buttons");
 
   buttonData.forEach((buttonText, i) => {
@@ -25,6 +25,7 @@ function createHTMLButtons() {
     button.style.marginLeft = "7px"; // Aggiungi spazio tra i bottoni
     button.style.backgroundSize = "cover"; // Imposta l'immagine per riempire completamente il bottone
     button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
+    buttonLabel.id = "Label" + button.id; // Imposta il testo del bottone
     buttonLabel.textContent = button.id; // Imposta il testo del bottone
     buttonLabel.style.color = "white"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.fontSize = "9px"; // Aggiungi spazio tra i bottoni
@@ -32,14 +33,27 @@ function createHTMLButtons() {
     //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.alignContent = "center"; // Aggiungi spazio tra i bottoni
 
+    if (button.id === "First") button.hidden = true
+
     button.addEventListener("click", function () {
+
+      if (buttonWeatherValue !== this.id) {
+        let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
+        let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
+
+        labelWeatherValue.style.color = "white";// Mostra il buttonLabel al passaggio del mouse
+        buttonWeatherValueNew.style.boxShadow = "0px  0px white";
+        buttonWeatherValueNew.style.transform = "scale(1)";
+      }
+
 
       buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
       button.style.transform = "scale(1.2)";
+      button.style.boxShadow = "0.25px  2.0px rgb(128, 128, 128)";
+
       buttonWeatherValue = this.id
       let year = document.getElementById("yearSlider").value;
       if (buttonWeatherValue === "None") {
-        buttonFlag = false;
         updatePlotsBasingOnSelectedYear();
       }
       else {
@@ -57,12 +71,14 @@ function createHTMLButtons() {
     });
 
     button.addEventListener("mouseover", function () {
-      buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
-      button.style.transform = "scale(1.2)";
+      if (this.id !== buttonWeatherValue) {
+        buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
+        button.style.transform = "scale(1.2)";
+      }
     });
 
     button.addEventListener("mouseout", function () {
-      if (!buttonFlag) {
+      if (this.id !== buttonWeatherValue) {
         buttonLabel.style.color = "white";// Mostra il buttonLabel al passaggio del mouse
         button.style.transform = "scale(1)";
       }

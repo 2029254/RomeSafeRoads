@@ -57,7 +57,7 @@ function updatePlotsBasingOnSelectedYear(){
 
   let csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
-  if (buttonWeatherValue === undefined || buttonWeatherValue === "None") {
+  if (buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First") {
     switch (selectedYear) {
       case '2022':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
@@ -87,9 +87,9 @@ function updatePlotsBasingOnSelectedYear(){
   barChartSvg.selectAll("*").remove();
   drawVerticalBarChart(csvFileNameVerticalBarChart);
 
-  let removeAllButtons = document.querySelectorAll(".circular-button");
-  removeAllButtons.forEach(function(button) {button.remove();});
-  createHTMLButtons();
+ // let removeAllButtons = document.querySelectorAll(".circular-button");
+ // removeAllButtons.forEach(function(button) {button.remove();});
+  //createHTMLButtons();
 
   choroplethMapSvg.selectAll("*").remove();
   drawChoroplethMap(csvFileNameChoroplethMap);

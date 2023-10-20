@@ -1,63 +1,63 @@
-Protocollo,Municipio,TipoPersona,Sesso,Tipolesione,Deceduto,CondizioneAtmosferica
-4736836,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno
-4746329,Municipio XIII,Conducente,F,Deceduto durante prime cure,-1,Sereno
-4748299,Municipio IX,Conducente,M,Deceduto sul posto,-1,Sereno
-4764985,Municipio III,Pedone,M,Deceduto durante prime cure,-1,Sereno
-4768714,Municipio VII,Conducente,M,Deceduto durante trasporto,-1,Nuvoloso
-4772950,Municipio V,Pedone,M,Deceduto sul posto,-1,Nuvoloso
-4801013,Municipio IX,Conducente,F,Deceduto sul posto,-1,Nuvoloso
-4801156,Municipio III,Conducente,M,Deceduto sul posto,-1,Nuvoloso
-4811366,Municipio II,Conducente,M,Deceduto sul posto,-1,Sereno
-4811618,Municipio I,Conducente,M,Deceduto sul posto,-1,Sereno
-4815412,Municipio IX,Conducente,M,Deceduto sul posto,-1,Sereno
-4851846,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno
-4864529,Municipio I,Pedone,M,Deceduto sul posto,-1,Sereno
-4878658,Municipio XV,Pedone,F,Deceduto sul posto,-1,Sereno
-4896315,Municipio X,Conducente,M,Deceduto sul posto,-1,Sereno
-4897650,Municipio VII,Pedone,M,Deceduto durante prime cure,-1,Sereno
-4910320,Municipio XIII,Pedone,F,Deceduto sul posto,-1,Sereno
-4918518,Municipio IV,Conducente,M,Deceduto sul posto,-1,Nuvoloso
-4919044,Municipio III,Pedone,M,Deceduto sul posto,-1,Nuvoloso
-4927222,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno
-4942703,Municipio VII,Pedone,M,Deceduto sul posto,-1,Sereno
-4946169,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Pioggia in atto
-4960907,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno
-4973964,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno
-4990788,Municipio X,Pedone,M,Deceduto sul posto,-1,Sereno
-5000045,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno
-5002289,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5013637,Municipio IV,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5020177,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Sereno
-5023059,Municipio VII,Conducente,M,Deceduto sul posto,-1,Sereno
-5029340,Municipio X,Conducente,M,Deceduto durante trasporto,-1,Sereno
-5030991,Municipio IX,Pedone non identificato,M,Deceduto sul posto,-1,Nuvoloso
-5031340,Municipio IX,Pedone,M,Deceduto sul posto,-1,Sereno
-5038617,Municipio XI,Conducente,M,Deceduto sul posto,-1,Pioggia in atto
-5052230,Municipio IX,Passeggero,F,Deceduto sul posto,-1,Sereno
-5057245,Municipio II,Conducente,M,Deceduto sul posto,-1,Sereno
-5079398,Municipio IX,Pedone,F,Deceduto sul posto,-1,Sereno
-5098191,Municipio X,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5100358,Municipio III,Conducente,M,Deceduto sul posto,-1,Nuvoloso
-5101307,Municipio VII,Pedone,F,Deceduto durante prime cure,-1,Sereno
-5106082,Municipio XV,Conducente,M,Deceduto sul posto,-1,Sereno
-5123380,Municipio II,Conducente,M,Deceduto sul posto,-1,Nuvoloso
-5246931,Municipio V,Conducente,M,Deceduto sul posto,-1,Sereno
-5139224,Municipio II,Conducente,M,Deceduto sul posto,-1,Nuvoloso
-5141575,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5144034,Municipio III,Pedone,M,Deceduto sul posto,-1,Sereno
-5145752,Municipio X,Pedone,M,Deceduto sul posto,-1,Sereno
-5146165,Municipio V,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5154962,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno
-5164266,Municipio III,Pedone,M,Deceduto sul posto,-1,Sereno
-5164604,Municipio XI,Conducente,M,Deceduto sul posto,-1,Sereno
-5169457,Municipio VII,Pedone,M,Deceduto durante prime cure,-1,Sereno
-5176838,Municipio I,Pedone,M,Deceduto sul posto,-1,Nuvoloso
-5180954,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Nuvoloso
-5181529,Municipio X,Pedone,F,Deceduto sul posto,-1,Nuvoloso
-5183605,Municipio I,Pedone,F,Deceduto durante prime cure,-1,Pioggia in atto
-5186726,Municipio I,Pedone,F,Deceduto durante trasporto,-1,Nuvoloso
-5189754,Municipio I,Pedone,M,Deceduto sul posto,-1,Nuvoloso
-5196801,Municipio I,Conducente,M,Deceduto sul posto,-1,Sereno
-5200601,Municipio I,Pedone,F,Deceduto durante prime cure,-1,Sereno
-5211703,Municipio I,Passeggero,M,Deceduto durante prime cure,-1,Nuvoloso
-5216554,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno
+Protocollo,Municipio,TipoPersona,Sesso,Tipolesione,Deceduto,CondizioneAtmosferica,NaturaIncidente
+4736836,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+4746329,Municipio XIII,Conducente,F,Deceduto durante prime cure,-1,Sereno,Fuoriuscita dalla sede stradale
+4748299,Municipio IX,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro veicolo in sosta
+4764985,Municipio III,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
+4768714,Municipio VII,Conducente,M,Deceduto durante trasporto,-1,Nuvoloso,Veicolo in marcia contro veicolo in sosta
+4772950,Municipio V,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+4801013,Municipio IX,Conducente,F,Deceduto sul posto,-1,Nuvoloso,Scontro frontale fra veicoli in marcia
+4801156,Municipio III,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Scontro laterale fra veicoli in marcia
+4811366,Municipio II,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+4811618,Municipio I,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia
+4815412,Municipio IX,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+4851846,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro veicolo in sosta
+4864529,Municipio I,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+4878658,Municipio XV,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone
+4896315,Municipio X,Conducente,M,Deceduto sul posto,-1,Sereno,Tamponamento
+4897650,Municipio VII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
+4910320,Municipio XIII,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone
+4918518,Municipio IV,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
+4919044,Municipio III,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+4927222,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno,Tamponamento
+4942703,Municipio VII,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+4946169,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Pioggia in atto,Veicolo in marcia contro ostacolo fisso
+4960907,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+4973964,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
+4990788,Municipio X,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5000045,Municipio III,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
+5002289,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+5013637,Municipio IV,Conducente,M,Deceduto durante prime cure,-1,Sereno,Infortunio per caduta del veicolo
+5020177,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+5023059,Municipio VII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro veicolo arresto
+5029340,Municipio X,Conducente,M,Deceduto durante trasporto,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
+5030991,Municipio IX,Pedone non identificato,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+5031340,Municipio IX,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5038617,Municipio XI,Conducente,M,Deceduto sul posto,-1,Pioggia in atto,Tamponamento
+5052230,Municipio IX,Passeggero,F,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
+5057245,Municipio II,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
+5079398,Municipio IX,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5098191,Municipio X,Conducente,M,Deceduto durante prime cure,-1,Sereno,Tamponamento
+5100358,Municipio III,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Scontro frontale fra veicoli in marcia
+5101307,Municipio VII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
+5106082,Municipio XV,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro veicolo in sosta
+5123380,Municipio II,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Scontro frontale fra veicoli in marcia
+5246931,Municipio V,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
+5139224,Municipio II,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
+5141575,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
+5144034,Municipio III,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5145752,Municipio X,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5146165,Municipio V,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro veicolo in sosta
+5154962,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
+5164266,Municipio III,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
+5164604,Municipio XI,Conducente,M,Deceduto sul posto,-1,Sereno,Tamponamento
+5169457,Municipio VII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
+5176838,Municipio I,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+5180954,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Nuvoloso,Scontro frontale fra veicoli in marcia
+5181529,Municipio X,Pedone,F,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+5183605,Municipio I,Pedone,F,Deceduto durante prime cure,-1,Pioggia in atto,Investimento di pedone
+5186726,Municipio I,Pedone,F,Deceduto durante trasporto,-1,Nuvoloso,Investimento di pedone
+5189754,Municipio I,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
+5196801,Municipio I,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia
+5200601,Municipio I,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
+5211703,Municipio I,Passeggero,M,Deceduto durante prime cure,-1,Nuvoloso,Tamponamento
+5216554,Municipio I,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
