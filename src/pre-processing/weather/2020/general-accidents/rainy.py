@@ -1,33 +1,34 @@
 import pandas
 
-# paths of csv files about 2019
-csv_2019 = [
-    'dataset/source/accidents-2019/02-Febbraio.csv',
-    'dataset/source/accidents-2019/03-Marzo.csv',
-    'dataset/source/accidents-2019/04-Aprile.csv',
-    'dataset/source/accidents-2019/05-Maggio.csv',
-    'dataset/source/accidents-2019/06-Giugno.csv',
-    'dataset/source/accidents-2019/07-Luglio.csv',
-    'dataset/source/accidents-2019/08-Agosto.csv',
-    'dataset/source/accidents-2019/09-Settembre.csv',
-    'dataset/source/accidents-2019/10-Ottobre.csv',
-    'dataset/source/accidents-2019/11-Novembre.csv',
-    'dataset/source/accidents-2019/12-Dicembre.csv'
+# paths of csv files about 2020
+csv_2020 = [
+    'dataset/source/accidents-2020/02-Febbraio.csv',
+    'dataset/source/accidents-2020/03-Marzo.csv',
+    'dataset/source/accidents-2020/04-Aprile.csv',
+    'dataset/source/accidents-2020/05-Maggio.csv',
+    'dataset/source/accidents-2020/06-Giugno.csv',
+    'dataset/source/accidents-2020/07-Luglio.csv',
+    'dataset/source/accidents-2020/08-Agosto.csv',
+    'dataset/source/accidents-2020/09-Settembre.csv',
+    'dataset/source/accidents-2020/10-Ottobre.csv',
+    'dataset/source/accidents-2020/11-Novembre.csv',
+    'dataset/source/accidents-2020/12-Dicembre.csv'
 ]
 
 # import the first csv file
-dataset_2019 = pandas.read_csv('dataset/source/accidents-2019/01-Gennaio.csv', sep=';', encoding='latin-1')
+dataset_2020 = pandas.read_csv('dataset/source/accidents-2020/01-Gennaio.csv', sep=';', encoding='latin-1')
 
 # import and concat all following csv files
-for file in csv_2019:
-    dataset_2019 = pandas.concat([dataset_2019, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
+for file in csv_2020:
+    dataset_2020 = pandas.concat([dataset_2020, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # select the columns of interest
-columns = ['NaturaIncidente', 'Protocollo']
-dataset_columns = dataset_2019[columns]
+columns = ['NaturaIncidente', 'Protocollo', 'CondizioneAtmosferica']
 
-# select the rows of interest
-dataset_rows = dataset_columns
+dataset_columns = dataset_2020[columns]
+
+dataset_rows = dataset_columns.loc[dataset_columns['CondizioneAtmosferica'].isin(['Pioggia in atto'])]
+
 
 # creation of dictionary to group natures
 groups = {
@@ -73,4 +74,4 @@ accidents_data_frame = pandas.DataFrame(natures_count)
 accidents_data_frame.rename(columns={"Protocollo": "NumeroIncidenti"}, inplace=True)
 
 # export results in a new csv
-accidents_data_frame.to_csv('dataset/processed/verticalBarChartData2019.csv', header=True)
+accidents_data_frame.to_csv('dataset/processed/weather/2020/general-accidents/generalAccidentsRainy2020.csv', header=True)

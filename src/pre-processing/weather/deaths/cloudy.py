@@ -7,11 +7,12 @@ for year in years:
     dataset = pandas.read_csv('dataset/source/death-accidents/deaths-' + year + '.csv', sep=',', encoding='latin-1')
 
     # select the columns of interest
-    columns = ['Protocollo', 'Municipio']
+    columns = ['Protocollo', 'Municipio', 'CondizioneAtmosferica']
+
     dataset_columns = dataset[columns]
 
     # select the rows of interest
-    dataset_rows = dataset_columns
+    dataset_rows = dataset_columns.loc[dataset_columns['CondizioneAtmosferica'].isin(['Nuvoloso'])]
 
     # count of deaths for each town hall
     town_hall_count = dataset_rows.groupby('Municipio')['Protocollo'].count()
@@ -23,4 +24,4 @@ for year in years:
     accidents_data_frame.rename(columns={"Protocollo": "NumeroIncidenti"}, inplace=True)
 
     # export results in a new csv for the current year
-    accidents_data_frame.to_csv('dataset/processed/choroplethMap' + year + '.csv', header=True)
+    accidents_data_frame.to_csv('dataset/processed/weather/' + year + '/deaths/deathsAccidentsCloudy' + year + '.csv', header=True)

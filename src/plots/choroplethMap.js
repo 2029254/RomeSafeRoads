@@ -36,7 +36,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .append("path")
       .attr("d", path)
       .style("stroke", "black")
-      .style("stroke-width", 1)
+      .style("stroke-width", 0.5)
   .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
         console.log(d.properties.nome)

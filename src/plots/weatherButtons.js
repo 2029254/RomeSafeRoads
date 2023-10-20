@@ -1,6 +1,8 @@
 // Dimensioni dei bottoni
 let buttonRadius = 20;
 let buttonPadding = 0; // Spazio tra i bottoni
+let buttonWeatherValue
+let buttonFlag = false;
 
 const imagePaths = [
   "dataset/img/cloudy.png",
@@ -11,7 +13,7 @@ const imagePaths = [
 ];
 // Funzione per creare bottoni HTML
 function createHTMLButtons() {
-  let buttonData = ["Cloudy", "Sunny", "Rainy", "Snowy", "None"];
+  let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "None"];
   const buttonsContainer = document.getElementById("buttons");
 
   buttonData.forEach((buttonText, i) => {
@@ -30,10 +32,28 @@ function createHTMLButtons() {
     //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.alignContent = "center"; // Aggiungi spazio tra i bottoni
 
-
-
     button.addEventListener("click", function () {
-      console.log("ID del bottone:", this.id);
+
+      buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
+      button.style.transform = "scale(1.2)";
+      buttonWeatherValue = this.id
+      let year = document.getElementById("yearSlider").value;
+      if (buttonWeatherValue === "None") {
+        buttonFlag = false;
+        updatePlotsBasingOnSelectedYear();
+      }
+      else {
+        buttonFlag = true;
+        let csvFileNameVerticalBarChart = "dataset/processed/weather/" + year + "/general-accidents/generalAccidents" + buttonWeatherValue + year + ".csv";
+        let csvFileNameChoroplethMap = "dataset/processed/weather/" + year + "/deaths/deathsAccidents" + buttonWeatherValue + year + ".csv";
+
+        barChartSvg.selectAll("*").remove();
+        drawVerticalBarChart(csvFileNameVerticalBarChart);
+
+        choroplethMapSvg.selectAll("*").remove();
+        drawChoroplethMap(csvFileNameChoroplethMap);
+      }
+
     });
 
     button.addEventListener("mouseover", function () {
@@ -42,8 +62,10 @@ function createHTMLButtons() {
     });
 
     button.addEventListener("mouseout", function () {
-      buttonLabel.style.color = "white"; // Mostra il buttonLabel al passaggio del mouse
-      button.style.transform = "scale(1)";
+      if (!buttonFlag) {
+        buttonLabel.style.color = "white";// Mostra il buttonLabel al passaggio del mouse
+        button.style.transform = "scale(1)";
+      }
     });
 
     button.appendChild(buttonLabel); // Aggiungi il buttonLabel come figlio del bottone
