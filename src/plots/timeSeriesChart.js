@@ -10,6 +10,11 @@ function drawTimeSeriesChart(){
   const timeSeriesData = [
     { date: "2023-01-01", value: 10 },
     { date: "2023-02-01", value: 20 },
+    { date: "2023-02-05", value: 18 },
+    { date: "2023-02-06", value: 12 },
+    { date: "2023-02-15", value: 17 },
+    { date: "2023-05-01", value: 3 },
+    { date: "2023-06-01", value: 17 },
     { date: "2023-08-01", value: 12 }];
 
   // Definisci il parser per le date
