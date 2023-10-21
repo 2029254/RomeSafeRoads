@@ -89,6 +89,7 @@ function updatePlotsBasingOnSelectedYear(){
   } else {
     csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
     csvFileNameChoroplethMap = "dataset/processed/weather/" + selectedYear + "/deaths/deathsAccidents" + buttonWeatherValue + selectedYear + ".csv";
+    csvFileNameTimeSeries = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + ".csv";
   }
 
   barChartSvg.selectAll("*").remove();

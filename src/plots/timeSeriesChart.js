@@ -13,7 +13,6 @@ function drawTimeSeriesChart(csvFileName){
     });
     console.log(timeSeriesData)
 
-
 /*
   const timeSeriesData = [
     { date: "2023-01-01", value: 1 },
@@ -27,28 +26,28 @@ function drawTimeSeriesChart(csvFileName){
  */
 
   // Definisci il parser per le date
-  const parseTime = d3.timeParse("%Y-%m-%d");
+  let parseTime = d3.timeParse("%Y-%m-%d");
 
 // Converti le date da stringhe a oggetti Date
   timeSeriesData.forEach(d => {
     d.DataOraIncidente = parseTime(d.DataOraIncidente);
   });
 
-  const widthTimeSeries = 500;
-  const heightTimeSeries = 200;
+  let widthTimeSeries = 500;
+  let heightTimeSeries = 200;
 
 
-  const xScaleTimeSeries = d3.scaleTime()
+  let xScaleTimeSeries = d3.scaleTime()
     .domain(d3.extent(timeSeriesData, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
 
-  const line = d3.line()
+  let line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
 
-  const yScaleTimeSeries = d3.scaleLinear()
+  let yScaleTimeSeries = d3.scaleLinear()
     .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)])
     .range([heightTimeSeries, 0]);
 
@@ -58,15 +57,15 @@ function drawTimeSeriesChart(csvFileName){
     .datum(timeSeriesData)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
-    .attr("stroke-width", 1.5)
+    .attr("stroke-width", 2.5)
     .attr("d", line)
-    .attr("transform", `translate(148, 5)`);
+    .attr("transform", `translate(149, 10)`);
 
   // Trova la data minima e massima nei tuoi dati
   const minDate = d3.min(timeSeriesData, d => d.DataOraIncidente);
   const maxDate = d3.max(timeSeriesData, d => d.DataOraIncidente);
 
-  const tickValues = [];
+  let tickValues = [];
   let currentDate = d3.timeMonth.floor(minDate);
   while (currentDate <= maxDate) {
     tickValues.push(currentDate);
@@ -84,14 +83,14 @@ function drawTimeSeriesChart(csvFileName){
   currentDate = d3.timeDay.offset(minDate, 10);
   while (currentDate < maxDate) {
     tickValues.push(currentDate);
-    currentDate = d3.timeDay.offset(currentDate, 200);
+    currentDate = d3.timeDay.offset(currentDate, 200000);
   }
 
 // Crea l'asse x con i tickValues
-  const xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
+  let xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
     .tickFormat(date => {
-      const day = d3.timeFormat("%d")(date);
+      let day = d3.timeFormat("%d")(date);
       if (day === "01") {
         return d3.timeFormat("%b")(date);
       }
@@ -99,14 +98,13 @@ function drawTimeSeriesChart(csvFileName){
     });
 
 
-  const yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
-
+  let yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, ${heightTimeSeries + 5})`)
+    .attr("transform", `translate(148, ${heightTimeSeries + 10})`)
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, 5)`)
+    .attr("transform", `translate(148, 10)`)
     .call(yAxisTimeSeries);
 
   });
