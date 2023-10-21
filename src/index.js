@@ -57,27 +57,34 @@ function updatePlotsBasingOnSelectedYear(){
 
   let csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
+  let csvFileNameTimeSeries = "dataset/processed/timeSeries/";
+
   if (buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First") {
     switch (selectedYear) {
       case '2022':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
+        csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2022.csv")
         break;
       case '2021':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2021.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2021.csv")
+        csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2021.csv")
         break;
       case '2020':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2020.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2020.csv")
+        csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2020.csv")
         break;
       case '2019':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2019.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2019.csv")
+        csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2019.csv")
         break;
       default:
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat(" choroplethMap2022.csv")
+        csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2022.csv")
     }
   } else {
     csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
@@ -95,7 +102,7 @@ function updatePlotsBasingOnSelectedYear(){
   drawChoroplethMap(csvFileNameChoroplethMap);
 
   timeSeriesSvg.selectAll("*").remove();
-  drawTimeSeriesChart();
+  drawTimeSeriesChart(csvFileNameTimeSeries);
 
 
 }
