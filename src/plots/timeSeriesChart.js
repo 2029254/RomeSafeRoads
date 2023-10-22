@@ -5,6 +5,9 @@ const timeSeriesSvg = d3.select("#timeSeries")
   //.attr("x", 200)
  // .attr("y", -200);
 
+const toolpit = d3.select("#timeSeries")
+
+
 function drawTimeSeriesChart(csvFileName){
 
   d3.csv(csvFileName, function (data) {
@@ -31,6 +34,7 @@ function drawTimeSeriesChart(csvFileName){
 // Converti le date da stringhe a oggetti Date
   timeSeriesData.forEach(d => {
     d.DataOraIncidente = parseTime(d.DataOraIncidente);
+    d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
   });
 
   let widthTimeSeries = 500;
@@ -41,15 +45,16 @@ function drawTimeSeriesChart(csvFileName){
     .domain(d3.extent(timeSeriesData, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
+    let yScaleTimeSeries = d3.scaleLinear()
+      .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)])
+      .range([heightTimeSeries, 0]);
 
   let line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
+console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
 
-  let yScaleTimeSeries = d3.scaleLinear()
-    .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)])
-    .range([heightTimeSeries, 0]);
 
   console.log(timeSeriesData)
 
@@ -61,6 +66,45 @@ function drawTimeSeriesChart(csvFileName){
     .attr("d", line)
     .attr("transform", `translate(149, 10)`);
 
+
+// Aggiungi un'area invisibile sopra il percorso per gestire gli eventi del mouse
+    timeSeriesSvg.append("rect")
+      .attr("width", widthTimeSeries)
+      .attr("height", heightTimeSeries)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .on("mouseover", handleMouseOver)
+      .on("mousemove", handleMouseMove)
+      .on("mouseout", handleMouseOut);
+
+// Funzione per gestire l'evento mouseover
+    function handleMouseOver(event, d) {
+      // Crea un elemento per il tooltip
+      d3.select("#tooltip")
+        .style("display", "block");
+    }
+
+// Funzione per gestire l'evento mousemove
+    function handleMouseMove(event, d) {
+      // Calcola la posizione x
+      let xPosition = d3.pointer(event)[0];
+      // Trova l'oggetto nei dati più vicino alla posizione x
+      let bisectDate = d3.bisector(d => xScaleTimeSeries(d.DataOraIncidente)).left;
+      let index = bisectDate(timeSeriesData, xScaleTimeSeries.invert(xPosition));
+      let closestData = timeSeriesData[index];
+      // Aggiungi il valore di NumeroIncidenti al tooltip
+      d3.select("#tooltip")
+        .html("NumeroIncidenti: " + closestData.NumeroIncidenti)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 20) + "px");
+    }
+
+// Funzione per gestire l'evento mouseout
+    function handleMouseOut(event, d) {
+      // Nascondi il tooltip
+      d3.select("#tooltip")
+        .style("display", "none");
+    }
   // Trova la data minima e massima nei tuoi dati
   const minDate = d3.min(timeSeriesData, d => d.DataOraIncidente);
   const maxDate = d3.max(timeSeriesData, d => d.DataOraIncidente);

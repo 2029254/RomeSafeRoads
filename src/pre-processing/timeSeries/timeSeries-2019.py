@@ -18,6 +18,7 @@ csv_2019 = [
 # import the first csv file
 dataset_2019 = pd.read_csv('dataset/source/accidents-2019/01-Gennaio.csv', sep=';', encoding='latin-1')
 
+
 # import and concatenate all following csv files
 for file in csv_2019:
     dataset_2019 = pd.concat([dataset_2019, pd.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
@@ -32,23 +33,33 @@ dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Inv
 # Convert the 'DataOraIncidente' column to a datetime object
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
                                                   errors='coerce')
+print(dataset_rows)
+
 
 # Drop duplicate Protocollo entries
 dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
 
+print(dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True))
 dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
+
 
 # Define a function to round the date to the nearest 10 days
 def round_date_to_10_days(date):
     day = 10
     month = date.month
     year = date.year
-    if date.day < 10:
+    if date == 1/1/2019:
         day = 1
-    elif date.day < 20:
+    elif date.day < 10:
         day = 10
-    else:
+    elif date.day < 20:
         day = 20
+    elif date.day > 20 and date.month < 12:
+        day = 1
+        month = month + 1
+    else:
+        day = 1
+        month = month
     return pd.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
 
 

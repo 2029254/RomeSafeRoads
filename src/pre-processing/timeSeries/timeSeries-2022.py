@@ -14,6 +14,7 @@ csv_2022 = [
 # import the first csv file
 dataset_2022 = pd.read_csv('dataset/source/accidents-2022/01-Gennaio.csv', sep=';', encoding='latin-1')
 
+
 # import and concatenate all following csv files
 for file in csv_2022:
     dataset_2022 = pd.concat([dataset_2022, pd.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
@@ -40,12 +41,18 @@ def round_date_to_10_days(date):
     day = 10
     month = date.month
     year = date.year
-    if date.day < 10:
+    if date == 1/1/2022:
         day = 1
-    elif date.day < 20:
+    elif date.day < 10:
         day = 10
-    else:
+    elif date.day < 20:
         day = 20
+    elif date.day > 20 and date.month < 12:
+        day = 1
+        month = month + 1
+    else:
+        day = 1
+        month = month
     return pd.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
 
 
