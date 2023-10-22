@@ -47,12 +47,12 @@ function drawTimeSeriesChart(csvFileName){
   const minDate = d3.min(timeSeriesData, d => d.DataOraIncidente);
   const maxDate = d3.max(timeSeriesData, d => d.DataOraIncidente);
 
-  let tickValues = [];
-  let currentDate = d3.timeMonth.floor(minDate);
+ let tickValues = [];
+ let currentDate = d3.timeMonth.floor(minDate);
   while (currentDate <= maxDate) {
     tickValues.push(currentDate);
     for (let i = 1; i < 3; i++) {
-      const nextDate = d3.timeDay.offset(currentDate, i * 10);
+      const nextDate = d3.timeDay.offset(currentDate, i*10);
       if (nextDate <= maxDate) {
         tickValues.push(nextDate);
       }
@@ -88,6 +88,7 @@ function drawTimeSeriesChart(csvFileName){
     .attr("transform", `translate(148, 10)`)
     .call(yAxisTimeSeries);
 
+
     // Aggiungi linee tratteggiate verticali
     timeSeriesSvg.selectAll("line.vgrid")
       .data(tickValues.slice(1))
@@ -120,5 +121,46 @@ function drawTimeSeriesChart(csvFileName){
       .style("stroke-dasharray", "5, 5")
       .style("stroke-width", 0.3)
       .filter((d, i) => i > 0);
+
+
+      // Aggiungi un gruppo per i punti interattivi
+      let pointsGroup = timeSeriesSvg.append("g")
+        .attr("transform", `translate(149, 10)`);
+
+      // Aggiungi cerchi per i punti di cambio di inclinazione
+      pointsGroup.selectAll(".point")
+        .data(timeSeriesData)
+        .enter()
+        .append("circle")
+        .attr("class", "point")
+        .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
+        .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
+        .attr("r", 3)
+        .style("fill", "steelblue")
+        .style("stroke", "white")
+        .style("stroke-width", 0.2)
+        .on("mouseover", showIncidentCount)
+        .on("mouseout", hideIncidentCount);
+
+      // Funzione per mostrare il numero di incidenti
+      function showIncidentCount(d) {
+        let incidentCount = d.NumeroIncidenti;
+        let xPosition = xScaleTimeSeries(d.DataOraIncidente);
+        let yPosition = yScaleTimeSeries(incidentCount) - 15;
+
+        pointsGroup.append("text")
+          .attr("class", "incident-count")
+          .attr("x", xPosition)
+          .attr("y", yPosition)
+          //.text("Incidenti: " + incidentCount)
+          .text(incidentCount)
+          .style("font-size", "12px")
+          .style("fill", "black");
+      }
+
+      // Funzione per nascondere il numero di incidenti
+      function hideIncidentCount() {
+        pointsGroup.selectAll(".incident-count").remove();
+      }
   });
 }
