@@ -1,12 +1,7 @@
 const timeSeriesSvg = d3.select("#timeSeries")
   .append("svg")
   .attr("width", 800)
-  .attr("height", 232)
-  //.attr("x", 200)
- // .attr("y", -200);
-
-const toolpit = d3.select("#timeSeries")
-
+  .attr("height", 232);
 
 function drawTimeSeriesChart(csvFileName){
 
@@ -16,22 +11,10 @@ function drawTimeSeriesChart(csvFileName){
     });
     console.log(timeSeriesData)
 
-/*
-  const timeSeriesData = [
-    { date: "2023-01-01", value: 1 },
-    { date: "2023-02-01", value: 1 },
-    { date: "2023-02-05", value: 1 },
-    { date: "2023-02-06", value: 1 },
-    { date: "2023-02-15", value: 1 },
-    { date: "2023-05-01", value: 1 },
-    { date: "2023-06-01", value: 1 },
-    { date: "2023-08-01", value: 1 }];
- */
-
   // Definisci il parser per le date
   let parseTime = d3.timeParse("%Y-%m-%d");
 
-// Converti le date da stringhe a oggetti Date
+ // Converti le date da stringhe a oggetti Date
   timeSeriesData.forEach(d => {
     d.DataOraIncidente = parseTime(d.DataOraIncidente);
     d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
@@ -40,23 +23,17 @@ function drawTimeSeriesChart(csvFileName){
   let widthTimeSeries = 500;
   let heightTimeSeries = 200;
 
-
   let xScaleTimeSeries = d3.scaleTime()
     .domain(d3.extent(timeSeriesData, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
     let yScaleTimeSeries = d3.scaleLinear()
-      .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)])
+      .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)+9])
       .range([heightTimeSeries, 0]);
 
   let line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
-
-console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
-
-
-  console.log(timeSeriesData)
 
   timeSeriesSvg.append("path")
     .datum(timeSeriesData)
@@ -66,45 +43,6 @@ console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
     .attr("d", line)
     .attr("transform", `translate(149, 10)`);
 
-
-// Aggiungi un'area invisibile sopra il percorso per gestire gli eventi del mouse
-    timeSeriesSvg.append("rect")
-      .attr("width", widthTimeSeries)
-      .attr("height", heightTimeSeries)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .on("mouseover", handleMouseOver)
-      .on("mousemove", handleMouseMove)
-      .on("mouseout", handleMouseOut);
-
-// Funzione per gestire l'evento mouseover
-    function handleMouseOver(event, d) {
-      // Crea un elemento per il tooltip
-      d3.select("#tooltip")
-        .style("display", "block");
-    }
-
-// Funzione per gestire l'evento mousemove
-    function handleMouseMove(event, d) {
-      // Calcola la posizione x
-      let xPosition = d3.pointer(event)[0];
-      // Trova l'oggetto nei dati più vicino alla posizione x
-      let bisectDate = d3.bisector(d => xScaleTimeSeries(d.DataOraIncidente)).left;
-      let index = bisectDate(timeSeriesData, xScaleTimeSeries.invert(xPosition));
-      let closestData = timeSeriesData[index];
-      // Aggiungi il valore di NumeroIncidenti al tooltip
-      d3.select("#tooltip")
-        .html("NumeroIncidenti: " + closestData.NumeroIncidenti)
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 20) + "px");
-    }
-
-// Funzione per gestire l'evento mouseout
-    function handleMouseOut(event, d) {
-      // Nascondi il tooltip
-      d3.select("#tooltip")
-        .style("display", "none");
-    }
   // Trova la data minima e massima nei tuoi dati
   const minDate = d3.min(timeSeriesData, d => d.DataOraIncidente);
   const maxDate = d3.max(timeSeriesData, d => d.DataOraIncidente);
@@ -122,7 +60,7 @@ console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
     currentDate = d3.timeMonth.offset(currentDate, 1);
   }
 
-// Aggiungi i trattini per ogni 10 giorni senza etichette
+ // Aggiungi i trattini per ogni 10 giorni senza etichette
   console.log(minDate)
   currentDate = d3.timeDay.offset(minDate, 10);
   while (currentDate < maxDate) {
@@ -130,7 +68,7 @@ console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
     currentDate = d3.timeDay.offset(currentDate, 200000);
   }
 
-// Crea l'asse x con i tickValues
+ // Crea l'asse x con i tickValues
   let xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
     .tickFormat(date => {
@@ -141,7 +79,6 @@ console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
       return "";
     });
 
-
   let yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
   timeSeriesSvg.append("g")
     .attr("transform", `translate(148, ${heightTimeSeries + 10})`)
@@ -151,5 +88,37 @@ console.log("MAx" + d3.max(timeSeriesData, d => d.NumeroIncidenti))
     .attr("transform", `translate(148, 10)`)
     .call(yAxisTimeSeries);
 
+    // Aggiungi linee tratteggiate verticali
+    timeSeriesSvg.selectAll("line.vgrid")
+      .data(tickValues.slice(1))
+      .enter()
+      .append("line")
+      .attr("class", "vgrid")
+      .attr("x1", d => xScaleTimeSeries(d))
+      .attr("x2", d => xScaleTimeSeries(d))
+      .attr("y1", heightTimeSeries)
+      .attr("y2", 0)
+      .attr("transform", `translate(148.5,  10)`)
+      .style("stroke", "gray")
+      .style("stroke-dasharray", "5, 5")
+      .style("stroke-width", 0.3)
+      .filter((d, i) => i > 0);
+
+
+    // Aggiungi linee tratteggiate orizzontali
+    timeSeriesSvg.selectAll("line.hgrid")
+      .data(yScaleTimeSeries.ticks().slice(1))
+      .enter()
+      .append("line")
+      .attr("class", "hgrid")
+      .attr("x1", 0)
+      .attr("x2", widthTimeSeries)
+      .attr("y1", d => yScaleTimeSeries(d))
+      .attr("y2", d => yScaleTimeSeries(d))
+      .attr("transform", `translate(148, 10.5)`)
+      .style("stroke", "gray")
+      .style("stroke-dasharray", "5, 5")
+      .style("stroke-width", 0.3)
+      .filter((d, i) => i > 0);
   });
 }
