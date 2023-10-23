@@ -72,7 +72,9 @@ function drawAxesAndBars(csvFileName){
     // definition of axes domain
     xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
     let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-    yScale.domain([0, 23000]);
+    if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
+       yScale.domain([0, 23000]);
+    else yScale.domain([0, Math.max.apply(null, MinMax)]);
 
     // bars creation
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
@@ -181,10 +183,48 @@ function onclickBar(d) {
       result = "Other nature";
   }
 
-  d3.csv("dataset/processed/choroplethMap/choroplethMapNature" + slider.value + ".csv", function (data) {
-    let dataAboutNature = data.filter(function (row) {
-      return row['NaturaIncidente'] === d.NaturaIncidente.toString();
+  let weatherResult = [];
+  switch (buttonWeatherValue) {
+    case 'Cloudy':
+      weatherResult.push("Nuvoloso");
+      break;
+    case 'Sunny':
+      weatherResult.push("Sereno", "Sole radente");
+      break;
+    case 'Rainy':
+      weatherResult.push("Pioggia in atto");
+      break;
+    case 'Severe':
+      weatherResult.push("Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+      break;
+    case 'None':
+      weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+      break;
+    default:
+      weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+  }
+
+  d3.csv(csvFileNameChoroplethMapNature, function (data) {
+
+    console.log(weatherResult )
+    let dataAboutWeather = [];
+    weatherResult.forEach(item => {
+     data.filter(function (row) {
+        if(row['CondizioneAtmosferica'] === item)
+          dataAboutWeather.push(row)
+      });
     });
+    console.log("Array meteo")
+
+    console.log(dataAboutWeather)
+
+    let dataAboutNature = []
+    dataAboutWeather.forEach(item => {
+      if (item['NaturaIncidente'] === d.NaturaIncidente.toString() )
+        dataAboutNature.push(item)
+    });
+
+
 
     let groupedByTownHall = new Map();
     dataAboutNature.forEach(item => {
