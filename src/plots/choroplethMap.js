@@ -233,16 +233,31 @@ function showNumberOfAccidents(townHall, number) {
   let centroidInterested = centroidTownHalls.get(townHall);
   let marginNumberY = 5;
   let marginNumberX = 0;
+  let marginNumberCircleX = 0;
+
   if(townHall.toString() === "Municipio VI" ) {
     marginNumberX = 15;
+    marginNumberCircleX = marginNumberX;
   } else if (townHall.toString() === "Municipio XV"){
     marginNumberY = 23;
     marginNumberX = -12;
+    marginNumberCircleX = -12;
+  } else if (townHall.toString() === "Municipio XIII" && number > 9){
+    marginNumberCircleX = -2.5
   }
+
+  let circlesNumber = choroplethMapSvg.append("circle")
+    .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
+    .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
+    .attr("r", 8) // Imposta il raggio del cerchio
+    .style("fill", "gray");
+
   let textNumberTownHall = choroplethMapSvg.append("text")
     .text(number)
     .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
+    .style("color", "white")
+    .style("fill", "white")
     .style("font-size", "10px");
 
   // Imposta un timeout per rimuovere il testo dopo 5 secondi
@@ -250,17 +265,17 @@ function showNumberOfAccidents(townHall, number) {
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);
     });
+     circlesNumber.remove();
      textNumberTownHall.remove();
-  }, 10000);
+  }, 5000);
 }
 
 function resetTownHall(){
-  console.log("VEDREMOO" + test)
-  console.log(centroidTownHalls.keys())
   clearInterval(test);
   clearTimeout(test);
   console.log(test)
   choroplethMapSvg.selectAll("text").remove();
+  choroplethMapSvg.selectAll("circle").remove();
   Array.from(centroidTownHalls.keys()).forEach(item => {
     console.log(item)
     let selectedPath = choroplethMapSvg.select(`path[id='${item}']`);
