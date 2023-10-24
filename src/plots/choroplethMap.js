@@ -231,12 +231,18 @@ function showNumberOfAccidents(townHall, number) {
   selectedPath.style("fill", "yellow");
 
   let centroidInterested = centroidTownHalls.get(townHall);
-  console.log("VEDIAMO")
-  console.log(centroidTownHalls.keys())
-  let text = choroplethMapSvg.append("text")
+  let marginNumberY = 5;
+  let marginNumberX = 0;
+  if(townHall.toString() === "Municipio VI" ) {
+    marginNumberX = 15;
+  } else if (townHall.toString() === "Municipio XV"){
+    marginNumberY = 23;
+    marginNumberX = -12;
+  }
+  let textNumberTownHall = choroplethMapSvg.append("text")
     .text(number)
-    .attr("x", centroidInterested[0]) // Coordinata x del testo
-    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
+    .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
+    .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
     .style("font-size", "10px");
 
   // Imposta un timeout per rimuovere il testo dopo 5 secondi
@@ -244,23 +250,24 @@ function showNumberOfAccidents(townHall, number) {
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);
     });
-    text.remove();
-  }, 5000);
+     textNumberTownHall.remove();
+  }, 10000);
 }
 
 function resetTownHall(){
-  console.log("VEDREMOO")
+  console.log("VEDREMOO" + test)
   console.log(centroidTownHalls.keys())
-  let text = choroplethMapSvg.selectAll("text")
+  clearInterval(test);
+  clearTimeout(test);
+  console.log(test)
+  choroplethMapSvg.selectAll("text").remove();
   Array.from(centroidTownHalls.keys()).forEach(item => {
     console.log(item)
     let selectedPath = choroplethMapSvg.select(`path[id='${item}']`);
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);
     });
-    clearInterval(test);
   });
-  text.remove();
 }
 
 
