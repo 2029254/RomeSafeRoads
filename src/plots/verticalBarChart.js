@@ -154,8 +154,8 @@ function handleMouseOut() {
       .style("fill", function(d) { return setBarColor(d.NumeroIncidenti)});
     barChartSvg.select(".bar-label").remove();
   }
-
 function onclickBar(d) {
+  resetTownHall();
   let result;
   switch (d.NaturaIncidente.toString()) {
     case 'C1':
@@ -224,8 +224,6 @@ function onclickBar(d) {
         dataAboutNature.push(item)
     });
 
-
-
     let groupedByTownHall = new Map();
     dataAboutNature.forEach(item => {
       let municipio = item.Municipio;
@@ -241,6 +239,8 @@ function onclickBar(d) {
       incidentCounts.set(municipio, count);
     });
     console.log(incidentCounts);
+    console.log("Centroidi")
+    console.log( centroidTownHalls)
 
     for (const [key, value] of incidentCounts) {
       showNumberOfAccidents(key, value)

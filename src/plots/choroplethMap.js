@@ -8,6 +8,8 @@ var choroplethMapSvg = d3.select("#choroplethMap")
 
 let dataAboutTownHall;
 let path;
+let centroidTownHalls = new Map();
+
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -29,7 +31,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 // Carica i dati GeoJSON dei comuni
   d3.json("dataset/source/choropleth-map/municipi.geojson", function (error, data) {
     if (error) throw error;
-
+    centroidTownHalls.clear();
     // Crea i percorsi geografici
     choroplethMapSvg.selectAll("path")
       .data(data.features)
@@ -38,7 +40,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .attr("d", path)
       .style("stroke", "black")
       .style("stroke-width", 0.5)
-      .attr("id",function (d) {return d.properties.nome })
+      .attr("id",function (d) {
+        centroidTownHalls.set(d.properties.nome, path.centroid(d));
+        return d.properties.nome })
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
         console.log(d.properties.nome)
@@ -151,23 +155,113 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
 
 }
 
-function showNumberOfAccidents(townHall, number){
-  console.log("number" +  number)
+function showNumberOfAccidents2(townHall, number){
   choroplethMapSvg.select(`path[id='${townHall}']`)
     .style("fill", "black")
 
   const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
-  selectedPath.style("fill", "black");
+  selectedPath.style("fill", "yellow");
+
+  let centroidInterested = centroidTownHalls.get(townHall)
 
   choroplethMapSvg.append("text")
     .text(number)
-    .attr("x", 100) // Coordinata x del testo
-    .attr("y", 190) // Coordinata y del testo
-    .style("font-size", "12px");
+    .attr("x", centroidInterested[0]) // Coordinata x del testo
+    .attr("y", centroidInterested[1]+5) // Coordinata y del testo
+    .style("font-size", "10px");
 
   // Aggiungiamo un ritardo di 5 secondi prima di rimuovere il testo e la linea
   setTimeout(function () {
     selectedPath.style("fill", function (d) { return setBarColorChoroplethMap(d); });
-    //choroplethMapSvg.selectAll("text").remove();
+    choroplethMapSvg.selectAll("text").remove();
   }, 5000);
 }
+
+function showNumberOfAccidents36(townHall, number) {
+  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
+  selectedPath.style("fill", "yellow");
+
+  let centroidInterested = centroidTownHalls.get(townHall);
+  let text = choroplethMapSvg.append("text")
+    .text(number)
+    .attr("x", centroidInterested[0]) // Coordinata x del testo
+    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
+    .style("font-size", "10px");
+
+  // Imposta un timeout per rimuovere il testo dopo 5 secondi
+  setTimeout(function() {
+    selectedPath.style("fill", function(d) {
+      return setBarColorChoroplethMap(d);
+    });
+    text.remove();
+  }, 5000);
+}
+
+let activeFlashInterval = false;
+
+function showNumberOfAccidents67(townHall, number) {
+  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
+  selectedPath.style("fill", "yellow");
+
+  let centroidInterested = centroidTownHalls.get(townHall);
+  let text = choroplethMapSvg.append("text")
+    .text(number)
+    .attr("x", centroidInterested[0]) // Coordinata x del testo
+    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
+    .style("font-size", "10px");
+
+  // Interrompi il flashInterval attivo (se presente)
+  if (activeFlashInterval) {
+    clearInterval(activeFlashInterval);
+  }
+
+  // Imposta un timeout per rimuovere il testo dopo 5 secondi
+  setTimeout(function() {
+    selectedPath.style("fill", function(d) {
+      return setBarColorChoroplethMap(d);
+    });
+    text.remove();
+  }, 5000);
+}
+
+let test
+function showNumberOfAccidents(townHall, number) {
+
+  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
+  selectedPath.style("fill", "yellow");
+
+  let centroidInterested = centroidTownHalls.get(townHall);
+  console.log("VEDIAMO")
+  console.log(centroidTownHalls.keys())
+  let text = choroplethMapSvg.append("text")
+    .text(number)
+    .attr("x", centroidInterested[0]) // Coordinata x del testo
+    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
+    .style("font-size", "10px");
+
+  // Imposta un timeout per rimuovere il testo dopo 5 secondi
+   test = setTimeout(function() {
+    selectedPath.style("fill", function(d) {
+      return setBarColorChoroplethMap(d);
+    });
+    text.remove();
+  }, 5000);
+}
+
+function resetTownHall(){
+  console.log("VEDREMOO")
+  console.log(centroidTownHalls.keys())
+  let text = choroplethMapSvg.selectAll("text")
+  Array.from(centroidTownHalls.keys()).forEach(item => {
+    console.log(item)
+    let selectedPath = choroplethMapSvg.select(`path[id='${item}']`);
+    selectedPath.style("fill", function(d) {
+      return setBarColorChoroplethMap(d);
+    });
+    clearInterval(test);
+  });
+  text.remove();
+}
+
+
+
