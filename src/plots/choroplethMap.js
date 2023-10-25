@@ -230,17 +230,22 @@ function showNumberOfAccidents67(townHall, number) {
   }, 5000);
 }
 
-let test
 function showNumberOfAccidents(townHall, number) {
 
   const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
-  selectedPath.style("fill", "yellow");
+  //selectedPath.style("fill", "yellow");
 
   let centroidInterested = centroidTownHalls.get(townHall);
   let marginNumberY = 5;
   let marginNumberX = 0;
   let marginNumberCircleX = 0;
-
+/*
+  Array.from(centroidTownHalls.keys()).forEach(item => {
+    let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
+    if(townHall.toString() !== item)
+      selectedTownHall.style("fill", "gray")
+  });
+ */
   if(townHall.toString() === "Municipio VI" ) {
     marginNumberX = 15;
     marginNumberCircleX = marginNumberX;
@@ -252,15 +257,13 @@ function showNumberOfAccidents(townHall, number) {
     marginNumberCircleX = -2.5
   }
 
-
- let circlesNumber = choroplethMapSvg.append("circle")
+ choroplethMapSvg.append("circle")
     .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
     .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
     .attr("r", 8) // Imposta il raggio del cerchio
     .style("fill", "gray");
 
-
-  let textNumberTownHall = choroplethMapSvg.append("text")
+  choroplethMapSvg.append("text")
     .text(number)
     .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
     .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
@@ -268,26 +271,19 @@ function showNumberOfAccidents(townHall, number) {
     .style("color", "white")
     .style("fill", "white")
     .style("font-size", "10px");
-
-  // Imposta un timeout per rimuovere il testo dopo 5 secondi
-  /* test = setTimeout(function() {
-    selectedPath.style("fill", function(d) {
-      return setBarColorChoroplethMap(d);
-    });
-     circlesNumber.remove();
-     d3.select("#text-number-town-hall").remove();
-  }, 5000);
-   */
+}
+function fillOtherTownHalls(map){
+  Array.from(centroidTownHalls.keys()).forEach(item => {
+    let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
+    if(!map.has(item))
+      selectedTownHall.style("fill", "white")
+  });
 }
 
 function resetTownHall(){
-  clearInterval(test);
-  clearTimeout(test);
-  console.log(test)
   d3.selectAll("#text-number-town-hall").remove();
   choroplethMapSvg.selectAll("circle").remove();
   Array.from(centroidTownHalls.keys()).forEach(item => {
-    console.log(item)
     let selectedPath = choroplethMapSvg.select(`path[id='${item}']`);
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);

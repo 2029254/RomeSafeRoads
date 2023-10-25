@@ -233,9 +233,6 @@ console.log(isActive)
           dataAboutWeather.push(row)
       });
     });
-    console.log("Array meteo")
-
-    console.log(dataAboutWeather)
 
     let dataAboutNature = []
     dataAboutWeather.forEach(item => {
@@ -257,16 +254,12 @@ console.log(isActive)
       const count = data.length;
       incidentCounts.set(municipio, count);
     });
-    console.log(incidentCounts);
-    console.log("Centroidi")
-    console.log( centroidTownHalls)
 
     for (const [key, value] of incidentCounts) {
-      showNumberOfAccidents(key, value)
+      showNumberOfAccidents(key, value);
     }
-
+    fillOtherTownHalls(incidentCounts);
   });
-
 }
 
 function setAccidentsNumberAndNatureAndYear(d) {
