@@ -154,8 +154,27 @@ function handleMouseOut() {
       .style("fill", function(d) { return setBarColor(d.NumeroIncidenti)});
     barChartSvg.select(".bar-label").remove();
   }
+
+let timer; // Variabile per il timer
+let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
+console.log(isActive)
+  if (!isActive) { // Se il timer non è attivo
+    isActive = true;
+    timer = setTimeout(function () {
+      isActive = false; // Resetta lo stato del timer
+      resetTownHall();
+    }, 3000);
+  } else if (timer){ // Se il timer è già attivo
+    clearTimeout(timer); // Interrompi il timer corrente
+    timer = setTimeout(function () {
+      isActive = false; // Resetta lo stato del timer
+      resetTownHall();
+    }, 3000);
+   // isActive = false; // Resetta lo stato del timer
+  }
   resetTownHall();
+
   let result;
   switch (d.NaturaIncidente.toString()) {
     case 'C1':

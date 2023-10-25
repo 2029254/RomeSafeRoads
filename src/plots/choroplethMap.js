@@ -50,10 +50,10 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .on("mouseover",  function(d) {
         let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
         if (townHallAndAccidentsNumber !== undefined)
-           accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
-          else
-           accidentsNumber = 0
-        d3.select(this).style("fill", "grey");
+          accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
+        else
+          accidentsNumber = 0
+        if (!isActive) d3.select(this).style("fill", "grey");
         choroplethMapSvg.append("text")
           .attr("class", "bar-label")
           .attr("x", 300)
@@ -111,9 +111,14 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
 
 function handleMouseOutChoroplethMap() {
-  d3.select(this)
-    .style("fill", function (d) { return setBarColorChoroplethMap(d)});
   choroplethMapSvg.select(".bar-label").remove();
+
+  if (!isActive) {
+    d3.select(this)
+      .style("fill", function (d) {
+        return setBarColorChoroplethMap(d)
+      });
+  }
 }
 
 function setBarColorChoroplethMap(d) {
@@ -206,6 +211,7 @@ function showNumberOfAccidents67(townHall, number) {
   let centroidInterested = centroidTownHalls.get(townHall);
   let text = choroplethMapSvg.append("text")
     .text(number)
+    .style("id", townHall)
     .attr("x", centroidInterested[0]) // Coordinata x del testo
     .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
     .style("font-size", "10px");
@@ -246,14 +252,17 @@ function showNumberOfAccidents(townHall, number) {
     marginNumberCircleX = -2.5
   }
 
-  let circlesNumber = choroplethMapSvg.append("circle")
+
+ let circlesNumber = choroplethMapSvg.append("circle")
     .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
     .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
     .attr("r", 8) // Imposta il raggio del cerchio
     .style("fill", "gray");
 
+
   let textNumberTownHall = choroplethMapSvg.append("text")
     .text(number)
+    .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
     .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
     .style("color", "white")
@@ -261,20 +270,21 @@ function showNumberOfAccidents(townHall, number) {
     .style("font-size", "10px");
 
   // Imposta un timeout per rimuovere il testo dopo 5 secondi
-   test = setTimeout(function() {
+  /* test = setTimeout(function() {
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);
     });
      circlesNumber.remove();
-     textNumberTownHall.remove();
+     d3.select("#text-number-town-hall").remove();
   }, 5000);
+   */
 }
 
 function resetTownHall(){
   clearInterval(test);
   clearTimeout(test);
   console.log(test)
-  choroplethMapSvg.selectAll("text").remove();
+  d3.selectAll("#text-number-town-hall").remove();
   choroplethMapSvg.selectAll("circle").remove();
   Array.from(centroidTownHalls.keys()).forEach(item => {
     console.log(item)
