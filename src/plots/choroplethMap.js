@@ -160,76 +160,6 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
 
 }
 
-function showNumberOfAccidents2(townHall, number){
-  choroplethMapSvg.select(`path[id='${townHall}']`)
-    .style("fill", "black")
-
-  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
-  selectedPath.style("fill", "yellow");
-
-  let centroidInterested = centroidTownHalls.get(townHall)
-
-  choroplethMapSvg.append("text")
-    .text(number)
-    .attr("x", centroidInterested[0]) // Coordinata x del testo
-    .attr("y", centroidInterested[1]+5) // Coordinata y del testo
-    .style("font-size", "10px");
-
-  // Aggiungiamo un ritardo di 5 secondi prima di rimuovere il testo e la linea
-  setTimeout(function () {
-    selectedPath.style("fill", function (d) { return setBarColorChoroplethMap(d); });
-    choroplethMapSvg.selectAll("text").remove();
-  }, 5000);
-}
-
-function showNumberOfAccidents36(townHall, number) {
-  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
-  selectedPath.style("fill", "yellow");
-
-  let centroidInterested = centroidTownHalls.get(townHall);
-  let text = choroplethMapSvg.append("text")
-    .text(number)
-    .attr("x", centroidInterested[0]) // Coordinata x del testo
-    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
-    .style("font-size", "10px");
-
-  // Imposta un timeout per rimuovere il testo dopo 5 secondi
-  setTimeout(function() {
-    selectedPath.style("fill", function(d) {
-      return setBarColorChoroplethMap(d);
-    });
-    text.remove();
-  }, 5000);
-}
-
-let activeFlashInterval = false;
-
-function showNumberOfAccidents67(townHall, number) {
-  const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
-  selectedPath.style("fill", "yellow");
-
-  let centroidInterested = centroidTownHalls.get(townHall);
-  let text = choroplethMapSvg.append("text")
-    .text(number)
-    .style("id", townHall)
-    .attr("x", centroidInterested[0]) // Coordinata x del testo
-    .attr("y", centroidInterested[1] + 5) // Coordinata y del testo
-    .style("font-size", "10px");
-
-  // Interrompi il flashInterval attivo (se presente)
-  if (activeFlashInterval) {
-    clearInterval(activeFlashInterval);
-  }
-
-  // Imposta un timeout per rimuovere il testo dopo 5 secondi
-  setTimeout(function() {
-    selectedPath.style("fill", function(d) {
-      return setBarColorChoroplethMap(d);
-    });
-    text.remove();
-  }, 5000);
-}
-
 function showNumberOfAccidents(townHall, number) {
 
   const selectedPath = choroplethMapSvg.select(`path[id='${townHall}']`);
@@ -239,13 +169,7 @@ function showNumberOfAccidents(townHall, number) {
   let marginNumberY = 5;
   let marginNumberX = 0;
   let marginNumberCircleX = 0;
-/*
-  Array.from(centroidTownHalls.keys()).forEach(item => {
-    let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
-    if(townHall.toString() !== item)
-      selectedTownHall.style("fill", "gray")
-  });
- */
+
   if(townHall.toString() === "Municipio VI" ) {
     marginNumberX = 15;
     marginNumberCircleX = marginNumberX;

@@ -53,19 +53,9 @@ function drawTimeSeriesChart(csvFileName){
     tickValues.push(currentDate);
     for (let i = 1; i < 3; i++) {
       const nextDate = d3.timeDay.offset(currentDate, i*10);
-      if (nextDate <= maxDate) {
-        tickValues.push(nextDate);
-      }
+      if (nextDate <= maxDate) tickValues.push(nextDate);
     }
     currentDate = d3.timeMonth.offset(currentDate, 1);
-  }
-
- // Aggiungi i trattini per ogni 10 giorni senza etichette
-  console.log(minDate)
-  currentDate = d3.timeDay.offset(minDate, 10);
-  while (currentDate < maxDate) {
-    tickValues.push(currentDate);
-    currentDate = d3.timeDay.offset(currentDate, 200000);
   }
 
  // Crea l'asse x con i tickValues
@@ -88,10 +78,9 @@ function drawTimeSeriesChart(csvFileName){
     .attr("transform", `translate(148, 10)`)
     .call(yAxisTimeSeries);
 
-
     // Aggiungi linee tratteggiate verticali
     timeSeriesSvg.selectAll("line.vgrid")
-      .data(tickValues.slice(1))
+      .data(xScaleTimeSeries.ticks())
       .enter()
       .append("line")
       .attr("class", "vgrid")
@@ -145,8 +134,19 @@ function drawTimeSeriesChart(csvFileName){
       // Funzione per mostrare il numero di incidenti
       function showIncidentCount(d) {
         let incidentCount = d.NumeroIncidenti;
-        let xPosition = xScaleTimeSeries(d.DataOraIncidente);
-        let yPosition = yScaleTimeSeries(incidentCount) - 15;
+        let xPosition = xScaleTimeSeries(d.DataOraIncidente) - 6;
+        let yPosition = yScaleTimeSeries(incidentCount) - 10;
+        let marginNumberCircleX;
+
+        if(incidentCount < 10 ) marginNumberCircleX = 2.5
+        else marginNumberCircleX = 5.5
+
+        pointsGroup.append("circle")
+          .attr("id", "num")
+          .attr("cx", xPosition+ marginNumberCircleX)
+          .attr("cy", yPosition- 3.5)
+          .attr("r", 9) // Imposta il raggio del cerchio
+          .style("fill", "gray");
 
         pointsGroup.append("text")
           .attr("class", "incident-count")
@@ -154,13 +154,15 @@ function drawTimeSeriesChart(csvFileName){
           .attr("y", yPosition)
           //.text("Incidenti: " + incidentCount)
           .text(incidentCount)
-          .style("font-size", "12px")
-          .style("fill", "black");
+          .style("font-size", "10px")
+          .style("fill", "white");
       }
 
       // Funzione per nascondere il numero di incidenti
       function hideIncidentCount() {
         pointsGroup.selectAll(".incident-count").remove();
+        d3.selectAll("#num").remove();
+
       }
   });
 }
