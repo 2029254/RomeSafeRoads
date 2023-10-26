@@ -1,6 +1,6 @@
 const timeSeriesSvg = d3.select("#timeSeries")
   .append("svg")
-  .attr("width", 800)
+  .attr("width", 680)
   .attr("height", 232);
 
 function drawTimeSeriesChart(csvFileName){
@@ -27,9 +27,9 @@ function drawTimeSeriesChart(csvFileName){
     .domain(d3.extent(timeSeriesData, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
-    let yScaleTimeSeries = d3.scaleLinear()
-      .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti)+9])
-      .range([heightTimeSeries, 0]);
+  let yScaleTimeSeries = d3.scaleLinear()
+    .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti) + 9])
+    .range([heightTimeSeries, 0]);
 
   let line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
@@ -51,14 +51,17 @@ function drawTimeSeriesChart(csvFileName){
  let currentDate = d3.timeMonth.floor(minDate);
   while (currentDate <= maxDate) {
     tickValues.push(currentDate);
-    for (let i = 1; i < 3; i++) {
-      const nextDate = d3.timeDay.offset(currentDate, i*10);
-      if (nextDate <= maxDate) tickValues.push(nextDate);
+    for (let i = 0; i < 3; i++) {
+      let nextDateTen = d3.timeDay.offset(currentDate, 10);
+      if (nextDateTen <= maxDate)
+        tickValues.push(nextDateTen);
     }
+    tickValues.push(d3.timeDay.offset(currentDate, 20));
     currentDate = d3.timeMonth.offset(currentDate, 1);
   }
+  tickValues.pop(tickValues.length)
 
- // Crea l'asse x con i tickValues
+    // Crea l'asse x con i tickValues
   let xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
     .tickFormat(date => {
@@ -80,7 +83,7 @@ function drawTimeSeriesChart(csvFileName){
 
     // Aggiungi linee tratteggiate verticali
     timeSeriesSvg.selectAll("line.vgrid")
-      .data(xScaleTimeSeries.ticks())
+      .data(xScaleTimeSeries.ticks().slice(1))
       .enter()
       .append("line")
       .attr("class", "vgrid")
@@ -92,8 +95,6 @@ function drawTimeSeriesChart(csvFileName){
       .style("stroke", "gray")
       .style("stroke-dasharray", "5, 5")
       .style("stroke-width", 0.3)
-      .filter((d, i) => i > 0);
-
 
     // Aggiungi linee tratteggiate orizzontali
     timeSeriesSvg.selectAll("line.hgrid")
@@ -105,12 +106,10 @@ function drawTimeSeriesChart(csvFileName){
       .attr("x2", widthTimeSeries)
       .attr("y1", d => yScaleTimeSeries(d))
       .attr("y2", d => yScaleTimeSeries(d))
-      .attr("transform", `translate(148, 10.5)`)
+      .attr("transform", `translate(150.5, 10.5)`)
       .style("stroke", "gray")
       .style("stroke-dasharray", "5, 5")
-      .style("stroke-width", 0.3)
-      .filter((d, i) => i > 0);
-
+      .style("stroke-width", 0.3);
 
       // Aggiungi un gruppo per i punti interattivi
       let pointsGroup = timeSeriesSvg.append("g")
@@ -152,7 +151,6 @@ function drawTimeSeriesChart(csvFileName){
           .attr("class", "incident-count")
           .attr("x", xPosition)
           .attr("y", yPosition)
-          //.text("Incidenti: " + incidentCount)
           .text(incidentCount)
           .style("font-size", "10px")
           .style("fill", "white");
@@ -162,7 +160,6 @@ function drawTimeSeriesChart(csvFileName){
       function hideIncidentCount() {
         pointsGroup.selectAll(".incident-count").remove();
         d3.selectAll("#num").remove();
-
       }
   });
 }
