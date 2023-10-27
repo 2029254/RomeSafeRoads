@@ -1,60 +1,59 @@
-Protocollo,Municipio,TipoPersona,Sesso,Tipolesione,Deceduto,CondizioneAtmosferica,NaturaIncidente
-5765328,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5769881,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
-5772566,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro veicolo in sosta
-5774885,Municipio XIII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-5777422,Municipio XIII,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone
-5778548,Municipio XIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-5779158,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro laterale fra veicoli in marcia
-5782762,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
-5786220,Municipio XIV,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
-5789537,Municipio XIII,Passeggero,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5792841,Municipio XIV,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5797962,Municipio XIV,Pedone,M,Deceduto durante prime cure,-1,Nuvoloso,Investimento di pedone
-5801072,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-5804527,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale
-5809596,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Scontro frontale/laterale DX fra veicoli in marcia
-5820729,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5823443,Municipio XIII,Conducente,M,Deceduto durante trasporto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
-5827098,Municipio XIII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-5828401,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-5854415,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5855071,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
-5855565,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia
-5857003,Municipio XIII,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone
-5857333,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5865330,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5876003,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5880154,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5885177,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia
-5899944,Municipio XIV,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone
-5904368,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5915878,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5919689,Municipio XIII,Conducente,F,Deceduto durante trasporto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-5921892,Municipio XIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-5930917,Municipio XIII,Passeggero,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale
-5946652,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Nuvoloso,Scontro frontale fra veicoli in marcia
-5949622,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso
-5956198,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-5968168,Municipio XIV,Conducente,M,Deceduto durante trasporto,-1,Sereno,Fuoriuscita dalla sede stradale
-5970931,Municipio XIII,Passeggero,F,Deceduto durante prime cure,-1,Sereno,Ribaltamento senza urto contro ostacolo fisso
-5987089,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-5987198,Municipio VIII,Conducente,F,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro veicolo in sosta
-5989356,Municipio VIII,Pedone,M,Deceduto durante prime cure,-1,Nuvoloso,Investimento di pedone
-6014500,Municipio XIII,Passeggero,F,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-6031071,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Infortunio per sola frenata improvvisa
-6031381,Municipio VIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-6031381,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Investimento di pedone
-6041826,Municipio XIII,Conducente,F,Deceduto durante prime cure,-1,Sereno,Tamponamento
-6045381,Municipio XIV,Conducente,F,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-6045381,Municipio XIII,Passeggero,F,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-6050018,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-6051967,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-6069267,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia
-6070438,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-6086380,Municipio VIII,Passeggero,F,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
-6087855,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia
-6090238,Municipio XIV,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone
-6090505,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale
-6092719,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia
-6096855,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso
+Protocollo,Municipio,TipoPersona,Sesso,Tipolesione,Deceduto,CondizioneAtmosferica,NaturaIncidente,DataOraIncidente
+5765328,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,01/01/2022 19:25:00
+5769881,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso,07/01/2022 02:42:00
+5772566,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro veicolo in sosta,08/01/2022 11:30:00
+5774885,Municipio XIII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,11/01/2022 09:10:00
+5777422,Municipio XIII,Pedone,M,Deceduto sul posto,-1,Nuvoloso,Investimento di pedone,13/01/2022 08:29:00
+5778548,Municipio XIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,13/01/2022 19:05:00
+5779158,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro laterale fra veicoli in marcia,14/01/2022 09:00:00
+5782762,Municipio II,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale SX fra veicoli in marcia,14/01/2022 12:40:00
+5786220,Municipio XIV,Pedone,M,Deceduto sul posto,-1,Sereno,Investimento di pedone,19/01/2022 17:25:00
+5789537,Municipio XIII,Passeggero,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso,22/01/2022 01:30:00
+5792841,Municipio XIV,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,24/01/2022 20:15:00
+5797962,Municipio XIV,Pedone,M,Deceduto durante prime cure,-1,Nuvoloso,Investimento di pedone,28/01/2022 06:55:00
+5801072,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,29/01/2022 19:25:00
+5804527,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale,01/02/2022 17:30:00
+5809596,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Scontro frontale/laterale DX fra veicoli in marcia,05/02/2022 17:40:00
+5820729,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,12/02/2022 22:00:00
+5823443,Municipio XIII,Conducente,M,Deceduto durante trasporto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso,14/02/2022 20:30:00
+5827098,Municipio XIII,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,16/02/2022 18:00:00
+5828401,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,17/02/2022 13:45:00
+5854415,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,06/03/2022 11:20:00
+5855071,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso,05/03/2022 06:45:00
+5855565,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia,07/03/2022 08:45:00
+5857003,Municipio XIII,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone,08/03/2022 09:45:00
+5857333,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,08/03/2022 06:40:00
+5865330,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,13/03/2022 18:40:00
+5876003,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso,20/03/2022 19:45:00
+5880154,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,23/03/2022 09:30:00
+5885177,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro laterale fra veicoli in marcia,26/03/2022 04:45:00
+5899944,Municipio XIV,Pedone,F,Deceduto sul posto,-1,Sereno,Investimento di pedone,05/04/2022 00:50:00
+5904368,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,07/04/2022 17:30:00
+5915878,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,14/04/2022 13:20:00
+5919689,Municipio XIII,Conducente,F,Deceduto durante trasporto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,19/04/2022 01:40:00
+5921892,Municipio XIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,19/04/2022 21:20:00
+5930917,Municipio XIII,Passeggero,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale,27/04/2022 02:40:00
+5946652,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Nuvoloso,Scontro frontale fra veicoli in marcia,07/05/2022 00:05:00
+5949622,Municipio VIII,Conducente,M,Deceduto sul posto,-1,Nuvoloso,Veicolo in marcia contro ostacolo fisso,08/05/2022 22:05:00
+5956198,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,12/05/2022 21:30:00
+5968168,Municipio XIV,Conducente,M,Deceduto durante trasporto,-1,Sereno,Fuoriuscita dalla sede stradale,19/05/2022 21:30:00
+5970931,Municipio XIII,Passeggero,F,Deceduto durante prime cure,-1,Sereno,Ribaltamento senza urto contro ostacolo fisso,21/05/2022 18:00:00
+5987089,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,01/06/2022 05:00:00
+5987198,Municipio VIII,Conducente,F,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro veicolo in sosta,01/06/2022 00:55:00
+5989356,Municipio VIII,Pedone,M,Deceduto durante prime cure,-1,Nuvoloso,Investimento di pedone,02/06/2022 09:50:00
+6014500,Municipio XIII,Passeggero,F,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,18/06/2022 01:20:00
+6031071,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Infortunio per sola frenata improvvisa,28/06/2022 08:00:00
+6031381,Municipio VIII,Pedone,F,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,30/06/2022 09:00:00
+6031381,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Investimento di pedone,30/06/2022 09:00:00
+6041826,Municipio XIII,Conducente,F,Deceduto durante prime cure,-1,Sereno,Tamponamento,07/07/2022 21:40:00
+6045381,Municipio XIV,Conducente,F,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,11/07/2022 00:10:00
+6045381,Municipio XIII,Passeggero,F,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,11/07/2022 00:10:00
+6050018,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,14/07/2022 07:30:00
+6051967,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,15/07/2022 12:40:00
+6069267,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Scontro frontale/laterale DX fra veicoli in marcia,29/07/2022 16:45:00
+6070438,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Veicolo in marcia contro ostacolo fisso,31/07/2022 04:00:00
+6086380,Municipio VIII,Passeggero,F,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso,15/08/2022 18:25:00
+6090238,Municipio XIV,Pedone,M,Deceduto durante prime cure,-1,Sereno,Investimento di pedone,20/08/2022 22:07:00
+6090505,Municipio XIV,Conducente,M,Deceduto sul posto,-1,Sereno,Fuoriuscita dalla sede stradale,21/08/2022 15:00:00
+6092719,Municipio XIII,Conducente,M,Deceduto sul posto,-1,Sereno,Scontro frontale fra veicoli in marcia,24/08/2022 04:07:00
+6096855,Municipio XIII,Conducente,M,Deceduto durante prime cure,-1,Sereno,Veicolo in marcia contro ostacolo fisso,28/08/2022 10:10:00

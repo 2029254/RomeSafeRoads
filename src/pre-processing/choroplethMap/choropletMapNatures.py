@@ -29,7 +29,7 @@ for year in years:
     dataset = pandas.read_csv('dataset/source/death-accidents/deaths-' + year + '.csv', sep=',', encoding='latin-1')
 
     # select the columns of interest
-    columns = ['Protocollo', 'Municipio', 'NaturaIncidente', 'CondizioneAtmosferica']
+    columns = ['Protocollo', 'Municipio', 'NaturaIncidente', 'CondizioneAtmosferica', 'DataOraIncidente']
     dataset_columns = dataset[columns]
 
     # select the rows of interest
@@ -46,6 +46,35 @@ for year in years:
     dataset_rows['NaturaIncidente'] = dataset_rows['NaturaIncidente'].apply(group_nature)
 
 
+    # Convert the 'DataOraIncidente' column to a datetime object
+    dataset_rows['DataOraIncidente'] = pandas.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
+                                                          errors='coerce')
+
+    dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
+
+
+    # Define a function to round the date to the nearest 10 days
+    def round_date_to_10_days(date):
+        day = 10
+        month = date.month
+        year = date.year
+        if date == 1/1/2019:
+            day = 1
+        elif date.day < 10:
+            day = 10
+        elif date.day < 20:
+            day = 20
+        elif date.day > 20 and date.month < 12:
+            day = 1
+            month = month + 1
+        else:
+            day = 1
+            month = month
+        return pandas.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
+
+
+    # Apply the function to round the date
+    dataset_rows['DataOraIncidente'] = dataset_rows['DataOraIncidente'].apply(round_date_to_10_days)
     # creation of dataframe (two-dimensional data structure) to organize a table with rows and columns
     accidents_data_frame = pandas.DataFrame(dataset_rows)
 

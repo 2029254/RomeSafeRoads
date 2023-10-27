@@ -45,8 +45,65 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         return d.properties.nome })
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
+
         console.log(d.properties.nome)
-      })
+        townHallClicked = true;
+        timeSeriesSvg.selectAll("*").remove();
+        drawTimeSeriesChart(csvFileNameTimeSeries, function() {
+          // Questo codice verrà eseguito quando la funzione drawTimeSeriesChart sarà completata
+          townHallClicked = false; // Imposta townHallClicked su false
+        });
+
+        d3.csv(csvFileNameChoroplethMapNature, function (data) {
+          let dataResult = [];
+          data.filter(function (row) {
+            if (row['Municipio'] === d.properties.nome.toString())
+              dataResult.push(row)
+          });
+
+          let rightNatureArray = [];
+          dataResult.filter(function (row) {
+            if (row['NaturaIncidente'] === "C1")
+              rightNatureArray.push(row)
+          });
+
+          let newArrayOfData = rightNatureArray.map(item => {
+            return {
+              Municipio: item.Municipio,
+              DataOraIncidente: item.DataOraIncidente
+            };
+          });
+
+          // Usa reduce per raggruppare per data e calcolare il conteggio
+          let incidentiRaggruppati = newArrayOfData.reduce((acc, item) => {
+            const data = item.DataOraIncidente;
+            if (!acc[data]) {
+              acc[data] = {DataOraIncidente: data, NumeroIncidenti: 1};
+            } else {
+              acc[data].NumeroIncidenti++;
+            }
+            return acc;
+          }, {});
+
+
+          // Definisci il parser per le date
+          let parseTime = d3.timeParse("%Y-%m-%d");
+
+          // Converti le date da stringhe a oggetti Date
+          Object.values(incidentiRaggruppati).forEach(d => {
+            d.DataOraIncidente = parseTime(d.DataOraIncidente);
+            d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
+          });
+
+
+          dataTest.forEach(d => {
+            d.DataOraIncidente = parseTime(d.DataOraIncidente);
+            d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
+          });
+
+        })
+
+        })
       .on("mouseover",  function(d) {
         let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
         if (townHallAndAccidentsNumber !== undefined)

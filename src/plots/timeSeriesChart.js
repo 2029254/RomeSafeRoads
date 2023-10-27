@@ -3,7 +3,25 @@ const timeSeriesSvg = d3.select("#timeSeries")
   .attr("width", 680)
   .attr("height", 232);
 
-function drawTimeSeriesChart(csvFileName){
+let line, xScaleTimeSeries, yScaleTimeSeries;
+let townHallClicked = false;
+
+const dataTest = [
+  { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
+  { DataOraIncidente: "2023-01-10", NumeroIncidenti: 1 },
+  { DataOraIncidente: "2023-02-01", NumeroIncidenti: 0 },
+  { DataOraIncidente: "2023-03-01", NumeroIncidenti: 2 },
+  { DataOraIncidente: "2023-04-01", NumeroIncidenti: 1 },
+  { DataOraIncidente: "2023-05-01", NumeroIncidenti: 0 },
+  { DataOraIncidente: "2023-06-01", NumeroIncidenti: 0 },
+  { DataOraIncidente: "2023-07-01", NumeroIncidenti: 2 },
+  { DataOraIncidente: "2023-08-01", NumeroIncidenti: 1 },
+  { DataOraIncidente: "2023-09-01", NumeroIncidenti: 2 },
+  { DataOraIncidente: "2023-10-01", NumeroIncidenti: 1 },
+  { DataOraIncidente: "2023-11-01", NumeroIncidenti: 1 },
+];
+
+function drawTimeSeriesChart(csvFileName, callback){
 
   d3.csv(csvFileName, function (data) {
     let timeSeriesData = data.filter(function (row) {
@@ -23,15 +41,15 @@ function drawTimeSeriesChart(csvFileName){
   let widthTimeSeries = 500;
   let heightTimeSeries = 200;
 
-  let xScaleTimeSeries = d3.scaleTime()
+  xScaleTimeSeries = d3.scaleTime()
     .domain(d3.extent(timeSeriesData, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
-  let yScaleTimeSeries = d3.scaleLinear()
+  yScaleTimeSeries = d3.scaleLinear()
     .domain([0, d3.max(timeSeriesData, d => d.NumeroIncidenti) + 9])
     .range([heightTimeSeries, 0]);
 
-  let line = d3.line()
+  line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
@@ -43,7 +61,7 @@ function drawTimeSeriesChart(csvFileName){
     .attr("d", line)
     .attr("transform", `translate(149, 10)`);
 
-  // Trova la data minima e massima nei tuoi dati
+    // Trova la data minima e massima nei tuoi dati
   const minDate = d3.min(timeSeriesData, d => d.DataOraIncidente);
   const maxDate = d3.max(timeSeriesData, d => d.DataOraIncidente);
 
@@ -130,6 +148,38 @@ function drawTimeSeriesChart(csvFileName){
         .on("mouseover", showIncidentCount)
         .on("mouseout", hideIncidentCount);
 
+      console.log(townHallClicked)
+      if(townHallClicked) {
+        dataTest.forEach(d => {
+          d.DataOraIncidente = parseTime(d.DataOraIncidente);
+          d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
+        });
+
+        xScaleTimeSeries = d3.scaleTime()
+          .domain(d3.extent(dataTest, d => d.DataOraIncidente))
+          .range([0, widthTimeSeries]);
+
+        yScaleTimeSeries = d3.scaleLinear()
+          .domain([0, d3.max(dataTest, d => d.NumeroIncidenti) + 9])
+          .range([heightTimeSeries, 0]);
+
+        let line2 = d3.line()
+          .x(d => xScaleTimeSeries(d.DataOraIncidente))
+          .y(d => yScaleTimeSeries(d.NumeroIncidenti));
+
+        timeSeriesSvg.append("path")
+          .datum(dataTest)
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 2.5)
+          .attr("d", line2)
+          .attr("transform", `translate(149, 10)`);
+      }
+
+    // Quando hai finito il disegno, chiama la callback
+    if (typeof callback === 'function') {
+      callback();
+    }
       // Funzione per mostrare il numero di incidenti
       function showIncidentCount(d) {
         let incidentCount = d.NumeroIncidenti;
@@ -142,8 +192,8 @@ function drawTimeSeriesChart(csvFileName){
 
         pointsGroup.append("circle")
           .attr("id", "num")
-          .attr("cx", xPosition+ marginNumberCircleX)
-          .attr("cy", yPosition- 3.5)
+          .attr("cx", xPosition + marginNumberCircleX)
+          .attr("cy", yPosition - 3.5)
           .attr("r", 9) // Imposta il raggio del cerchio
           .style("fill", "gray");
 
@@ -161,5 +211,7 @@ function drawTimeSeriesChart(csvFileName){
         pointsGroup.selectAll(".incident-count").remove();
         d3.selectAll("#num").remove();
       }
+
+
   });
 }

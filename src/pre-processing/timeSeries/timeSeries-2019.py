@@ -33,13 +33,11 @@ dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Inv
 # Convert the 'DataOraIncidente' column to a datetime object
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
                                                   errors='coerce')
-print(dataset_rows)
 
 
 # Drop duplicate Protocollo entries
 dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
 
-print(dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True))
 dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
 
 
