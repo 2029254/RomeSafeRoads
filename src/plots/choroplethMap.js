@@ -46,13 +46,15 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
 
-        console.log(d.properties.nome)
-        townHallClicked = true;
-        timeSeriesSvg.selectAll("*").remove();
-        drawTimeSeriesChart(csvFileNameTimeSeries, function() {
-          // Questo codice verrà eseguito quando la funzione drawTimeSeriesChart sarà completata
-          townHallClicked = false; // Imposta townHallClicked su false
-        });
+      console.log(d.properties.nome)
+      console.log(csvFileNameTimeSeries)
+      townHallClicked = true;
+      timeSeriesSvg.selectAll("*").remove();
+      drawTimeSeriesChart(csvFileNameTimeSeries, function() {
+        // Questo codice verrà eseguito quando la funzione drawTimeSeriesChart sarà completata
+        townHallClicked = false; // Imposta townHallClicked su false
+      });
+
 
         d3.csv(csvFileNameChoroplethMapNature, function (data) {
           let dataResult = [];
@@ -100,6 +102,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
             d.DataOraIncidente = parseTime(d.DataOraIncidente);
             d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
           });
+
 
         })
 
