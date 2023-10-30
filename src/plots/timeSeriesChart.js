@@ -9,6 +9,9 @@ let widthTimeSeries = 500;
 let heightTimeSeries = 200;
 let parseTime = d3.timeParse("%Y-%m-%d");
 let line;
+let timeSeriesData;
+let arrayOfData = [];
+let idPoints;
 
 const dataTest = [
   { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
@@ -46,6 +49,8 @@ function convertData(data){
     d.DataOraIncidente = parseTime(d.DataOraIncidente);
     d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
   });
+
+  arrayOfData.push(data)
 }
 function setAxesScale(data){
 
@@ -63,13 +68,15 @@ function drawLineWithValue(data){
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
-  timeSeriesSvg.append("path")
-    .datum(data)
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-width", 2.5)
-    .attr("d", line)
-    .attr("transform", `translate(149, 10)`);
+  data.forEach(data => {
+    timeSeriesSvg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 2.5)
+      .attr("d", line)
+      .attr("transform", `translate(149, 10)`);
+  });
 }
 
 function drawAxes(data){
@@ -145,62 +152,44 @@ function drawGrid(){
     .style("stroke-width", 0.3);
 }
 
-function drawPoints(data){
+function addPoints(){
   // Aggiungi un gruppo per i punti interattivi
   pointsGroup = timeSeriesSvg.append("g")
+    .attr("id", idPoints++)
     .attr("transform", `translate(149, 10)`);
+}
+function drawPoints(data){
 
-  // Aggiungi cerchi per i punti di cambio di inclinazione
-  pointsGroup.selectAll(".point")
-    .data(data)
-    .enter()
-    .append("circle")
-    .attr("class", "point")
-    .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
-    .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
-    .attr("r", 3)
-    .style("fill", "steelblue")
-    .style("stroke", "white")
-    .style("stroke-width", 0.2)
-    .on("mouseover", showIncidentCount)
-    .on("mouseout", hideIncidentCount);
+    // Aggiungi cerchi per i punti di cambio di inclinazione
+    pointsGroup.selectAll(".point")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "point")
+      .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
+      .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
+      .attr("r", 3)
+      .style("fill", "steelblue")
+      .style("stroke", "white")
+      .style("stroke-width", 0.2)
+      .on("mouseover", showIncidentCount)
+      .on("mouseout", hideIncidentCount);
 }
 
 function drawTimeSeriesChart(csvFileName, callback){
 
   d3.csv(csvFileName, function (data) {
-    let timeSeriesData = data.filter(function (row) {
+    timeSeriesData = data.filter(function (row) {
       return row['DataOraIncidente', 'NumeroIncidenti'];
     });
 
-    //Commenta da qui a
     convertData(timeSeriesData);
     setAxesScale(timeSeriesData);
-    drawLineWithValue(timeSeriesData);
     drawAxes(timeSeriesData);
+    drawLineWithValue(arrayOfData);
     drawGrid();
+    addPoints()
     drawPoints(timeSeriesData);
-
-    convertData(dataTest2);
-    drawLineWithValue(dataTest2);
-    drawPoints(dataTest2);
-    //qui
-
-    //Scommenta da qui a
-    /*
-    convertData(dataTest2);
-    setAxesScale(dataTest2);
-    drawLineWithValue(dataTest2);
-    drawAxes(dataTest2);
-    drawGrid();
-    drawPoints(dataTest2);
-
-    convertData(dataTest);
-    drawLineWithValue(dataTest);
-    drawPoints(dataTest);
-     */
-    //a qui
-
   });
 }
 

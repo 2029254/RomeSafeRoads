@@ -10,7 +10,6 @@ let dataAboutTownHall;
 let path;
 let centroidTownHalls = new Map();
 
-
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
   // function to get and filter csv data
@@ -46,15 +45,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
 
-      console.log(d.properties.nome)
-      console.log(csvFileNameTimeSeries)
-      townHallClicked = true;
-      timeSeriesSvg.selectAll("*").remove();
-      drawTimeSeriesChart(csvFileNameTimeSeries, function() {
-        // Questo codice verrà eseguito quando la funzione drawTimeSeriesChart sarà completata
-        townHallClicked = false; // Imposta townHallClicked su false
-      });
 
+        console.log(d.properties.nome)
+        townHallClicked = true;
 
         d3.csv(csvFileNameChoroplethMapNature, function (data) {
           let dataResult = [];
@@ -69,39 +62,66 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
               rightNatureArray.push(row)
           });
 
-          let newArrayOfData = rightNatureArray.map(item => {
-            return {
-              Municipio: item.Municipio,
-              DataOraIncidente: item.DataOraIncidente
-            };
-          });
-
-          // Usa reduce per raggruppare per data e calcolare il conteggio
-          let incidentiRaggruppati = newArrayOfData.reduce((acc, item) => {
-            const data = item.DataOraIncidente;
-            if (!acc[data]) {
-              acc[data] = {DataOraIncidente: data, NumeroIncidenti: 1};
-            } else {
-              acc[data].NumeroIncidenti++;
-            }
-            return acc;
-          }, {});
-
 
           // Definisci il parser per le date
           let parseTime = d3.timeParse("%Y-%m-%d");
+          let newArrayOfData = rightNatureArray.map(item => {
+            return {
+              Municipio: item.Municipio,
+              DataOraIncidente: parseTime(item.DataOraIncidente),
+            };
+          });
 
-          // Converti le date da stringhe a oggetti Date
-          Object.values(incidentiRaggruppati).forEach(d => {
-            d.DataOraIncidente = parseTime(d.DataOraIncidente);
+          console.log(newArrayOfData);
+
+// Usa reduce per raggruppare per data e calcolare il conteggio
+          let incidentiRaggruppati = Object.values(newArrayOfData.reduce((acc, item) => {
+            let data = item.DataOraIncidente;
+            const dataString = data.toDateString();
+            if (!acc[dataString]) {
+              acc[dataString] = { Data: data, NumeroIncidenti: 0 };
+            }
+            acc[dataString].NumeroIncidenti++;
+            return acc;
+          }, {}));
+
+          console.log(incidentiRaggruppati)
+
+      //    let dataset  = Object.values(incidentiRaggruppati).map(({ DataOraIncidente, ...rest }) => rest);
+
+       //   console.log(dataset)
+
+          const finalDataset = Object.values(incidentiRaggruppati).map(({ Data, ...rest }) => ({ DataOraIncidente: Data, ...rest }));
+
+          console.log(finalDataset)
+
+          timeSeriesSvg.selectAll("*").remove();
+
+          finalDataset.forEach(d => {
             d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
           });
 
-
-          dataTest.forEach(d => {
-            d.DataOraIncidente = parseTime(d.DataOraIncidente);
-            d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
+          finalDataset.forEach(d => {
+              console.log(d)
           });
+
+// Esempio di utilizzo con il tuo array
+          const finalDatasetWithMissingDates = addMissingDatesWithZeroes(finalDataset);
+
+// finalDatasetWithMissingDates contiene le date mancanti con NumeroIncidenti pari a 0
+          console.log(finalDatasetWithMissingDates);
+
+         // console.log(finalDataset)
+          arrayOfData.push(finalDataset)
+
+          setAxesScale(finalDataset);
+          drawAxes(finalDataset);
+          drawLineWithValue(arrayOfData);
+          drawGrid();
+          addPoints()
+          drawPoints(finalDataset );
+
+
 
 
         })
@@ -276,4 +296,47 @@ function resetTownHall(){
 }
 
 
+function addMissingDatesWithZeroes(data) {
+  const newData = [];
+  const startDate = new Date('2022-01-01'); // Imposta la tua data di inizio
+  const endDate = new Date('2022-09-01'); // Imposta la tua data di fine
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    console.log("currentDate")
+
+    console.log(currentDate)
+    data.forEach(d => {
+      if(d.DataOraIncidente.getMonth() === currentDate.getMonth()){
+        if(d.DataOraIncidente.getDay() === currentDate.getDay())
+          console.log ("ciao")
+
+      }
+
+    });
+    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 01
+    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
+
+    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 10
+    currentDate.setDate(10);
+    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
+
+    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 20
+    currentDate.setDate(20);
+
+    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
+
+    // Passa al mese successivo
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    currentDate.setDate(1);
+  }
+
+  // Combinare i nuovi dati con i dati esistenti
+  const combinedData = [...newData, ...data];
+
+  // Ordina i dati per DataOraIncidente
+  combinedData.sort((a, b) => a.DataOraIncidente - b.DataOraIncidente);
+
+  return combinedData;
+}
 
