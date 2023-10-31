@@ -229,7 +229,7 @@ function drawGridPedestrianDeaths(){
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
-    .data(yScaleTimeSeries.ticks(5))
+    .data(yScaleTimeSeries.ticks(5).slice(1))
     .enter()
     .append("line")
     .attr("class", "hgrid")
