@@ -94,8 +94,6 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
           console.log(finalDataset)
 
-          timeSeriesSvg.selectAll("*").remove();
-
           finalDataset.forEach(d => {
             d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
           });
@@ -104,20 +102,22 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
               console.log(d)
           });
 
-// Esempio di utilizzo con il tuo array
           const finalDatasetWithMissingDates = addMissingDatesWithZeroes(finalDataset);
 
-// finalDatasetWithMissingDates contiene le date mancanti con NumeroIncidenti pari a 0
           console.log(finalDatasetWithMissingDates);
 
-         // console.log(finalDataset)
+          timeSeriesSvg.selectAll("*").remove();
+          arrayOfData = []
+
+          // console.log(finalDataset)
           arrayOfData.push(finalDatasetWithMissingDates)
-          setAxesScale(finalDatasetWithMissingDates);
-          drawAxes(finalDatasetWithMissingDates);
+          setAxesScalePedestrianDeaths(finalDatasetWithMissingDates);
+          drawAxesPedestrianDeaths(finalDatasetWithMissingDates);
           drawLineWithValue(arrayOfData);
-          drawGrid();
+
           addPoints()
           drawPoints(finalDatasetWithMissingDates );
+          drawGridPedestrianDeaths();
         })
 
         })
@@ -295,8 +295,10 @@ function addMissingDatesWithZeroes(data) {
   let endDate
   if (selectedYear === "2022")
   endDate = new Date('2022-09-01'); // Imposta la tua data di fine
-  else
-  endDate = new Date(selectedYear + '-12-20'); // Imposta la tua data di fine
+  else {
+    let nextYear = parseInt(selectedYear) + 1;
+    endDate = new Date(nextYear + '-01-01'); // Imposta la tua data di fine
+  }
 
   const startDate = new Date(selectedYear + '-01-01'); // Imposta la tua data di inizio
   let currentDate = new Date(startDate);
@@ -316,18 +318,22 @@ function addMissingDatesWithZeroes(data) {
     if (currentDate.getDate() === 1) {
       datesToAdd.push(1); // Aggiungi il 01 solo se la data corrente è il 01 di un mese
     }
+    if (currentDate.getMonth() === 11)
+      datesToAdd.push(30)
 
-    for (const day of datesToAdd) {
-      const newDate = new Date(currentYear, currentMonth, day, 0, 0, 0);
+      for (const day of datesToAdd) {
+        const newDate = new Date(currentYear, currentMonth, day, 0, 0, 0);
 
-      if (
-        existingDates.indexOf(newDate.toISOString()) === -1 &&
-        newDate >= startDate &&
-        newDate <= endDate
-      ) {
-        newData.push({ DataOraIncidente: newDate, NumeroIncidenti: 0 });
+
+        if (
+          existingDates.indexOf(newDate.toISOString()) === -1 &&
+          newDate >= startDate &&
+          newDate <= endDate
+        ) {
+          newData.push({DataOraIncidente: newDate, NumeroIncidenti: 0});
+        }
       }
-    }
+
 
     // Passa al mese successivo
     currentDate.setMonth(currentDate.getMonth() + 1);

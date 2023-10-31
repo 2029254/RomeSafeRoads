@@ -62,6 +62,17 @@ function setAxesScale(data){
     .domain([0, d3.max(data, d => d.NumeroIncidenti) + 9])
     .range([heightTimeSeries, 0]);
 }
+function setAxesScalePedestrianDeaths(data){
+
+  xScaleTimeSeries = d3.scaleTime()
+    .domain(d3.extent(data, d => d.DataOraIncidente))
+    .range([0, widthTimeSeries]);
+
+  yScaleTimeSeries = d3.scaleLinear()
+    .domain([0, 5])
+    .range([heightTimeSeries, 0]);
+}
+
 
 function drawLineWithValue(data){
   line = d3.line()
@@ -120,6 +131,54 @@ function drawAxes(data){
 
 }
 
+function drawAxesPedestrianDeaths(data){
+  // Trova la data minima e massima nei tuoi dati
+  const minDate = d3.min(data, d => d.DataOraIncidente);
+  const maxDate = d3.max(data, d => d.DataOraIncidente);
+
+  let tickValues = [];
+  let currentDate = d3.timeMonth.floor(minDate);
+  while (currentDate <= maxDate) {
+    tickValues.push(currentDate);
+    for (let i = 0; i < 3; i++) {
+      let nextDateTen = d3.timeDay.offset(currentDate, 10);
+      if (nextDateTen <= maxDate)
+        tickValues.push(nextDateTen);
+    }
+    tickValues.push(d3.timeDay.offset(currentDate, 20));
+    currentDate = d3.timeMonth.offset(currentDate, 1);
+  }
+  tickValues.pop(tickValues.length)
+
+  // Crea l'asse x con i tickValues
+  xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
+    .tickValues(tickValues)
+    .tickFormat(date => {
+      let day = d3.timeFormat("%d")(date);
+      let year = d3.timeFormat("%Y")(date);
+      let nextYear = parseInt(selectedYear) + 1;
+      if(parseInt(year) === nextYear)
+        return "";
+      else if (day === "01")
+        return d3.timeFormat("%b")(date);
+      return "";
+    });
+
+  yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries)
+    .tickValues(d3.range(6))
+    .tickFormat(function(d){return d;})
+
+  timeSeriesSvg.append("g")
+    .attr("transform", `translate(148, ${heightTimeSeries + 13})`)
+    .call(xAxisTimeSeries);
+
+  timeSeriesSvg.append("g")
+    .attr("transform", `translate(148, 13)`)
+    .call(yAxisTimeSeries);
+
+}
+
+
 function drawGrid(){
   // Aggiungi linee tratteggiate verticali
   timeSeriesSvg.selectAll("line.vgrid")
@@ -151,6 +210,39 @@ function drawGrid(){
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3);
 }
+
+function drawGridPedestrianDeaths(){
+  // Aggiungi linee tratteggiate verticali
+  timeSeriesSvg.selectAll("line.vgrid")
+    .data(xScaleTimeSeries.ticks())
+    .enter()
+    .append("line")
+    .attr("class", "vgrid")
+    .attr("x1", d => xScaleTimeSeries(d))
+    .attr("x2", d => xScaleTimeSeries(d))
+    .attr("y1", heightTimeSeries)
+    .attr("y2", 0)
+    .attr("transform", `translate(148.5,  13)`)
+    .style("stroke", "gray")
+    .style("stroke-dasharray", "5, 5")
+    .style("stroke-width", 0.3)
+
+  // Aggiungi linee tratteggiate orizzontali
+  timeSeriesSvg.selectAll("line.hgrid")
+    .data(yScaleTimeSeries.ticks(5))
+    .enter()
+    .append("line")
+    .attr("class", "hgrid")
+    .attr("x1", 0)
+    .attr("x2", widthTimeSeries)
+    .attr("y1", d => yScaleTimeSeries(d))
+    .attr("y2", d => yScaleTimeSeries(d))
+    .attr("transform", `translate(150.5, 13.5)`)
+    .style("stroke", "gray")
+    .style("stroke-dasharray", "5, 5")
+    .style("stroke-width", 0.3);
+}
+
 
 function addPoints(){
   // Aggiungi un gruppo per i punti interattivi
