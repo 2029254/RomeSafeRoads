@@ -49,6 +49,7 @@ decrementButton.addEventListener("click", () => {
 
 let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
+let selectedYear;
 function updatePlotsBasingOnSelectedYear(){
   idPoints = 0
   arrayOfData = [];
@@ -57,7 +58,7 @@ function updatePlotsBasingOnSelectedYear(){
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
   csvFileNameTimeSeries = "dataset/processed/timeSeries/";
   csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/";
-  let selectedYear = document.getElementById("yearSlider").value;
+  selectedYear = document.getElementById("yearSlider").value;
 
   console.log(selectedYear)
   console.log(buttonWeatherValue)

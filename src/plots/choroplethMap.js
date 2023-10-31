@@ -45,7 +45,6 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
 
-
         console.log(d.properties.nome)
         townHallClicked = true;
 
@@ -112,18 +111,13 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
           console.log(finalDatasetWithMissingDates);
 
          // console.log(finalDataset)
-          arrayOfData.push(finalDataset)
-
-          setAxesScale(finalDataset);
-          drawAxes(finalDataset);
+          arrayOfData.push(finalDatasetWithMissingDates)
+          setAxesScale(finalDatasetWithMissingDates);
+          drawAxes(finalDatasetWithMissingDates);
           drawLineWithValue(arrayOfData);
           drawGrid();
           addPoints()
-          drawPoints(finalDataset );
-
-
-
-
+          drawPoints(finalDatasetWithMissingDates );
         })
 
         })
@@ -298,37 +292,45 @@ function resetTownHall(){
 
 function addMissingDatesWithZeroes(data) {
   const newData = [];
-  const startDate = new Date('2022-01-01'); // Imposta la tua data di inizio
-  const endDate = new Date('2022-09-01'); // Imposta la tua data di fine
+  let endDate
+  if (selectedYear === "2022")
+  endDate = new Date('2022-09-01'); // Imposta la tua data di fine
+  else
+  endDate = new Date(selectedYear + '-12-20'); // Imposta la tua data di fine
+
+  const startDate = new Date(selectedYear + '-01-01'); // Imposta la tua data di inizio
   let currentDate = new Date(startDate);
 
+  const existingDates = data.map(item => item.DataOraIncidente.toISOString()); // Creare un array di date esistenti
+
+  // Aggiungi manualmente il 01 gennaio se manca nei dati
+  if (existingDates.indexOf(startDate.toISOString()) === -1) {
+    newData.push({ DataOraIncidente: new Date(startDate), NumeroIncidenti: 0 });
+  }
+
   while (currentDate <= endDate) {
-    console.log("currentDate")
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const datesToAdd = [10, 20];
 
-    console.log(currentDate)
-    data.forEach(d => {
-      if(d.DataOraIncidente.getMonth() === currentDate.getMonth()){
-        if(d.DataOraIncidente.getDay() === currentDate.getDay())
-          console.log ("ciao")
+    if (currentDate.getDate() === 1) {
+      datesToAdd.push(1); // Aggiungi il 01 solo se la data corrente è il 01 di un mese
+    }
 
+    for (const day of datesToAdd) {
+      const newDate = new Date(currentYear, currentMonth, day, 0, 0, 0);
+
+      if (
+        existingDates.indexOf(newDate.toISOString()) === -1 &&
+        newDate >= startDate &&
+        newDate <= endDate
+      ) {
+        newData.push({ DataOraIncidente: newDate, NumeroIncidenti: 0 });
       }
-
-    });
-    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 01
-    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
-
-    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 10
-    currentDate.setDate(10);
-    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
-
-    // Aggiungi la data con NumeroIncidenti pari a 0 per il giorno 20
-    currentDate.setDate(20);
-
-    newData.push({ DataOraIncidente: new Date(currentDate), NumeroIncidenti: 0 });
+    }
 
     // Passa al mese successivo
     currentDate.setMonth(currentDate.getMonth() + 1);
-    currentDate.setDate(1);
   }
 
   // Combinare i nuovi dati con i dati esistenti
@@ -339,4 +341,11 @@ function addMissingDatesWithZeroes(data) {
 
   return combinedData;
 }
+
+
+
+
+
+
+
 

@@ -1,7 +1,7 @@
 const timeSeriesSvg = d3.select("#timeSeries")
   .append("svg")
   .attr("width", 680)
-  .attr("height", 232);
+  .attr("height", 245);
 
 let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;
 let townHallClicked = false;
@@ -75,7 +75,7 @@ function drawLineWithValue(data){
       .attr("stroke", "steelblue")
       .attr("stroke-width", 2.5)
       .attr("d", line)
-      .attr("transform", `translate(149, 10)`);
+      .attr("transform", `translate(149, 13)`);
   });
 }
 
@@ -111,11 +111,11 @@ function drawAxes(data){
 
   yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, ${heightTimeSeries + 10})`)
+    .attr("transform", `translate(148, ${heightTimeSeries + 13})`)
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, 10)`)
+    .attr("transform", `translate(148, 13)`)
     .call(yAxisTimeSeries);
 
 }
@@ -131,7 +131,7 @@ function drawGrid(){
     .attr("x2", d => xScaleTimeSeries(d))
     .attr("y1", heightTimeSeries)
     .attr("y2", 0)
-    .attr("transform", `translate(148.5,  10)`)
+    .attr("transform", `translate(148.5,  13)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3)
@@ -146,7 +146,7 @@ function drawGrid(){
     .attr("x2", widthTimeSeries)
     .attr("y1", d => yScaleTimeSeries(d))
     .attr("y2", d => yScaleTimeSeries(d))
-    .attr("transform", `translate(150.5, 10.5)`)
+    .attr("transform", `translate(150.5, 13.5)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3);
@@ -156,24 +156,28 @@ function addPoints(){
   // Aggiungi un gruppo per i punti interattivi
   pointsGroup = timeSeriesSvg.append("g")
     .attr("id", idPoints++)
-    .attr("transform", `translate(149, 10)`);
+    .attr("transform", `translate(149, 13)`);
 }
-function drawPoints(data){
+function drawPoints(data) {
+  // Filtra i dati in modo da includere solo quelli con NumeroIncidenti diverso da zero
+  var filteredData = data.filter(function(d) {
+    return d.NumeroIncidenti !== 0;
+  });
 
-    // Aggiungi cerchi per i punti di cambio di inclinazione
-    pointsGroup.selectAll(".point")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("class", "point")
-      .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
-      .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
-      .attr("r", 3)
-      .style("fill", "steelblue")
-      .style("stroke", "white")
-      .style("stroke-width", 0.2)
-      .on("mouseover", showIncidentCount)
-      .on("mouseout", hideIncidentCount);
+  // Aggiungi cerchi per i punti di cambio di inclinazione solo con dati filtrati
+  pointsGroup.selectAll(".point")
+    .data(filteredData)
+    .enter()
+    .append("circle")
+    .attr("class", "point")
+    .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
+    .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
+    .attr("r", 3)
+    .style("fill", "steelblue")
+    .style("stroke", "white")
+    .style("stroke-width", 0.2)
+    .on("mouseover", showIncidentCount)
+    .on("mouseout", hideIncidentCount);
 }
 
 function drawTimeSeriesChart(csvFileName, callback){
@@ -201,7 +205,8 @@ function showIncidentCount(d) {
   let marginNumberCircleX;
 
   if (incidentCount < 10) marginNumberCircleX = 2.5
-  else marginNumberCircleX = 5.5
+  else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5
+  else marginNumberCircleX = 8.5
 
   pointsGroup.append("circle")
     .attr("id", "num")
