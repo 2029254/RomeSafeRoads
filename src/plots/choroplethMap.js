@@ -108,6 +108,13 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
           timeSeriesSvg.selectAll("*").remove();
           arrayOfData = []
+        timeSeriesSvg.append("text")
+          .attr("class", "bar-label")
+          .attr("x", 360)
+          .attr("y", 10)
+          //.text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
+          .text("Fatal pedestrian accidents happened in " + d.properties.nome)
+          .style("font-size", "12px");
 
           // console.log(finalDataset)
           arrayOfData.push(finalDatasetWithMissingDates)
