@@ -43,6 +43,10 @@ def round_date_to_10_days(date):
     year = date.year
     if date == 1/1/2022:
         day = 1
+    elif date.month == 12 and date.day >= 20:
+        day = 1
+        month = 1
+        year = year + 1
     elif date.day < 10:
         day = 10
     elif date.day < 20:

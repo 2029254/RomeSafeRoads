@@ -114,9 +114,12 @@ function drawAxes(data){
     .tickValues(tickValues)
     .tickFormat(date => {
       let day = d3.timeFormat("%d")(date);
-      if (day === "01") {
+      let year = d3.timeFormat("%Y")(date);
+      let nextYear = parseInt(selectedYear) + 1;
+      if(parseInt(year) === nextYear)
+        return "";
+      else if (day === "01")
         return d3.timeFormat("%b")(date);
-      }
       return "";
     });
 

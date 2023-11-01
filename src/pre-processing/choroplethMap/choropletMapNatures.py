@@ -58,8 +58,12 @@ for year in years:
         day = 10
         month = date.month
         year = date.year
-        if date == 1/1/2019:
+        if month == 1 and day == 1:
             day = 1
+        elif date.month == 12 and date.day >= 20:
+            day = 1
+            month = 1
+            year = year + 1
         elif date.day < 10:
             day = 10
         elif date.day < 20:
@@ -67,9 +71,6 @@ for year in years:
         elif date.day > 20 and date.month < 12:
             day = 1
             month = month + 1
-        else:
-            day = 1
-            month = month
         return pandas.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
 
 

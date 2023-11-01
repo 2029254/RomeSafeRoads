@@ -7,8 +7,8 @@
 5,4772950,Municipio V,C1,Nuvoloso,2020-02-01
 6,4801013,Municipio IX,C2,Nuvoloso,2020-02-20
 7,4801156,Municipio III,C2,Nuvoloso,2020-02-20
-8,4811366,Municipio II,C5,Sereno,2020-02-01
-9,4811618,Municipio I,C2,Sereno,2020-02-01
+8,4811366,Municipio II,C5,Sereno,2020-02-10
+9,4811618,Municipio I,C2,Sereno,2020-02-10
 10,4815412,Municipio IX,C5,Sereno,2020-03-01
 11,4851846,Municipio I,C3,Sereno,2020-04-01
 12,4864529,Municipio I,C1,Sereno,2020-04-10
@@ -16,8 +16,8 @@
 14,4896315,Municipio X,C4,Sereno,2020-05-10
 15,4897650,Municipio VII,C1,Sereno,2020-05-10
 16,4910320,Municipio XIII,C1,Sereno,2020-05-20
-17,4918518,Municipio IV,C5,Nuvoloso,2020-05-01
-18,4919044,Municipio III,C1,Nuvoloso,2020-05-01
+17,4918518,Municipio IV,C5,Nuvoloso,2020-05-10
+18,4919044,Municipio III,C1,Nuvoloso,2020-05-10
 19,4927222,Municipio I,C4,Sereno,2020-06-01
 20,4942703,Municipio VII,C1,Sereno,2020-06-10
 21,4946169,Municipio XIII,C5,Pioggia in atto,2020-06-20
@@ -29,7 +29,7 @@
 27,5013637,Municipio IV,C6,Sereno,2020-08-10
 28,5020177,Municipio VIII,C5,Sereno,2020-08-10
 29,5023059,Municipio VII,C3,Sereno,2020-08-20
-30,5029340,Municipio X,C8,Sereno,2020-08-01
+30,5029340,Municipio X,C8,Sereno,2020-08-10
 31,5030991,Municipio IX,C1,Nuvoloso,2020-09-01
 32,5031340,Municipio IX,C1,Sereno,2020-09-01
 33,5038617,Municipio XI,C4,Pioggia in atto,2020-09-01
@@ -59,5 +59,5 @@
 57,5189754,Municipio I,C1,Nuvoloso,2020-12-10
 58,5196801,Municipio I,C2,Sereno,2020-12-20
 59,5200601,Municipio I,C1,Sereno,2020-12-20
-60,5211703,Municipio I,C4,Nuvoloso,2020-12-01
-61,5216554,Municipio I,C5,Sereno,2020-12-01
+60,5211703,Municipio I,C4,Nuvoloso,2021-01-01
+61,5216554,Municipio I,C5,Sereno,2021-01-01
