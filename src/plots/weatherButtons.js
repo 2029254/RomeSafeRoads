@@ -35,8 +35,10 @@ function createHTMLButtons() {
     button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
     buttonLabel.id = "Label" + button.id; // Imposta il testo del bottone
     buttonLabel.textContent = button.id; // Imposta il testo del bottone
+    buttonLabel.style.fontFamily = "Lora"
+    buttonLabel.style.fontWeight = "bold"
     buttonLabel.style.color = "#f7f3eb"; // Aggiungi spazio tra i bottoni
-    buttonLabel.style.fontSize = "9px"; // Aggiungi spazio tra i bottoni
+    buttonLabel.style.fontSize = "8px"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.marginTop = "25px"; // Aggiungi spazio tra i bottoni
     //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.alignContent = "center"; // Aggiungi spazio tra i bottoni
@@ -53,16 +55,18 @@ function createHTMLButtons() {
         let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
         buttonWeatherValueNew.style.backgroundColor = "white";
         labelWeatherValue.style.color = "#f7f3eb";// Mostra il buttonLabel al passaggio del mouse
+        buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
         buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
         buttonWeatherValueNew.style.transform = "scale(1)";
         buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
       }
 
 
-      buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
+      buttonLabel.style.color = "#524a32"; // Mostra il buttonLabel al passaggio del mouse
       button.style.backgroundColor = "#e6e1d5";
       button.style.transform = "scale(1.2)";
       button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
+      button.style.border = "1px solid #524a32";
      // body.style.backgroundColor = "#f6fad9"
 
       buttonWeatherValue = this.id
@@ -83,7 +87,7 @@ function createHTMLButtons() {
     button.addEventListener("mouseover", function () {
       if (this.id !== buttonWeatherValue) {
         button.style.animation = "pop 0.5s ease-in-out";
-        buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
+        buttonLabel.style.color = "#a1987d"; // Mostra il buttonLabel al passaggio del mouse
         buttonLabel.style.animation = "pop 0.5s ease-in-out";
         button.style.transform = "scale(1.2)";
       }

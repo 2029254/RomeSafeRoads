@@ -220,7 +220,7 @@ button.circular-button {
     width: 40px; /* Diametro */
     height: 40px; /* Diametro */
     border-radius: 50%; /* Rende il bordo circolare */
-    border: 0.5px solid rgb(128, 128, 128); /* Imposta il bordo a 1px di spessore e colore nero */
+    border: 1px solid #d4d0c5; /* Imposta il bordo a 0.5px di spessore e colore nero */
     line-height: 40px;
     font-size: 16px;
     margin-top: 10px;

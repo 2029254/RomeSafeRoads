@@ -9,16 +9,6 @@ function drawColorsLegend(){
   let keys = ["> 0 and <= 5000", "> 5000 and <= 10000", "> 10000"];
   let size = 15;
 
-  barChartSvg
-    .append("rect")
-    .attr("x", 490)
-    .attr("y", 15)
-    .attr("width", 220)
-    .attr("height", 305)
-    .style("fill", "white")
-    .style("stroke", "black")
-    .style("stroke-width", 0.3)
-
   barChartSvg.selectAll("mydots")
     .data(keys)
     .enter()
@@ -38,6 +28,8 @@ function drawColorsLegend(){
     .attr("x", 500 + size*1.2)
     .attr("y", function(d,i){ return 30 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
     .text(function(d){ return d})
+    .style("color", "#524a32")
+    .style("font-family", "Lora")
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
 
@@ -58,6 +50,8 @@ function drawColorsLegend(){
     .attr("y", function(d,i){ return 130 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
     .text(function(d){ return d})
     .attr("text-anchor", "left")
+    .style("font-family", "Lora")
+    .style("color", "#524a32")
     .style("alignment-baseline", "middle")
 
 }
