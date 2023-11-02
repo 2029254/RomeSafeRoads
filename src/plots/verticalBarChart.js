@@ -9,6 +9,16 @@ function drawColorsLegend(){
   let keys = ["> 0 and <= 5000", "> 5000 and <= 10000", "> 10000"];
   let size = 15;
 
+  barChartSvg
+    .append("rect")
+    .attr("x", 490)
+    .attr("y", 15)
+    .attr("width", 220)
+    .attr("height", 305)
+    .style("fill", "white")
+    .style("stroke", "black")
+    .style("stroke-width", 0.3)
+
   barChartSvg.selectAll("mydots")
     .data(keys)
     .enter()
@@ -29,7 +39,7 @@ function drawColorsLegend(){
     .attr("y", function(d,i){ return 30 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
     .text(function(d){ return d})
     .attr("text-anchor", "left")
-    .style("alignment-baseline", "middle")
+    .style("alignment-baseline", "middle");
 
   let groups = ["[C1] Pedestrian investment",
                         "[C2] Vehicles collision (moving)",
@@ -116,6 +126,65 @@ function drawAxesAndBars(csvFileName){
       .text("Number of accidents");
   });
 }
+
+function drawAxesAndBarsFromChoroplethMap(data){
+
+  // definition of axes  height and width
+  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.165);
+  yScale = d3.scaleLinear().range([height, 0]);
+
+    // get data group by year
+    dataAboutYearSorted = data.sort(function (a, b) {
+      return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+    });
+
+    // definition of axes domain
+    xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
+    let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
+    if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
+      yScale.domain([0, 20]);
+    else yScale.domain([0, Math.max.apply(null, MinMax)]);
+
+    // bars creation
+    g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
+    g.selectAll(".bar")
+      .data(dataAboutYearSorted)
+      .enter().append("rect")
+      .attr("x", function (d) { return xScale(d.NaturaIncidente); })
+      .attr("y", function (d) { return yScale(d.NumeroIncidenti); })
+      .attr("width", xScale.bandwidth())
+      .attr("height", function (d) { return height - yScale(d.NumeroIncidenti) })
+      .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
+      .style("stroke", "black") // Aggiungi un bordo nero
+      .style("stroke-width", 0.3) // Imposta la larghezza del bordo
+      .on("click", function (d) {onclickBar(d)})
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut);
+
+    // axis x description
+    g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xScale))
+      .append("text")
+      .attr("y", 37)
+      .attr("x", width - 278)
+      .attr("text-anchor", "end")
+      .attr("fill", "black")
+      .text("Accidents' nature");
+
+    // axis y description
+    g.append("g")
+      .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("x", -105)
+      .attr("dy", "-5.1em")
+      .attr("text-anchor", "end")
+      .attr("fill", "black")
+      .text("Number of accidents");
+}
+
 
 function drawVerticalBarChart(csvFileName) {
 

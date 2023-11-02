@@ -2,9 +2,10 @@
 var choroplethMapSvg = d3.select("#choroplethMap")
   .append("svg")
   .attr("width", 600)
-  .attr("height", 350)
-  .attr("x", 50)
-  .attr("y", 50);
+  .attr("height", 350);
+
+choroplethMapSvg.style.marginTop = "200px";
+
 
 let dataAboutTownHall;
 let path;
@@ -125,6 +126,32 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
           addPoints()
           drawPoints(finalDatasetWithMissingDates );
           drawGridPedestrianDeaths();
+
+          // Vertical bar chart interaction
+          console.log("Interaction")
+          console.log(dataResult)
+          const conteggiNature = {};
+
+          // Iterare attraverso i dati e aggiornare i conteggi
+          dataResult.forEach(item => {
+            const natura = item.NaturaIncidente;
+            if (conteggiNature[natura]) {
+              conteggiNature[natura]++;
+            } else {
+              conteggiNature[natura] = 1;
+            }
+          });
+
+          // Convertire i conteggi in un array di oggetti
+          const resultVerticalChart = Object.keys(conteggiNature).map(natura => ({
+            NaturaIncidente: natura,
+            NumeroIncidenti: conteggiNature[natura],
+          }));
+
+          console.log(resultVerticalChart);
+          barChartSvg.selectAll("*").remove();
+          drawAxesAndBarsFromChoroplethMap(resultVerticalChart);
+
         })
 
         })
