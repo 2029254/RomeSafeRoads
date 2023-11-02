@@ -1,3 +1,34 @@
+@import url(https://fonts.googleapis.com/css?family=Lora);
+
+#title{
+    font-family: Lora;
+    font-weight: bold;
+    color: #524a32;
+}
+
+#period{
+    font-family: Lora;
+    color: #524a32;
+}
+
+#sliderValues{
+    font-family: Lora;
+    color: #524a32;
+}
+
+#sliderValue{
+    font-family: Lora;
+    color: #524a32;
+}
+
+.fontClass{
+    font-family: Lora;
+    color: #524a32;
+}
+.border-bottom{
+    border:white;
+}
+
 body {
     font: 10px sans-serif;
     background-color: #f8f7f1;
@@ -138,6 +169,36 @@ svg {
     stroke: steelblue;
 }
 
+#anim { position: relative;
+    animation: myfirst 1.7s 1;
+    animation-direction: normal ;
+}
+#animTwo { position: relative;
+    animation: myfirst 1.7s 1;
+    animation-direction: normal ;
+}
+
+@keyframes myfirst {
+    0%   { top: -32px;}
+    100% { top: 0px;}
+}
+
+#animThree { position: relative;
+    animation: mysecond 1.7s 1;
+    animation-direction: normal ;
+}
+
+#animFour { position: relative;
+    animation: mysecond 1.7s 1;
+    animation-direction: normal ;
+}
+
+
+@keyframes mysecond {
+    0%   { bottom: -32px;}
+    100% { bottom: 0px;}
+}
+
 .brush .extent {
     fill-opacity: .3;
     stroke: #fff;
@@ -213,8 +274,8 @@ button.circular-button {
     appearance: none;
     width: 10px;
     height: 10px;
-    background: rgb(128, 128, 128);
-    border: 2px solid white;
+    background: #a1987d;
+    border: 0.5px solid #a1987d;
     border-radius: 50%;
     cursor: pointer;
 }

@@ -35,7 +35,7 @@ function createHTMLButtons() {
     button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
     buttonLabel.id = "Label" + button.id; // Imposta il testo del bottone
     buttonLabel.textContent = button.id; // Imposta il testo del bottone
-    buttonLabel.style.color = "#f8f7f1"; // Aggiungi spazio tra i bottoni
+    buttonLabel.style.color = "#f7f3eb"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.fontSize = "9px"; // Aggiungi spazio tra i bottoni
     buttonLabel.style.marginTop = "25px"; // Aggiungi spazio tra i bottoni
     //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
@@ -52,7 +52,7 @@ function createHTMLButtons() {
         let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
         let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
         buttonWeatherValueNew.style.backgroundColor = "white";
-        labelWeatherValue.style.color = "#f8f7f1";// Mostra il buttonLabel al passaggio del mouse
+        labelWeatherValue.style.color = "#f7f3eb";// Mostra il buttonLabel al passaggio del mouse
         buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
         buttonWeatherValueNew.style.transform = "scale(1)";
         buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
@@ -60,10 +60,10 @@ function createHTMLButtons() {
 
 
       buttonLabel.style.color = "black"; // Mostra il buttonLabel al passaggio del mouse
-      button.style.backgroundColor = "#d9d4c5";
+      button.style.backgroundColor = "#e6e1d5";
       button.style.transform = "scale(1.2)";
       button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
-      body.style.backgroundColor = "#f6fad9"
+     // body.style.backgroundColor = "#f6fad9"
 
       buttonWeatherValue = this.id
       let year = document.getElementById("yearSlider").value;
@@ -73,13 +73,9 @@ function createHTMLButtons() {
       else {
         buttonFlag = true;
         let csvFileNameVerticalBarChart = "dataset/processed/weather/" + year + "/general-accidents/generalAccidents" + buttonWeatherValue + year + ".csv";
-        let csvFileNameChoroplethMap = "dataset/processed/weather/" + year + "/deaths/deathsAccidents" + buttonWeatherValue + year + ".csv";
 
         barChartSvg.selectAll("*").remove();
         drawVerticalBarChart(csvFileNameVerticalBarChart);
-
-        choroplethMapSvg.selectAll("*").remove();
-        drawChoroplethMap(csvFileNameChoroplethMap);
       }
 
     });
@@ -95,7 +91,7 @@ function createHTMLButtons() {
 
     button.addEventListener("mouseout", function () {
       if (this.id !== buttonWeatherValue) {
-        buttonLabel.style.color = "#f8f7f1";// Mostra il buttonLabel al passaggio del mouse
+        buttonLabel.style.color = "#f7f3eb";// Mostra il buttonLabel al passaggio del mouse
         buttonLabel.style.animation = "none";
         button.style.transform = "scale(1)";
       }
