@@ -6,8 +6,8 @@ let xScale, yScale, g, dataAboutYearSorted;
 
 function drawColorsLegend(){
 
-  let keys = ["> 0 and <= 5000", "> 5000 and <= 10000", "> 10000"];
-  let size = 15;
+  let keys = ["> 0 and <= 500", "> 500 and <= 1500", "> 1500 and <= 5000", "> 5000 and <= 7500",  "> 7500 and <= 11000", ">11000"]
+  let size = 13;
 
   barChartSvg.selectAll("mydots")
     .data(keys)
@@ -18,8 +18,8 @@ function drawColorsLegend(){
     .attr("width", size)
     .attr("height", size)
     .style("fill", function(d){ return setBarColor(d)})
-    .style("stroke", "black")
-    .style("stroke-width", 0.5);
+    .style("stroke", "#524a32")
+    .style("stroke-width", 0.1);
 
   barChartSvg.selectAll("mylabels")
     .data(keys)
@@ -191,12 +191,18 @@ function drawVerticalBarChart(csvFileName) {
 }
 
 function setBarColor(accidentNumber) {
-    if(accidentNumber > 0 && accidentNumber <= 5000)
-      return "#d9ef8b"
-    else if (accidentNumber > 5000 && accidentNumber <= 10000)
+    if(accidentNumber > 0 && accidentNumber <= 500)
+      return "#1a9850"
+    else if (accidentNumber > 500 && accidentNumber <= 1500)
+      return "#91cf60";
+    else if (accidentNumber > 1500 && accidentNumber <= 4000)
+      return "#d9ef8b";
+    else if (accidentNumber > 4000 && accidentNumber <= 9000)
       return "#fee08b";
-    else if (accidentNumber > 10000)
+    else if (accidentNumber > 9000 && accidentNumber <= 12000)
       return "#fc8d59";
+    else if (accidentNumber > 12000)
+      return "#d73027";
     else if (accidentNumber.toString() === "> 0 and <= 5000")
       return "#d9ef8b"
     else if (accidentNumber.toString() === "> 5000 and <= 10000")
