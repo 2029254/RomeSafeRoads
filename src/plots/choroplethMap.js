@@ -115,6 +115,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
           .attr("y", 10)
           //.text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
           .text("Fatal pedestrian accidents happened in " + d.properties.nome)
+          .style("font-family", "Lora")
           .style("font-size", "12px");
 
           // console.log(finalDataset)
@@ -202,6 +203,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .append("text")
     .attr("x", 508 ) // Posiziona le etichette al centro delle celle
     .attr("y", (d, i) => i * 30.7 + 104 )
+    .style("font-family", "Lora")
     .text((d) => `${d}`); // Testo dell'etichetta
 
   choroplethMapSvg.selectAll("line")

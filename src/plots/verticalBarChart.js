@@ -6,7 +6,7 @@ let xScale, yScale, g, dataAboutYearSorted;
 
 function drawColorsLegend(){
 
-  let keys = ["> 0 and <= 500", "> 500 and <= 1500", "> 1500 and <= 5000", "> 5000 and <= 7500",  "> 7500 and <= 11000", ">11000"]
+  let keys = ["> 0 and \u2264 500", "> 500 and \u2264 1500", "> 1500 and \u2264 4000", "> 4000 and \u2264 9000",  "> 9000 and \u2264 15000", "> 15000"];
   let size = 13;
 
   barChartSvg.selectAll("mydots")
@@ -33,21 +33,22 @@ function drawColorsLegend(){
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
 
-  let groups = ["[C1] Pedestrian investment",
+  let groups = ["[C1] Pedestrian hit",
                         "[C2] Vehicles collision (moving)",
                         "[C3] Vehicles collision with a stationary vehicle",
                         "[C4] Rear-end collision",
-                        "[C5] Road conditions",
-                        "[C6] Injury",
+                        "[C5] Collision with obstacle",
+                        "[C6] Sudden braking and vehicle fall",
                         "[C7] Overturning and run-off-road",
-                        "[C8] Other nature"];
+                        "[C8] Side/head-on collision",
+                        ];
 
   barChartSvg.selectAll("mylabels")
     .data(groups)
     .enter()
     .append("text")
     .attr("x", 480 + size*1.2)
-    .attr("y", function(d,i){ return 130 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .attr("y", function(d,i){ return 180 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
     .text(function(d){ return d})
     .html(function(d) {
         let parts = d.split(" "); // Dividi la stringa in parti
@@ -103,22 +104,24 @@ function drawAxesAndBars(csvFileName){
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xScale))
+      .style("font-family", "Lora")
       .append("text")
       .attr("y", 37)
       .attr("x", width - 278)
-      .attr("text-anchor", "end")
+      .style("font-family", "Lora")
       .attr("fill", "black")
       .text("Accidents' nature");
 
     // axis y description
     g.append("g")
       .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+      .style("font-family", "Lora")
       .append("text")
+      .style("font-family", "Lora")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
       .attr("x", -105)
       .attr("dy", "-5.1em")
-      .attr("text-anchor", "end")
       .attr("fill", "black")
       .text("Number of accidents");
   });
@@ -191,26 +194,31 @@ function drawVerticalBarChart(csvFileName) {
 }
 
 function setBarColor(accidentNumber) {
-    if(accidentNumber > 0 && accidentNumber <= 500)
-      return "#1a9850"
-    else if (accidentNumber > 500 && accidentNumber <= 1500)
-      return "#91cf60";
-    else if (accidentNumber > 1500 && accidentNumber <= 4000)
-      return "#d9ef8b";
-    else if (accidentNumber > 4000 && accidentNumber <= 9000)
-      return "#fee08b";
-    else if (accidentNumber > 9000 && accidentNumber <= 12000)
-      return "#fc8d59";
-    else if (accidentNumber > 12000)
-      return "#d73027";
-    else if (accidentNumber.toString() === "> 0 and <= 5000")
-      return "#d9ef8b"
-    else if (accidentNumber.toString() === "> 5000 and <= 10000")
-      return "#fee08b"
-    else
-      return "#fc8d59";
+  if (accidentNumber > 0 && accidentNumber <= 500)
+    return "#1a9850"
+  else if (accidentNumber > 500 && accidentNumber <= 1500)
+    return "#91cf60";
+  else if (accidentNumber > 1500 && accidentNumber <= 4000)
+    return "#d9ef8b";
+  else if (accidentNumber > 4000 && accidentNumber <= 9000)
+    return "#fee08b";
+  else if (accidentNumber > 9000 && accidentNumber <= 15000)
+    return "#fc8d59";
+  else if (accidentNumber > 15000)
+    return "#d73027";
+  else if (accidentNumber.toString() === "> 0 and \u2264 500")
+    return "#1a9850"
+  else if (accidentNumber.toString() === "> 500 and \u2264 1500")
+    return "#91cf60"
+  else if (accidentNumber.toString() === "> 1500 and \u2264 4000")
+    return "#d9ef8b"
+  else if (accidentNumber.toString() === "> 4000 and \u2264 9000")
+    return "#fee08b"
+  else if (accidentNumber.toString() === "> 9000 and \u2264 15000")
+    return "#fc8d59"
+  else if (accidentNumber.toString() === "> 15000")
+    return "#d73027"
 }
-
 function handleMouseOver(d) {
     d3.select(this).style("fill", "grey");
     barChartSvg.append("text")
@@ -250,7 +258,7 @@ console.log(isActive)
   let result;
   switch (d.NaturaIncidente.toString()) {
     case 'C1':
-      result = "Pedestrian investment";
+      result = "Pedestrian hit";
       break;
     case 'C2':
       result = "Vehicles collision (moving)";
@@ -262,16 +270,16 @@ console.log(isActive)
       result = "Rear-end collision";
       break;
     case 'C5':
-      result = "Road conditions";
+      result = "Collision with obstacle";
       break;
     case 'C6':
-      result = "Injury";
+      result = "Sudden braking and vehicle fall";
       break;
     case 'C7':
       result = "Overturning and run-off-road";
       break;
     default:
-      result = "Other nature";
+      result = "Side/head-on collision";
   }
 
   let weatherResult = [];
@@ -338,7 +346,7 @@ function setAccidentsNumberAndNatureAndYear(d) {
   let result = '[' + d.NumeroIncidenti + '] of '
   switch(d.NaturaIncidente.toString()) {
     case 'C1':
-      return result.concat("Pedestrian investment")
+      return result.concat("Pedestrian hit")
     case 'C2':
       return result.concat("Vehicles collision (moving)")
     case 'C3':
@@ -346,13 +354,13 @@ function setAccidentsNumberAndNatureAndYear(d) {
     case 'C4':
       return result.concat("Rear-end collision")
     case 'C5':
-      return result.concat("Road conditions")
+      return result.concat("Collision with obstacle")
     case 'C6':
-      return result.concat("Injury")
+      return result.concat("Sudden braking and vehicle fall")
     case 'C7':
       return result.concat("Overturning and run-off-road")
     default:
-      return result.concat("Other nature")
+      return result.concat("Side/head-on collision")
   }
 
 }

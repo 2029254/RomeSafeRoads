@@ -5,7 +5,9 @@ years = ["2019", "2020", "2021", "2022"]
 groups = {
     'C1': ['Investimento di pedone'],
     'C2': ['Scontro frontale fra veicoli in marcia',
-           'Scontro laterale fra veicoli in marcia'],
+           'Scontro laterale fra veicoli in marcia',
+           'Scontro frontale/laterale SX fra veicoli in marcia',
+           'Scontro frontale/laterale DX fra veicoli in marcia'],
     'C3': ['Veicolo in marcia contro veicolo in sosta',
            'Veicolo in marcia contro veicolo fermo',
            'Veicolo in marcia contro veicolo arresto'],
@@ -13,15 +15,13 @@ groups = {
            'Tamponamento Multiplo'],
     'C5': ['Veicolo in marcia che urta buche nella carreggiata',
            'Veicolo in marcia contro ostacolo fisso',
-           'Veicolo in marcia contro ostacolo accidentale'],
+           'Veicolo in marcia contro ostacolo accidentale',
+           'Veicolo in marcia contro treno',
+           'Veicolo in marcia contro animale'],
     'C6': ['Infortunio per sola frenata improvvisa',
            'Infortunio per caduta del veicolo'],
     'C7': ['Fuoriuscita dalla sede stradale',
-           'Ribaltamento senza urto contro ostacolo fisso'],
-    'C8': ['Veicolo in marcia contro treno',
-           'Veicolo in marcia contro animale',
-           'Scontro frontale/laterale SX fra veicoli in marcia',
-           'Scontro frontale/laterale DX fra veicoli in marcia']
+           'Ribaltamento senza urto contro ostacolo fisso']
 }
 
 for year in years:

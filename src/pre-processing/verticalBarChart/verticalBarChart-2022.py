@@ -37,15 +37,15 @@ groups = {
            'Tamponamento Multiplo'],
     'C5': ['Veicolo in marcia che urta buche nella carreggiata',
            'Veicolo in marcia contro ostacolo fisso',
-           'Veicolo in marcia contro ostacolo accidentale'],
+           'Veicolo in marcia contro ostacolo accidentale',
+           'Veicolo in marcia contro treno',
+           'Veicolo in marcia contro animale'],
     'C6': ['Infortunio per sola frenata improvvisa',
            'Infortunio per caduta del veicolo'],
     'C7': ['Fuoriuscita dalla sede stradale',
            'Ribaltamento senza urto contro ostacolo fisso'],
-    'C8': ['Veicolo in marcia contro treno',
-           'Veicolo in marcia contro animale',
-           'Scontro frontale/laterale SX fra veicoli in marcia',
-           'Scontro frontale/laterale DX fra veicoli in marcia']
+    'C8':  ['Scontro frontale/laterale DX fra veicoli in marcia',
+            'Scontro frontale/laterale SX fra veicoli in marcia']
 }
 
 

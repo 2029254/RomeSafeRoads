@@ -126,10 +126,12 @@ function drawAxes(data){
   yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
   timeSeriesSvg.append("g")
     .attr("transform", `translate(148, ${heightTimeSeries + 21})`)
+    .style("font-family", "Lora")
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
     .attr("transform", `translate(148, 21)`)
+    .style("font-family", "Lora")
     .call(yAxisTimeSeries);
 
 }
