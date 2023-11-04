@@ -187,9 +187,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         if (!isActive) {
             // Rendi meno opache tutte le aree tranne l'area corrente
             choroplethMapSvg.selectAll(".area")
-              .style("fill-opacity", 0.5);
+              .style("opacity", 0.3);
               d3.select(this)
-              .style("fill-opacity", 1); // Imposta l'opacità dell'area corrente a 1
+              .style("opacity", 1); // Imposta l'opacità dell'area corrente a 1
         }
         //puntatore pointer solo per le aree con numeroincidenti >1
         if (accidentsNumber > 1) {
@@ -279,7 +279,7 @@ function handleMouseOutChoroplethMap() {
     if (!isActive) {
         // Ripristina l'opacità di tutte le aree al valore predefinito (ad esempio 1)
         choroplethMapSvg.selectAll(".area")
-            .style("fill-opacity", 1);
+            .style("opacity", 1);
     }
 }
 
