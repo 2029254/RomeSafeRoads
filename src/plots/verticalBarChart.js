@@ -2,7 +2,7 @@ const barChartSvg = d3.select("#barChartSvg");
 let width = 500;
 let height = 300;
 
-let xScale, yScale, g, dataAboutYearSorted;
+let xScale, yScale, g, dataAboutYearSorted, tooltip;
 
 function drawColorsLegend(){
 
@@ -52,7 +52,7 @@ function drawColorsLegend(){
     .text(function(d){ return d})
     .html(function(d) {
         let parts = d.split(" "); // Dividi la stringa in parti
-        return "<tspan font-weight='bold'>" + parts[0] + "</tspan> " + parts.slice(1).join(" ");
+        return "<tspan font-weight='bold' >" + parts[0] + ' '+"</tspan>" + "<tspan id='" + parts[0].slice(1, -1)+"'>"+parts.slice(1).join(" ")+"</tspan>";
     })
     .attr("text-anchor", "left")
     .style("font-family", "Lora")
@@ -98,7 +98,7 @@ function drawAxesAndBars(csvFileName){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut)
+      .on("mouseout", function (d) {handleMouseOut(d)})
       .on("mousemove", handleMouseOver)
       .attr("class", "bar")
       .style("transition", "0.3s");
@@ -162,7 +162,7 @@ function drawAxesAndBarsFromChoroplethMap(data){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut);
+      .on("mouseout", function (d) {handleMouseOut(d)});
 
     // axis x description
     g.append("g")
@@ -229,8 +229,9 @@ function handleMouseOver(d) {
         .filter(function (datum) {
             return datum !== d;
         })
-        .style("opacity", 0.5);
+        .style("opacity", 0.4);
 
+    barChartSvg.selectAll("#"+ d.NaturaIncidente).style("text-decoration", "underline")
     /*barChartSvg.append("text")
       .attr("class", "bar-label")
       .attr("x", 120)
@@ -238,26 +239,28 @@ function handleMouseOver(d) {
       .text(setAccidentsNumberAndNatureAndYear(d))
       .style("font-size", "12px");*/
 
-const tooltip = d3.select("#popup");
-    tooltip.transition()
-        .duration(200)
-        .style("opacity", 1);
+    tooltip = d3.select("#popup");
+        tooltip.style("opacity", 0.8);
 
         tooltip.html(setAccidentsNumberAndNatureAndYear(d))
         .style("color", "#524a32")
         .style("font-family", "Lora")
         .style("font-size", "10px")
         .style("font-weight", "bold")
-        .style("left", (d3.event.pageX + 7 + "px"))
-        .style("top", (d3.event.pageY - 7 + "px"));
+        .style("left", (d3.event.pageX + 9 + "px"))
+        .style("top", (d3.event.pageY - 9 + "px"));
   }
 
-function handleMouseOut() {
+function handleMouseOut(d) {
     //d3.select(this)
       //.style("fill", function(d) { return setBarColor(d.NumeroIncidenti)});
+    // Nascondi il pop-up
+    barChartSvg.selectAll("#"+ d.NaturaIncidente).style("text-decoration", "none")
+    tooltip.style("opacity", 0);
     barChartSvg.selectAll("rect")
         .style("opacity", 1);
     barChartSvg.select(".bar-label").remove();
+
   }
 
 let timer; // Variabile per il timer

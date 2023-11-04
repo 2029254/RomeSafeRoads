@@ -8,9 +8,8 @@ choroplethMapSvg.style.marginTop = "200px";
 
 
 let dataAboutTownHall;
-let path;
+let path, tooltipChor;
 let centroidTownHalls = new Map();
-currentHoveredElement = null;
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -174,6 +173,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
           accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
         else
           accidentsNumber = 0
+
         /*if (!isActive) {
             choroplethMapSvg.selectAll(".area")
                 .filter(function (datum) {
@@ -198,14 +198,26 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         }
         //}
 
-        choroplethMapSvg.append("text")
+        /*choroplethMapSvg.append("text")
           .attr("class", "bar-label")
           .attr("x", 300)
           .attr("y", 30)
           .text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
-          .style("font-size", "12px");
+          .style("font-size", "12px");*/
       })
-      .on("mouseout", handleMouseOutChoroplethMap);
+      .on("mouseout", handleMouseOutChoroplethMap)
+      .on("mousemove",  function(d) {
+              tooltipChor = d3.select("#popupChoropleth");
+                      tooltipChor.style("opacity", 0.9);
+
+                      tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>" + "deaths: "+ accidentsNumber + "</tspan>")
+                      .style("color", "#524a32")
+                      .style("font-family", "Lora")
+                      .style("font-size", "10px")
+                      //.style("font-weight", "bold")
+                      .style("left", (d3.event.pageX + 9 + "px"))
+                      .style("top", (d3.event.pageY - 9 + "px"));
+      });
   });
 
   const scale = d3.scaleLinear()
@@ -257,7 +269,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
 function handleMouseOutChoroplethMap() {
   choroplethMapSvg.select(".bar-label").remove();
-
+  tooltipChor.style("opacity", 0);
   /*if (!isActive) {
     d3.select(this)
         .style("fill", function (d) {
