@@ -10,6 +10,7 @@ choroplethMapSvg.style.marginTop = "200px";
 let dataAboutTownHall;
 let path;
 let centroidTownHalls = new Map();
+currentHoveredElement = null;
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -38,6 +39,8 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .enter()
       .append("path")
       .attr("d", path)
+      .attr("class", "area")
+      .style("transition", "0.3s")
       .style("stroke", "black")
       .style("stroke-width", 0.5)
       .attr("id",function (d) {
@@ -162,7 +165,25 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
           accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
         else
           accidentsNumber = 0
-        if (!isActive) d3.select(this).style("fill", "grey");
+        /*if (!isActive) {
+            choroplethMapSvg.selectAll(".area")
+                .filter(function (datum) {
+                    return datum !== d;
+                })
+                .style("opacity", 0.5);
+
+        //d3.select(this).style("fill", "grey");
+        }*/
+
+        if (!isActive) {
+            // Rendi meno opache tutte le aree tranne l'area corrente
+            choroplethMapSvg.selectAll(".area")
+                .style("fill-opacity", 0.5);
+
+            d3.select(this)
+                .style("fill-opacity", 1); // Imposta l'opacità dell'area corrente a 1
+        }
+
         choroplethMapSvg.append("text")
           .attr("class", "bar-label")
           .attr("x", 300)
@@ -223,12 +244,17 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 function handleMouseOutChoroplethMap() {
   choroplethMapSvg.select(".bar-label").remove();
 
-  if (!isActive) {
+  /*if (!isActive) {
     d3.select(this)
-      .style("fill", function (d) {
+        .style("fill", function (d) {
         return setBarColorChoroplethMap(d)
       });
-  }
+  }*/
+    if (!isActive) {
+        // Ripristina l'opacità di tutte le aree al valore predefinito (ad esempio 1)
+        choroplethMapSvg.selectAll(".area")
+            .style("fill-opacity", 1);
+    }
 }
 
 function setBarColorChoroplethMap(d) {

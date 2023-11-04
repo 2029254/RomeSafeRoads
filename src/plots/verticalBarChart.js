@@ -98,7 +98,9 @@ function drawAxesAndBars(csvFileName){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
-      .on("mouseout", handleMouseOut);
+      .on("mouseout", handleMouseOut)
+      .attr("class", "bar")
+      .style("transition", "0.3s");
 
     // axis x description
     g.append("g")
@@ -220,7 +222,14 @@ function setBarColor(accidentNumber) {
     return "#d73027"
 }
 function handleMouseOver(d) {
-    d3.select(this).style("fill", "grey");
+    //d3.select(this).style("fill", "grey");
+
+    barChartSvg.selectAll(".bar")
+        .filter(function (datum) {
+            return datum !== d;
+        })
+        .style("opacity", 0.5);
+
     barChartSvg.append("text")
       .attr("class", "bar-label")
       .attr("x", 120)
@@ -230,8 +239,10 @@ function handleMouseOver(d) {
   }
 
 function handleMouseOut() {
-    d3.select(this)
-      .style("fill", function(d) { return setBarColor(d.NumeroIncidenti)});
+    //d3.select(this)
+      //.style("fill", function(d) { return setBarColor(d.NumeroIncidenti)});
+    barChartSvg.selectAll("rect")
+        .style("opacity", 1);
     barChartSvg.select(".bar-label").remove();
   }
 
