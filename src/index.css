@@ -38,11 +38,6 @@ body {
     cursor: pointer;
 }
 
-.area {
-    cursor: pointer;
-}
-
-
 .svg-container {
     display: inline-block;
     position: relative;

@@ -49,115 +49,124 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
 
-        console.log(d.properties.nome)
-        townHallClicked = true;
+        let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
 
-        d3.csv(csvFileNameChoroplethMapNature, function (data) {
-          let dataResult = [];
-          data.filter(function (row) {
-            if (row['Municipio'] === d.properties.nome.toString())
-              dataResult.push(row)
-          });
+        if (townHallAndAccidentsNumber !== undefined) {
+            accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti;
 
-          let rightNatureArray = [];
-          dataResult.filter(function (row) {
-            if (row['NaturaIncidente'] === "C1")
-              rightNatureArray.push(row)
-          });
+            //click solo su aree con numeroincidenti>1
+            if (accidentsNumber > 1) {
+
+                console.log(d.properties.nome)
+                townHallClicked = true;
+
+                d3.csv(csvFileNameChoroplethMapNature, function (data) {
+                  let dataResult = [];
+                  data.filter(function (row) {
+                    if (row['Municipio'] === d.properties.nome.toString())
+                      dataResult.push(row)
+                  });
+
+                  let rightNatureArray = [];
+                  dataResult.filter(function (row) {
+                    if (row['NaturaIncidente'] === "C1")
+                      rightNatureArray.push(row)
+                  });
 
 
-          // Definisci il parser per le date
-          let parseTime = d3.timeParse("%Y-%m-%d");
-          let newArrayOfData = rightNatureArray.map(item => {
-            return {
-              Municipio: item.Municipio,
-              DataOraIncidente: parseTime(item.DataOraIncidente),
-            };
-          });
+                  // Definisci il parser per le date
+                  let parseTime = d3.timeParse("%Y-%m-%d");
+                  let newArrayOfData = rightNatureArray.map(item => {
+                    return {
+                      Municipio: item.Municipio,
+                      DataOraIncidente: parseTime(item.DataOraIncidente),
+                    };
+                  });
 
-          console.log(newArrayOfData);
+                  console.log(newArrayOfData);
 
-// Usa reduce per raggruppare per data e calcolare il conteggio
-          let incidentiRaggruppati = Object.values(newArrayOfData.reduce((acc, item) => {
-            let data = item.DataOraIncidente;
-            const dataString = data.toDateString();
-            if (!acc[dataString]) {
-              acc[dataString] = { Data: data, NumeroIncidenti: 0 };
+                  // Usa reduce per raggruppare per data e calcolare il conteggio
+                  let incidentiRaggruppati = Object.values(newArrayOfData.reduce((acc, item) => {
+                    let data = item.DataOraIncidente;
+                    const dataString = data.toDateString();
+                    if (!acc[dataString]) {
+                      acc[dataString] = { Data: data, NumeroIncidenti: 0 };
+                    }
+                    acc[dataString].NumeroIncidenti++;
+                    return acc;
+                  }, {}));
+
+                  console.log(incidentiRaggruppati)
+
+              //    let dataset  = Object.values(incidentiRaggruppati).map(({ DataOraIncidente, ...rest }) => rest);
+
+               //   console.log(dataset)
+
+                  const finalDataset = Object.values(incidentiRaggruppati).map(({ Data, ...rest }) => ({ DataOraIncidente: Data, ...rest }));
+
+                  console.log(finalDataset)
+
+                  finalDataset.forEach(d => {
+                    d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
+                  });
+
+                  finalDataset.forEach(d => {
+                      console.log(d)
+                  });
+
+                  const finalDatasetWithMissingDates = addMissingDatesWithZeroes(finalDataset);
+
+                  console.log(finalDatasetWithMissingDates);
+
+                  timeSeriesSvg.selectAll("*").remove();
+                  arrayOfData = []
+                timeSeriesSvg.append("text")
+                  .attr("class", "bar-label")
+                  .attr("x", 360)
+                  .attr("y", 10)
+                  //.text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
+                  .text("Fatal pedestrian accidents happened in " + d.properties.nome)
+                  .style("font-family", "Lora")
+                  .style("font-size", "12px");
+
+                  // console.log(finalDataset)
+                  arrayOfData.push(finalDatasetWithMissingDates)
+                  setAxesScalePedestrianDeaths(finalDatasetWithMissingDates);
+                  drawAxesPedestrianDeaths(finalDatasetWithMissingDates);
+                  drawLineWithValue(arrayOfData);
+
+                  addPoints()
+                  drawPoints(finalDatasetWithMissingDates );
+                  drawGridPedestrianDeaths();
+
+                  // Vertical bar chart interaction
+                  console.log("Interaction")
+                  console.log(dataResult)
+                  const conteggiNature = {};
+
+                  // Iterare attraverso i dati e aggiornare i conteggi
+                  dataResult.forEach(item => {
+                    const natura = item.NaturaIncidente;
+                    if (conteggiNature[natura]) {
+                      conteggiNature[natura]++;
+                    } else {
+                      conteggiNature[natura] = 1;
+                    }
+                  });
+
+                  // Convertire i conteggi in un array di oggetti
+                  const resultVerticalChart = Object.keys(conteggiNature).map(natura => ({
+                    NaturaIncidente: natura,
+                    NumeroIncidenti: conteggiNature[natura],
+                  }));
+
+                  console.log(resultVerticalChart);
+                  barChartSvg.selectAll("*").remove();
+                  drawAxesAndBarsFromChoroplethMap(resultVerticalChart);
+
+                  })
+                }
             }
-            acc[dataString].NumeroIncidenti++;
-            return acc;
-          }, {}));
-
-          console.log(incidentiRaggruppati)
-
-      //    let dataset  = Object.values(incidentiRaggruppati).map(({ DataOraIncidente, ...rest }) => rest);
-
-       //   console.log(dataset)
-
-          const finalDataset = Object.values(incidentiRaggruppati).map(({ Data, ...rest }) => ({ DataOraIncidente: Data, ...rest }));
-
-          console.log(finalDataset)
-
-          finalDataset.forEach(d => {
-            d.NumeroIncidenti = parseInt(d.NumeroIncidenti);
-          });
-
-          finalDataset.forEach(d => {
-              console.log(d)
-          });
-
-          const finalDatasetWithMissingDates = addMissingDatesWithZeroes(finalDataset);
-
-          console.log(finalDatasetWithMissingDates);
-
-          timeSeriesSvg.selectAll("*").remove();
-          arrayOfData = []
-        timeSeriesSvg.append("text")
-          .attr("class", "bar-label")
-          .attr("x", 360)
-          .attr("y", 10)
-          //.text("In " + d.properties.nome + " happened " + accidentsNumber + " deaths accidents")
-          .text("Fatal pedestrian accidents happened in " + d.properties.nome)
-          .style("font-family", "Lora")
-          .style("font-size", "12px");
-
-          // console.log(finalDataset)
-          arrayOfData.push(finalDatasetWithMissingDates)
-          setAxesScalePedestrianDeaths(finalDatasetWithMissingDates);
-          drawAxesPedestrianDeaths(finalDatasetWithMissingDates);
-          drawLineWithValue(arrayOfData);
-
-          addPoints()
-          drawPoints(finalDatasetWithMissingDates );
-          drawGridPedestrianDeaths();
-
-          // Vertical bar chart interaction
-          console.log("Interaction")
-          console.log(dataResult)
-          const conteggiNature = {};
-
-          // Iterare attraverso i dati e aggiornare i conteggi
-          dataResult.forEach(item => {
-            const natura = item.NaturaIncidente;
-            if (conteggiNature[natura]) {
-              conteggiNature[natura]++;
-            } else {
-              conteggiNature[natura] = 1;
-            }
-          });
-
-          // Convertire i conteggi in un array di oggetti
-          const resultVerticalChart = Object.keys(conteggiNature).map(natura => ({
-            NaturaIncidente: natura,
-            NumeroIncidenti: conteggiNature[natura],
-          }));
-
-          console.log(resultVerticalChart);
-          barChartSvg.selectAll("*").remove();
-          drawAxesAndBarsFromChoroplethMap(resultVerticalChart);
-
-        })
-
         })
       .on("mouseover",  function(d) {
         let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
@@ -174,15 +183,20 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
         //d3.select(this).style("fill", "grey");
         }*/
-
+        //if (accidentsNumber > 1) {
         if (!isActive) {
             // Rendi meno opache tutte le aree tranne l'area corrente
             choroplethMapSvg.selectAll(".area")
-                .style("fill-opacity", 0.5);
-
-            d3.select(this)
-                .style("fill-opacity", 1); // Imposta l'opacità dell'area corrente a 1
+              .style("fill-opacity", 0.5);
+              d3.select(this)
+              .style("fill-opacity", 1); // Imposta l'opacità dell'area corrente a 1
         }
+        //puntatore pointer solo per le aree con numeroincidenti >1
+        if (accidentsNumber > 1) {
+            d3.select(this).style("cursor", "pointer");
+            // Resto del tuo codice di gestione dell'evento mouseover
+        }
+        //}
 
         choroplethMapSvg.append("text")
           .attr("class", "bar-label")
