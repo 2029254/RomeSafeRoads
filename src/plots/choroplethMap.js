@@ -347,22 +347,26 @@ function showNumberOfAccidents(townHall, number) {
     .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
     .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
     .attr("r", 8) // Imposta il raggio del cerchio
-    .style("fill", "gray");
+    .style("font-family", "Lora")
+    .style("opacity", "0.6")
+    .style("stroke", "#524a32") // Colore del bordo
+    .style("stroke-width", "0.3px") // Larghezza del bordo
+    .style("fill", "white");
 
   choroplethMapSvg.append("text")
     .text(number)
     .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
     .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
-    .style("color", "white")
-    .style("fill", "white")
-    .style("font-size", "10px");
+    .style("color", "#524a32")
+    //.style("fill", "white")
+    .style("font-size", "9px");
 }
 function fillOtherTownHalls(map){
   Array.from(centroidTownHalls.keys()).forEach(item => {
     let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
     if(!map.has(item))
-      selectedTownHall.style("fill", "white")
+      selectedTownHall.style("opacity", "0.3")
   });
 }
 
@@ -371,8 +375,10 @@ function resetTownHall(){
   choroplethMapSvg.selectAll("circle").remove();
   Array.from(centroidTownHalls.keys()).forEach(item => {
     let selectedPath = choroplethMapSvg.select(`path[id='${item}']`);
+    selectedPath.style("opacity", "1")
     selectedPath.style("fill", function(d) {
       return setBarColorChoroplethMap(d);
+
     });
   });
 }
