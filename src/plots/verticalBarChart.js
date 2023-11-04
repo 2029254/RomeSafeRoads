@@ -99,6 +99,7 @@ function drawAxesAndBars(csvFileName){
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut)
+      .on("mousemove", handleMouseOver)
       .attr("class", "bar")
       .style("transition", "0.3s");
 
@@ -230,12 +231,25 @@ function handleMouseOver(d) {
         })
         .style("opacity", 0.5);
 
-    barChartSvg.append("text")
+    /*barChartSvg.append("text")
       .attr("class", "bar-label")
       .attr("x", 120)
       .attr("y", 30)
       .text(setAccidentsNumberAndNatureAndYear(d))
-      .style("font-size", "12px");
+      .style("font-size", "12px");*/
+
+const tooltip = d3.select("#popup");
+    tooltip.transition()
+        .duration(200)
+        .style("opacity", 1);
+
+        tooltip.html(setAccidentsNumberAndNatureAndYear(d))
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "10px")
+        .style("font-weight", "bold")
+        .style("left", (d3.event.pageX + 7 + "px"))
+        .style("top", (d3.event.pageY - 7 + "px"));
   }
 
 function handleMouseOut() {
@@ -354,8 +368,9 @@ console.log(isActive)
 }
 
 function setAccidentsNumberAndNatureAndYear(d) {
-  let result = '[' + d.NumeroIncidenti + '] of '
-  switch(d.NaturaIncidente.toString()) {
+  let result = d.NumeroIncidenti
+  return result
+  /*switch(d.NaturaIncidente.toString()) {
     case 'C1':
       return result.concat("Pedestrian hit")
     case 'C2':
@@ -372,7 +387,7 @@ function setAccidentsNumberAndNatureAndYear(d) {
       return result.concat("Overturning and run-off-road")
     default:
       return result.concat("Side/head-on collision")
-  }
+  }*/
 
 }
 
