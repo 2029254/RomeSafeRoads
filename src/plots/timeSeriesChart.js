@@ -83,7 +83,7 @@ function drawLineWithValue(data){
     timeSeriesSvg.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "steelblue")
+      .attr("stroke", "#a1987d")
       .attr("stroke-width", 2.5)
       .attr("d", line)
       .attr("transform", `translate(149, 21)`);
@@ -270,7 +270,7 @@ function drawPoints(data) {
     .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
     .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
     .attr("r", 3)
-    .style("fill", "steelblue")
+    .style("fill", "#524a32")
     .style("stroke", "white")
     .style("stroke-width", 0.2)
     .on("mouseover", showIncidentCount)

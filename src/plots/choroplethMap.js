@@ -231,7 +231,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [2, 5, 10, 20, 30, 45]; // Valori per le celle
+  const legendCells = [1, 3, 5, 10, 20, 30, 45]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -289,34 +289,38 @@ function setBarColorChoroplethMap(d) {
   if (townHallAndAccidentsNumber !== undefined) {
     let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
 
-    if (accidentsNumber > 0 && accidentsNumber <= 2)
-      return "#fef0d9"
-    else if (accidentsNumber > 2 && accidentsNumber <= 5)
+    if (accidentsNumber > 0 && accidentsNumber <= 1)
+      return "#fee8c8"
+    else if (accidentsNumber > 1 && accidentsNumber <= 3)
       return "#fdd49e";
-    else if (accidentsNumber > 5 && accidentsNumber <= 10)
+    else if (accidentsNumber > 3 && accidentsNumber <= 5)
       return "#fdbb84";
-    else if (accidentsNumber > 10 && accidentsNumber <= 20)
+    else if (accidentsNumber > 5 && accidentsNumber <= 10)
       return "#fc8d59";
+    else if (accidentsNumber > 10 && accidentsNumber <= 20)
+      return "#ef6548";
     else if (accidentsNumber > 20 && accidentsNumber <= 30)
-      return "#e34a33";
+      return "#d7301f";
     else
       return "#b30000";
   } else
-    return "#fef0d9"
+    return "#fee8c8";
 }
 
 function setLegendColorsChoroplethMap(accidentsNumber) {
 
-  if (accidentsNumber > 0 && accidentsNumber <= 2)
-    return "#fef0d9"
-  else if (accidentsNumber > 2 && accidentsNumber <= 5)
+  if (accidentsNumber > 0 && accidentsNumber <= 1)
+    return "#fee8c8"
+  else if (accidentsNumber > 1 && accidentsNumber <= 3)
     return "#fdd49e";
-  else if (accidentsNumber > 5 && accidentsNumber <= 10)
+  else if (accidentsNumber > 3 && accidentsNumber <= 5)
     return "#fdbb84";
-  else if (accidentsNumber > 10 && accidentsNumber <= 20)
+  else if (accidentsNumber > 5 && accidentsNumber <= 10)
     return "#fc8d59";
+  else if (accidentsNumber > 10 && accidentsNumber <= 20)
+    return "#ef6548";
   else if (accidentsNumber > 20 && accidentsNumber <= 30)
-    return "#e34a33";
+    return "#d7301f";
   else
     return "#b30000";
 

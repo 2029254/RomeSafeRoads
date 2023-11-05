@@ -22,27 +22,41 @@ function createHTMLButtons() {
   buttonData.forEach((buttonText, i) => {
     const button = document.createElement("button");
     const buttonLabel = document.createElement("div"); // Elemento per la scritta
-    button.id = buttonData[i]; // Assegna un ID univoco
-    button.className = "circular-button"; // Applica la classe CSS per i bottoni circolari
-    button.style.animation = "pop 0.5s ease-in-out";
-    button.style.marginTop = (buttonRadius * 0.8 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
-    button.style.marginLeft = "60px"; // Aggiungi spazio tra i bottoni
-    button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
-    button.style.backgroundRepeat = "no-repeat";
-    button.style.backgroundColor = "white";
-    button.style.backgroundPositionX = "5.2px";
-    button.style.backgroundPositionY = "5px";
-    button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
-    buttonLabel.id = "Label" + button.id; // Imposta il testo del bottone
-    buttonLabel.textContent = button.id; // Imposta il testo del bottone
-    buttonLabel.style.fontFamily = "Lora"
-    buttonLabel.style.fontWeight = "bold"
-    buttonLabel.style.color = "#f7f3eb"; // Aggiungi spazio tra i bottoni
-    buttonLabel.style.fontSize = "8px"; // Aggiungi spazio tra i bottoni
-    buttonLabel.style.marginTop = "25px"; // Aggiungi spazio tra i bottoni
-    //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
-    buttonLabel.style.alignContent = "center"; // Aggiungi spazio tra i bottoni
+    if(i!==4) {
+      button.id = buttonData[i]; // Assegna un ID univoco
+      button.className = "circular-button"; // Applica la classe CSS per i bottoni circolari
+      button.style.animation = "pop 0.5s ease-in-out";
+      button.style.marginTop = (buttonRadius * 0.8 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
+      button.style.marginLeft = "60px"; // Aggiungi spazio tra i bottoni
+      button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
+      button.style.backgroundRepeat = "no-repeat";
 
+      button.style.backgroundColor = "white";
+      button.style.backgroundPositionX = "5.2px";
+      button.style.backgroundPositionY = "5px";
+      button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
+      buttonLabel.id = "Label" + button.id; // Imposta il testo del bottone
+      buttonLabel.textContent = button.id; // Imposta il testo del bottone
+      buttonLabel.style.fontFamily = "Lora"
+      buttonLabel.style.fontWeight = "bold"
+      buttonLabel.style.color = "#f7f3eb"; // Aggiungi spazio tra i bottoni
+      buttonLabel.style.fontSize = "8px"; // Aggiungi spazio tra i bottoni
+      buttonLabel.style.marginTop = "25px"; // Aggiungi spazio tra i bottoni
+      //buttonLabel.style.marginLeft = "-1.5px"; // Aggiungi spazio tra i bottoni
+      buttonLabel.style.alignContent = "center"; // Aggiungi spazio tra i bottoni
+    } else {
+      button.id = buttonData[i]; // Assegna un ID univoco
+      button.style.backgroundColor = "#f7f3eb";
+      button.className = "bucket"; // Applica la classe CSS per i bottoni circolari
+      button.style.animation = "pop 0.5s ease-in-out";
+      button.style.marginTop = (buttonRadius * 0.8 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
+      button.style.marginLeft = "60px"; // Aggiungi spazio tra i bottoni
+      button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
+      button.style.backgroundRepeat = "no-repeat";
+      button.style.backgroundPositionX = "5.2px";
+      button.style.backgroundPositionY = "5px";
+      button.style.backgroundImage = `url(${imagePaths[i]})`; // Imposta l'immagine di sfondo del bottone
+    }
     if (button.id === "First") button.hidden = true
 
     button.addEventListener("click", function () {
@@ -62,21 +76,16 @@ function createHTMLButtons() {
       // Imposta l'animazione per il bottone "None"
       if (this.id === "None") {
         buttonLabel.style.color = "#524a32";
-        button.style.backgroundColor = "white";
         button.style.transform = "scale(1.2)";
         button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
-        button.style.border = "1px solid #524a32";
         buttonWeatherValue = this.id;
         let year = document.getElementById("yearSlider").value;
         updatePlotsBasingOnSelectedYear();
         // Imposta un timer per riportare il bottone "None" allo stato precedente dopo 2 secondi
         setTimeout(function () {
-          buttonLabel.style.color = "#f7f3eb";
-          button.style.backgroundColor = "white";
           button.style.transform = "scale(1)";
           button.style.transition = "0.5s";
           button.style.backgroundImage = `url(${imageClick + "BlackAndWhite/NoneBW.png"})`;
-          button.style.border = "1px solid #d4d0c5";
           buttonWeatherValue="First"
           // body.style.backgroundColor = "#f6fad9"
         }, 1000);
