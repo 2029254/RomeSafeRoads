@@ -162,6 +162,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                   console.log(resultVerticalChart);
                   barChartSvg.selectAll("*").remove();
                   drawAxesAndBarsFromChoroplethMap(resultVerticalChart);
+                  drawColorsLegend();
 
                   })
                 }

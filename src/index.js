@@ -92,13 +92,13 @@ console.log("SONO QUIIIII")
         break;
       default:
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
-        csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat(" choroplethMap2022.csv")
+        csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2022.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2022.csv")
     }
   } else {
     csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
-    csvFileNameChoroplethMap = "dataset/processed/weather/" + selectedYear + "/deaths/deathsAccidents" + buttonWeatherValue + selectedYear + ".csv";
+    csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap"+ selectedYear +".csv")
     csvFileNameTimeSeries = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + ".csv";
     csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
   }
