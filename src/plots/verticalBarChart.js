@@ -111,7 +111,6 @@ function drawAxesAndBars(csvFileName){
       .append("text")
       .attr("y", 37)
       .attr("x", width - 278)
-      .style("font-family", "Lora")
       .attr("fill", "black")
       .text("Accidents' nature");
 
@@ -120,13 +119,13 @@ function drawAxesAndBars(csvFileName){
       .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
       .style("font-family", "Lora")
       .append("text")
-      .style("font-family", "Lora")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
       .attr("x", -105)
       .attr("dy", "-5.1em")
       .attr("fill", "black")
       .text("Number of accidents");
+
   });
 }
 
@@ -162,7 +161,10 @@ function drawAxesAndBarsFromChoroplethMap(data){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
-      .on("mouseout", function (d) {handleMouseOut(d)});
+      .on("mouseout", function (d) {handleMouseOut(d)})
+      .on("mousemove", handleMouseOver)
+      .attr("class", "bar")
+      .style("transition", "0.3s");
 
     // axis x description
     g.append("g")
@@ -229,7 +231,7 @@ function handleMouseOver(d) {
         .filter(function (datum) {
             return datum !== d;
         })
-        .style("opacity", 0.4);
+        .style("opacity", 0.3);
 
     barChartSvg.selectAll("#"+ d.NaturaIncidente).style("text-decoration", "underline")
     /*barChartSvg.append("text")

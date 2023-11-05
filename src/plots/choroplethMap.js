@@ -41,7 +41,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .attr("class", "area")
       .style("transition", "0.3s")
       .style("stroke", "black")
-      .style("stroke-width", 0.5)
+      .style("stroke-width", "0.3px")
       .attr("id",function (d) {
         centroidTownHalls.set(d.properties.nome, path.centroid(d));
         return d.properties.nome })
@@ -262,7 +262,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x2", 501)
     .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
-    .style("stroke-width", 1);
+    .style("stroke-width", "1px");
   });
   }
 

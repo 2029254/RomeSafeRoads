@@ -310,7 +310,11 @@ function showIncidentCount(d) {
     .attr("cx", xPosition + marginNumberCircleX)
     .attr("cy", yPosition - 3.5)
     .attr("r", 9) // Imposta il raggio del cerchio
-    .style("fill", "gray");
+    .style("font-family", "Lora")
+    .style("opacity", "0.6")
+    .style("stroke", "#524a32") // Colore del bordo
+    .style("stroke-width", "0.3px") // Larghezza del bordo
+    .style("fill", "white")
 
   pointsGroup.append("text")
     .attr("class", "incident-count")
@@ -318,7 +322,8 @@ function showIncidentCount(d) {
     .attr("y", yPosition)
     .text(incidentCount)
     .style("font-size", "10px")
-    .style("fill", "white");
+    //.style("fill", "white");
+    .style("color", "#524a32");
 }
 
 // Funzione per nascondere il numero di incidenti

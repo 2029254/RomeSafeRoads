@@ -9,7 +9,7 @@ const imagePaths = [
   "dataset/img/BlackAndWhite/SunnyBW.png",
   "dataset/img/BlackAndWhite/RainyBW.png",
   "dataset/img/BlackAndWhite/SevereBW.png",
-  "dataset/img/None.png"
+  "dataset/img/BlackAndWhite/NoneBW.png"
 ];
 
 const imageClick = "dataset/img/"
@@ -48,41 +48,54 @@ function createHTMLButtons() {
     button.addEventListener("click", function () {
       let body = document.getElementById("body");
 
-      console.log(this.id)
-
       if (buttonWeatherValue !== this.id) {
         let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
         let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
         buttonWeatherValueNew.style.backgroundColor = "white";
-        labelWeatherValue.style.color = "#f7f3eb";// Mostra il buttonLabel al passaggio del mouse
+        labelWeatherValue.style.color = "#f7f3eb";
         buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
         buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
         buttonWeatherValueNew.style.transform = "scale(1)";
         buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
       }
 
-
-      buttonLabel.style.color = "#524a32"; // Mostra il buttonLabel al passaggio del mouse
-      button.style.backgroundColor = "#e6e1d5";
-      button.style.transform = "scale(1.2)";
-      button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
-      button.style.border = "1px solid #524a32";
-     // body.style.backgroundColor = "#f6fad9"
-
-      buttonWeatherValue = this.id
-      let year = document.getElementById("yearSlider").value;
-      if (buttonWeatherValue === "None") {
+      // Imposta l'animazione per il bottone "None"
+      if (this.id === "None") {
+        buttonLabel.style.color = "#524a32";
+        button.style.backgroundColor = "white";
+        button.style.transform = "scale(1.2)";
+        button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
+        button.style.border = "1px solid #524a32";
+        buttonWeatherValue = this.id;
+        let year = document.getElementById("yearSlider").value;
         updatePlotsBasingOnSelectedYear();
-      }
-      else {
+        // Imposta un timer per riportare il bottone "None" allo stato precedente dopo 2 secondi
+        setTimeout(function () {
+          buttonLabel.style.color = "#f7f3eb";
+          button.style.backgroundColor = "white";
+          button.style.transform = "scale(1)";
+          button.style.transition = "0.5s";
+          button.style.backgroundImage = `url(${imageClick + "BlackAndWhite/NoneBW.png"})`;
+          button.style.border = "1px solid #d4d0c5";
+          buttonWeatherValue="First"
+          // body.style.backgroundColor = "#f6fad9"
+        }, 1000);
+      } else {
+        buttonLabel.style.color = "#524a32";
+        button.style.backgroundColor = "#e6e1d5";
+        button.style.transform = "scale(1.2)";
+        button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
+        button.style.border = "1px solid #524a32";
+        buttonWeatherValue = this.id;
+        let year = document.getElementById("yearSlider").value;
+
         buttonFlag = true;
         let csvFileNameVerticalBarChart = "dataset/processed/weather/" + year + "/general-accidents/generalAccidents" + buttonWeatherValue + year + ".csv";
-
         barChartSvg.selectAll("*").remove();
         drawVerticalBarChart(csvFileNameVerticalBarChart);
       }
-
     });
+
 
     button.addEventListener("mouseover", function () {
       if (this.id !== buttonWeatherValue) {

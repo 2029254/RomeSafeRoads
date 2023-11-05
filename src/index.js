@@ -51,6 +51,7 @@ let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
 let selectedYear;
 function updatePlotsBasingOnSelectedYear(){
+console.log("SONO QUIIIII")
   idPoints = 0
   arrayOfData = [];
 
