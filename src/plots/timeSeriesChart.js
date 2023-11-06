@@ -1,7 +1,4 @@
-const timeSeriesSvg = d3.select("#timeSeries")
-  .append("svg")
-  .attr("width", 680)
-  .attr("height", 245);
+const timeSeriesSvg = d3.select("#timeSeriesSvg");
 
 let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;
 let townHallClicked = false;
@@ -86,7 +83,7 @@ function drawLineWithValue(data){
       .attr("stroke", "#a1987d")
       .attr("stroke-width", 2.5)
       .attr("d", line)
-      .attr("transform", `translate(149, 21)`);
+      .attr("transform", `translate(51, 50)`);
   });
 }
 
@@ -125,12 +122,12 @@ function drawAxes(data){
 
   yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, ${heightTimeSeries + 21})`)
+    .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .style("font-family", "Lora")
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, 21)`)
+    .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
     .call(yAxisTimeSeries);
 
@@ -174,11 +171,11 @@ function drawAxesPedestrianDeaths(data){
     .tickFormat(function(d){return d;})
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, ${heightTimeSeries + 21})`)
+    .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .call(xAxisTimeSeries);
 
   timeSeriesSvg.append("g")
-    .attr("transform", `translate(148, 21)`)
+    .attr("transform", `translate(50, 50)`)
     .call(yAxisTimeSeries);
 
 }
@@ -195,7 +192,7 @@ function drawGrid(){
     .attr("x2", d => xScaleTimeSeries(d))
     .attr("y1", heightTimeSeries)
     .attr("y2", 0)
-    .attr("transform", `translate(148.5, 21)`)
+    .attr("transform", `translate(50.5, 50)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3)
@@ -210,7 +207,7 @@ function drawGrid(){
     .attr("x2", widthTimeSeries)
     .attr("y1", d => yScaleTimeSeries(d))
     .attr("y2", d => yScaleTimeSeries(d))
-    .attr("transform", `translate(150.5, 21.5)`)
+    .attr("transform", `translate(52.5, 50.5)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3);
@@ -227,7 +224,7 @@ function drawGridPedestrianDeaths(){
     .attr("x2", d => xScaleTimeSeries(d))
     .attr("y1", heightTimeSeries)
     .attr("y2", 0)
-    .attr("transform", `translate(148.5,  21)`)
+    .attr("transform", `translate(50.5,  50)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3)
@@ -242,7 +239,7 @@ function drawGridPedestrianDeaths(){
     .attr("x2", widthTimeSeries)
     .attr("y1", d => yScaleTimeSeries(d))
     .attr("y2", d => yScaleTimeSeries(d))
-    .attr("transform", `translate(150.5, 21.5)`)
+    .attr("transform", `translate(52.5, 50.5)`)
     .style("stroke", "gray")
     .style("stroke-dasharray", "5, 5")
     .style("stroke-width", 0.3);
@@ -253,7 +250,7 @@ function addPoints(){
   // Aggiungi un gruppo per i punti interattivi
   pointsGroup = timeSeriesSvg.append("g")
     .attr("id", idPoints++)
-    .attr("transform", `translate(149, 21)`);
+    .attr("transform", `translate(51, 50)`);
 }
 function drawPoints(data) {
   // Filtra i dati in modo da includere solo quelli con NumeroIncidenti diverso da zero

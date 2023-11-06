@@ -27,7 +27,7 @@ function createHTMLButtons() {
       button.className = "circular-button"; // Applica la classe CSS per i bottoni circolari
       button.style.animation = "pop 0.5s ease-in-out";
       button.style.marginTop = (buttonRadius * 0.8 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
-      button.style.marginLeft = "60px"; // Aggiungi spazio tra i bottoni
+      //button.style.marginLeft = "0px"; // Aggiungi spazio tra i bottoni
       button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
       button.style.backgroundRepeat = "no-repeat";
 
@@ -50,7 +50,7 @@ function createHTMLButtons() {
       button.className = "bucket"; // Applica la classe CSS per i bottoni circolari
       button.style.animation = "pop 0.5s ease-in-out";
       button.style.marginTop = (buttonRadius * 0.8 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
-      button.style.marginLeft = "60px"; // Aggiungi spazio tra i bottoni
+      //button.style.marginLeft = "0px"; // Aggiungi spazio tra i bottoni
       button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
       button.style.backgroundRepeat = "no-repeat";
       button.style.backgroundPositionX = "5.2px";

@@ -1,4 +1,5 @@
 const barChartSvg = d3.select("#barChartSvg");
+
 let width = 500;
 let height = 300;
 
@@ -63,7 +64,7 @@ function drawColorsLegend(){
 function drawAxesAndBars(csvFileName){
 
   // definition of axes  height and width
-  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.165);
+  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
   yScale = d3.scaleLinear().range([height, 0]);
 
   // function to get and filter csv data
@@ -81,7 +82,7 @@ function drawAxesAndBars(csvFileName){
     xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
     let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
     if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
-       yScale.domain([0, 23000]);
+       yScale.domain([0, 24000]);
     else yScale.domain([0, Math.max.apply(null, MinMax)]);
 
     // bars creation
@@ -110,7 +111,7 @@ function drawAxesAndBars(csvFileName){
       .style("font-family", "Lora")
       .append("text")
       .attr("y", 37)
-      .attr("x", width - 278)
+      .attr("x", width - 315)
       .attr("fill", "black")
       .text("Accidents' nature");
 
@@ -132,7 +133,7 @@ function drawAxesAndBars(csvFileName){
 function drawAxesAndBarsFromChoroplethMap(data){
 
   // definition of axes  height and width
-  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.165);
+  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
   yScale = d3.scaleLinear().range([height, 0]);
 
     // get data group by year

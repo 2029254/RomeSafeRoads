@@ -34,27 +34,35 @@
 </div>
 
 <!-- Create a div where the graph will take place -->
-<div class="container" style="max-width:100vw;">
+<div class="container">
     <div class="row" >
-        <div class="col" style="flex:0.1; align-content: center;background-size:cover;">
+        <div class="col" style="flex:2; width:3rem; display:flex; justify-content:center; align-items:center;">
             <div id="buttons"></div>
         </div>
-        <div class="col" id="anim" >
+        <div class="col" id="anim" style="flex:2; display:flex; justify-content:center; align-items:center;">
             <div id="verticalBarChart">
-                <svg width="720" height="370" id="barChartSvg"></svg>
+                <svg width="45rem" height="23.5rem" id="barChartSvg"></svg>
             </div>
         </div>
-        <div class="col" id="animTwo">
-            <div width="300" height="350" id="choroplethMap"></div>
+        <div class="col" id="animTwo" style="flex:2; display:flex; justify-content:center; align-items:center;">
+            <div id="choroplethMap">
+                <svg width="31rem" height="23.5rem" id="choroplethMapSvg"></svg>
+            </div>
         </div>
     </div>
-    <div class="row" width="710" height="300">
-        <div class="col" style="flex:2.5;" >
-            <div id="scatterPlot"></div>
+    <div class="row">
+        <div class="col" style="flex:2; display:flex; justify-content:center; align-items:center;">
+            <div>
+                <p id="tooltip" style="display:none;"></p>
+            </div>
+            <div id="timeSeries">
+                <svg width="40rem" height="19rem" id="timeSeriesSvg"></svg>
+            </div>
         </div>
-        <div class="col" style="flex:2.5;" id="animThree">
-            <div><p id="tooltip" style="display: none;"></p></div>
-            <div width="500" style="margin-left: 40px;" id="timeSeries"></div>
+        <div class="col" style="flex:2; display:flex; justify-content:center; align-items:center;">
+            <div id="scatterPlot">
+                <svg width="39rem" height="19rem" id="scatterPlotSvg"></svg>
+            </div>
         </div>
     </div>
 </div>

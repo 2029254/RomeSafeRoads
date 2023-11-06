@@ -1,11 +1,4 @@
-
-var choroplethMapSvg = d3.select("#choroplethMap")
-  .append("svg")
-  .attr("width", 600)
-  .attr("height", 350);
-
-choroplethMapSvg.style.marginTop = "200px";
-
+var choroplethMapSvg = d3.select("#choroplethMapSvg");
 
 let dataAboutTownHall;
 let path, tooltipChor;
@@ -23,7 +16,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
   let projection = d3.geoMercator()
     .center([12.4964, 41.9028]) // Coordinata centrale per Roma
     .scale(30000)
-    .translate([500 / 2, 350 / 2]);
+    .translate([500 / 2.2, 350 / 1.90]);
 
 // Crea un generatore di percorsi geografici
   path = d3.geoPath().projection(projection);
@@ -238,7 +231,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells)
     .enter()
     .append("rect")
-    .attr("x",  490) // Posiziona le celle orizzontalmente
+    .attr("x",  460) // Posiziona le celle orizzontalmente
     //.attr("y",  (d, i) => i * 31)
     .attr("y",  (d,i) => 70 + 31 * i)
     .attr("width", 8) // Larghezza delle celle
@@ -249,7 +242,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells)
     .enter()
     .append("text")
-    .attr("x", 508 ) // Posiziona le etichette al centro delle celle
+    .attr("x", 478 ) // Posiziona le etichette al centro delle celle
     .attr("y", (d, i) => i * 30.7 + 104 )
     .style("font-family", "Lora")
     .text((d) => `${d}`); // Testo dell'etichetta
@@ -258,9 +251,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells) // Ignora l'ultimo valore
     .enter()
     .append("line")
-    .attr("x1", 490)
+    .attr("x1", 460)
     .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
-    .attr("x2", 501)
+    .attr("x2", 471)
     .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
     .style("stroke-width", "1px");
