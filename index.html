@@ -34,24 +34,22 @@
 </div>
 
 <!-- Create a div where the graph will take place -->
-<div class="container">
-    <div class="row" >
-        <div class="col" style="flex:2; width:3rem; display:flex; justify-content:center; align-items:center;">
-            <div id="buttons"></div>
+<div class="container" style="max-width:90vw;">
+    <div class="row" style="background-color:green; height:50vh;">
+        <div class="col-1" style="align-self:center; vertical-align: middle;">
+            <div id="buttons" class="d-flex flex-column" style="align-items:center; justify-content:center; "></div>
         </div>
-        <div class="col" id="anim" style="flex:2; display:flex; justify-content:center; align-items:center;">
+        <div class="col-6" id="anim" style="background-color:yellow;">
             <div id="verticalBarChart">
-                <svg width="45rem" height="23.5rem" id="barChartSvg"></svg>
             </div>
         </div>
-        <div class="col" id="animTwo" style="flex:2; display:flex; justify-content:center; align-items:center;">
+        <div class="col" id="animTwo">
             <div id="choroplethMap">
-                <svg width="31rem" height="23.5rem" id="choroplethMapSvg"></svg>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col" style="flex:2; display:flex; justify-content:center; align-items:center;">
+    <div class="row" style="background-color:brown; height:40vh;">
+        <div class="col">
             <div>
                 <p id="tooltip" style="display:none;"></p>
             </div>
@@ -59,7 +57,7 @@
                 <svg width="40rem" height="19rem" id="timeSeriesSvg"></svg>
             </div>
         </div>
-        <div class="col" style="flex:2; display:flex; justify-content:center; align-items:center;">
+        <div class="col">
             <div id="scatterPlot">
                 <svg width="39rem" height="19rem" id="scatterPlotSvg"></svg>
             </div>

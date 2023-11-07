@@ -1,4 +1,14 @@
-var choroplethMapSvg = d3.select("#choroplethMapSvg");
+//var choroplethMapSvg = d3.select("#choroplethMapSvg");
+
+// append the svg object to the body of the page
+var choroplethMapSvg = d3.select("#choroplethMap")
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 550 400")
+    .classed("svg-content-responsive", true)
+    //.attr("width", width + margin.left + margin.right)
+    //.attr("height", height + margin.top + margin.bottom)
+    .append("g").attr("transform", "translate(25, -15)");
 
 let dataAboutTownHall;
 let path, tooltipChor;

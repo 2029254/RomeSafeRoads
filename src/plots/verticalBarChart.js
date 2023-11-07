@@ -1,4 +1,15 @@
-const barChartSvg = d3.select("#barChartSvg");
+//const barChartSvg = d3.select("#barChartSvg");
+
+// append the svg object to the body of the page
+var barChartSvg = d3.select("#verticalBarChart")
+
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 700 400")
+    .classed("svg-content-responsive", true)
+    //.attr("width", width + margin.left + margin.right)
+    //.attr("height", height + margin.top + margin.bottom)
+    .append("g").attr("transform", "translate(-20, 0)");
 
 let width = 500;
 let height = 300;
@@ -21,6 +32,7 @@ function drawColorsLegend(){
     .style("fill", function(d){ return setBarColor(d)})
     .style("stroke", "#524a32")
     .style("stroke-width", 0.1);
+
 
   barChartSvg.selectAll("mylabels")
     .data(keys)
@@ -396,6 +408,7 @@ function setAccidentsNumberAndNatureAndYear(d) {
   }*/
 
 }
+
 
 
 
