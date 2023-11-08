@@ -28,7 +28,7 @@ columns = ['NaturaIncidente', 'Protocollo', 'DataOraIncidente']
 
 dataset_columns = dataset_2020[columns]
 
-dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Investimento di pedone'])]
+dataset_rows = dataset_columns
 
 # Convert the 'DataOraIncidente' column to a datetime object
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',

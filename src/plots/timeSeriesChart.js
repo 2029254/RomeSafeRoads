@@ -78,7 +78,7 @@ function setAxesScale(data){
     .range([0, widthTimeSeries]);
 
   yScaleTimeSeries = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.NumeroIncidenti) + 9])
+    .domain([0, 1200])
     .range([heightTimeSeries, 0]);
 }
 function setAxesScalePedestrianDeaths(data){
@@ -93,20 +93,21 @@ function setAxesScalePedestrianDeaths(data){
 }
 
 
-function drawLineWithValue(data){
+function drawLineWithValue(data, color, id){
   line = d3.line()
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
-  data.forEach(data => {
+
     timeSeriesSvg.append("path")
       .datum(data)
+      .attr("id", id)
       .attr("fill", "none")
-      .attr("stroke", "#a1987d")
+      .attr("stroke", color)
       .attr("stroke-width", 2.5)
       .attr("d", line)
       .attr("transform", `translate(51, 50)`);
-  });
+
 }
 
 function drawAxes(data){
@@ -151,7 +152,7 @@ function drawAxes(data){
   timeSeriesSvg.append("g")
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
-    .call(yAxisTimeSeries);
+    .call(yAxisTimeSeries.tickFormat(function(d){return d;}));
 
 }
 
@@ -274,7 +275,7 @@ function addPoints(){
     .attr("id", idPoints++)
     .attr("transform", `translate(51, 50)`);
 }
-function drawPoints(data) {
+function drawPoints(data, color) {
   // Filtra i dati in modo da includere solo quelli con NumeroIncidenti diverso da zero
   var filteredData = data.filter(function(d) {
     return d.NumeroIncidenti !== 0;
@@ -289,7 +290,7 @@ function drawPoints(data) {
     .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
     .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
     .attr("r", 3)
-    .style("fill", "#524a32")
+    .style("fill", color)
     .style("stroke", "white")
     .style("stroke-width", 0.2)
     .on("mouseover", showIncidentCount)
@@ -306,10 +307,10 @@ function drawTimeSeriesChart(csvFileName, callback){
     convertData(timeSeriesData);
     setAxesScale(timeSeriesData);
     drawAxes(timeSeriesData);
-    drawLineWithValue(arrayOfData);
+    drawLineWithValue(timeSeriesData, "#a1987d", "main");
     drawGrid();
     addPoints()
-    drawPoints(timeSeriesData);
+    drawPoints(timeSeriesData, "#524a32");
   });
 }
 

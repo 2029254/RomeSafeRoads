@@ -137,7 +137,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                   arrayOfData.push(finalDatasetWithMissingDates)
                   setAxesScalePedestrianDeaths(finalDatasetWithMissingDates);
                   drawAxesPedestrianDeaths(finalDatasetWithMissingDates);
-                  drawLineWithValue(arrayOfData);
+                  drawLineWithValue(finalDatasetWithMissingDates);
 
                   addPoints()
                   drawPoints(finalDatasetWithMissingDates );

@@ -283,6 +283,7 @@ function handleMouseOut(d) {
 let timer; // Variabile per il timer
 let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
+  console.log(d)
 console.log(isActive)
   if (!isActive) { // Se il timer non è attivo
     isActive = true;
@@ -304,6 +305,7 @@ console.log(isActive)
   switch (d.NaturaIncidente.toString()) {
     case 'C1':
       result = "Pedestrian hit";
+
       break;
     case 'C2':
       result = "Vehicles collision (moving)";
@@ -384,6 +386,15 @@ console.log(isActive)
       showNumberOfAccidents(key, value);
     }
     fillOtherTownHalls(incidentCounts);
+  });
+
+  let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
+  d3.csv(natureAccidents, function (data) {
+    convertData(data);
+    drawLineWithValue(data,setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
+
+    addPoints();
+    drawPoints(data, "gray");
   });
 }
 
