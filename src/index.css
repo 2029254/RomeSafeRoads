@@ -61,9 +61,8 @@ body {
 
 .svg-container {
     display: inline-block;
-    position: relative;
     width: 100%;
-    padding-bottom: 70%; /* aspect ratio */
+    padding-bottom: 52%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
 }
@@ -71,7 +70,7 @@ body {
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 50%; /* aspect ratio */
+    padding-bottom: 40%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
 }

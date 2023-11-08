@@ -34,32 +34,25 @@
 </div>
 
 <!-- Create a div where the graph will take place -->
-<div class="container" style="max-width:90vw;">
-    <div class="row" style="background-color:green; height:50vh;">
+<div class="container" style="max-width:95vw;">
+    <div class="row" style="background-color:green;">
         <div class="col-1" style="align-self:center; vertical-align: middle;">
             <div id="buttons" class="d-flex flex-column" style="align-items:center; justify-content:center; "></div>
         </div>
         <div class="col-6" id="anim" style="background-color:yellow;">
-            <div id="verticalBarChart">
-            </div>
+            <div id="verticalBarChart"></div>
         </div>
-        <div class="col" id="animTwo">
-            <div id="choroplethMap">
-            </div>
+        <div class="col-5" id="animTwo">
+            <div id="choroplethMap"></div>
         </div>
     </div>
-    <div class="row" style="background-color:brown; height:40vh;">
-        <div class="col">
-            <div>
-                <p id="tooltip" style="display:none;"></p>
-            </div>
-            <div id="timeSeries">
-                <svg width="40rem" height="19rem" id="timeSeriesSvg"></svg>
-            </div>
+    <div class="row" style="background-color:brown;">
+        <div class="col" style="background-color:violet;">
+            <div><p id="tooltip" style="display:none;"></p></div>
+                <div id="timeSeries"></div>
         </div>
         <div class="col">
-            <div id="scatterPlot">
-                <svg width="39rem" height="19rem" id="scatterPlotSvg"></svg>
+            <div id="scatterPlot" style="background-color:blue;">
             </div>
         </div>
     </div>
@@ -76,6 +69,8 @@
 <script src="src/plots/weatherButtons.js"></script>
 <script src="src/plots/choroplethMap.js"></script>
 <script src="src/plots/timeSeriesChart.js"></script>
+<script src="src/plots/scatterPlot.js"></script>
+
 
 
 

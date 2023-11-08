@@ -2,10 +2,11 @@
 
 // append the svg object to the body of the page
 var barChartSvg = d3.select("#verticalBarChart")
-
+    .append("div")
+    .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 700 400")
+    .attr("viewBox", "0 0 750 370")
     .classed("svg-content-responsive", true)
     //.attr("width", width + margin.left + margin.right)
     //.attr("height", height + margin.top + margin.bottom)

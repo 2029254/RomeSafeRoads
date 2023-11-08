@@ -2,9 +2,11 @@
 
 // append the svg object to the body of the page
 var choroplethMapSvg = d3.select("#choroplethMap")
+    .append("div")
+    .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 550 400")
+    .attr("viewBox", "0 0 600 370")
     .classed("svg-content-responsive", true)
     //.attr("width", width + margin.left + margin.right)
     //.attr("height", height + margin.top + margin.bottom)

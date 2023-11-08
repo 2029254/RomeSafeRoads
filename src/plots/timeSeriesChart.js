@@ -1,4 +1,26 @@
-const timeSeriesSvg = d3.select("#timeSeriesSvg");
+/*
+var timeSeriesSvg = d3.select("#timeSeries")
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "-50 -300 1300 400")
+  .classed("svg-content-responsive", true)
+  .append("g").attr("transform", "translate(0, 0)");
+
+ */
+var margin = {top: 10, right: 30, bottom: 160, left: 40};
+
+// append the svg object to the body of the page
+var timeSeriesSvg = d3.select("#timeSeries")
+  .append("div")
+  .classed("svg-container-largo", true)
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "0 0 660 300")
+  .classed("svg-content-responsive", true)
+  //.attr("width", width + margin.left + margin.right)
+  //.attr("height", height + margin.top + margin.bottom)
+  .append("g").attr("transform", "translate(0, -25)");
+
 
 let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;
 let townHallClicked = false;
