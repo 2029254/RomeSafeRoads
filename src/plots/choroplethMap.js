@@ -243,7 +243,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells)
     .enter()
     .append("rect")
-    .attr("x",  460) // Posiziona le celle orizzontalmente
+    .attr("x",  500) // Posiziona le celle orizzontalmente
     //.attr("y",  (d, i) => i * 31)
     .attr("y",  (d,i) => 70 + 31 * i)
     .attr("width", 8) // Larghezza delle celle
@@ -254,7 +254,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells)
     .enter()
     .append("text")
-    .attr("x", 478 ) // Posiziona le etichette al centro delle celle
+    .attr("x", 518 ) // Posiziona le etichette al centro delle celle
     .attr("y", (d, i) => i * 30.7 + 104 )
     .style("font-family", "Lora")
     .text((d) => `${d}`); // Testo dell'etichetta
@@ -263,9 +263,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .data(legendCells) // Ignora l'ultimo valore
     .enter()
     .append("line")
-    .attr("x1", 460)
+    .attr("x1", 500)
     .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
-    .attr("x2", 471)
+    .attr("x2", 511)
     .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
     .style("stroke-width", "1px");

@@ -16,7 +16,7 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <!-- Header -->
-<div class="container">
+<div class="container" style="max-width:90vw;">
     <header class="d-flex flex-wrap justify-content-center py-3 border-bottom custom-border" style="height: 60px; border-bottom-color: #d4d0c5 !important; border-width: 2px !important; ">
         <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" style="margin-top: 0px; margin-bottom: 0px;">
             <span class="fs-3" id="title" style="margin-top: -10px; margin-bottom: 10px;">Rome Road Insights 2022 </span>
@@ -35,30 +35,31 @@
 
 <!-- Create a div where the graph will take place -->
 <div class="container" style="max-width:95vw;">
-    <div class="row" style="background-color:green;">
-        <div class="col-1" style="align-self:center; vertical-align: middle;">
+    <div class="row">
+        <div class="col-1" style=" vertical-align: middle; padding-top: 2.4%;">
             <div id="buttons" class="d-flex flex-column" style="align-items:center; justify-content:center; "></div>
         </div>
-        <div class="col-6" id="anim" style="background-color:yellow;">
+        <div class="col-6" id="anim">
             <div id="verticalBarChart"></div>
         </div>
         <div class="col-5" id="animTwo">
             <div id="choroplethMap"></div>
         </div>
     </div>
-    <div class="row" style="background-color:brown;">
-        <div class="col" style="background-color:violet;">
+    <div class="row">
+        <div class="col">
             <div><p id="tooltip" style="display:none;"></p></div>
                 <div id="timeSeries"></div>
         </div>
         <div class="col">
-            <div id="scatterPlot" style="background-color:blue;">
+            <div id="scatterPlot">
             </div>
         </div>
     </div>
 </div>
-<div id="popup"></div>
-<div id="popupChoropleth"></div>
+<div id="popup" style="opacity:0;"></div>
+<div id="popupChoropleth" style="opacity:0;"></div>
+
 
 
 

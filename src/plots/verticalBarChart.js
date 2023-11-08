@@ -256,9 +256,10 @@ function handleMouseOver(d) {
       .style("font-size", "12px");*/
 
     tooltip = d3.select("#popup");
-        tooltip.style("opacity", 0.8);
 
-        tooltip.html(setAccidentsNumberAndNatureAndYear(d))
+
+  tooltip.html(setAccidentsNumberAndNatureAndYear(d))
+        .style("opacity", 0.8)
         .style("color", "#524a32")
         .style("font-family", "Lora")
         .style("font-size", "10px")

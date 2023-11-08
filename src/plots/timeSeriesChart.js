@@ -19,7 +19,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
-  .append("g").attr("transform", "translate(0, -25)");
+  .append("g").attr("transform", "translate(0, -33)");
 
 
 let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;

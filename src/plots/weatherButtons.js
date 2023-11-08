@@ -1,6 +1,6 @@
 // Dimensioni dei bottoni
 let buttonRadius = 20;
-let buttonPadding = 0; // Spazio tra i bottoni
+let buttonPadding = 8; // Spazio tra i bottoni
 let buttonWeatherValue = "First"
 let buttonFlag = false;
 
