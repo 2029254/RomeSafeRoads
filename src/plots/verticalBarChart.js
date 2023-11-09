@@ -14,6 +14,9 @@ var barChartSvg = d3.select("#verticalBarChart")
 
 let width = 500;
 let height = 300;
+let clickedBars = [];
+let clickedNature = "";
+
 
 let xScale, yScale, g, dataAboutYearSorted, tooltip;
 
@@ -283,119 +286,140 @@ function handleMouseOut(d) {
 let timer; // Variabile per il timer
 let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
-  console.log(d)
-console.log(isActive)
-  if (!isActive) { // Se il timer non è attivo
-    isActive = true;
-    timer = setTimeout(function () {
-      isActive = false; // Resetta lo stato del timer
-      resetTownHall();
-    }, 3000);
-  } else if (timer){ // Se il timer è già attivo
-    clearTimeout(timer); // Interrompi il timer corrente
-    timer = setTimeout(function () {
-      isActive = false; // Resetta lo stato del timer
-      resetTownHall();
-    }, 3000);
-   // isActive = false; // Resetta lo stato del timer
-  }
-  resetTownHall();
-
-  let result;
-  switch (d.NaturaIncidente.toString()) {
-    case 'C1':
-      result = "Pedestrian hit";
-
-      break;
-    case 'C2':
-      result = "Vehicles collision (moving)";
-      break;
-    case 'C3':
-      result = "Vehicles collision (stationary vehicle)";
-      break;
-    case 'C4':
-      result = "Rear-end collision";
-      break;
-    case 'C5':
-      result = "Collision with obstacle";
-      break;
-    case 'C6':
-      result = "Sudden braking and vehicle fall";
-      break;
-    case 'C7':
-      result = "Overturning and run-off-road";
-      break;
-    default:
-      result = "Side/head-on collision";
-  }
-
-  let weatherResult = [];
-  switch (buttonWeatherValue) {
-    case 'Cloudy':
-      weatherResult.push("Nuvoloso");
-      break;
-    case 'Sunny':
-      weatherResult.push("Sereno", "Sole radente");
-      break;
-    case 'Rainy':
-      weatherResult.push("Pioggia in atto");
-      break;
-    case 'Severe':
-      weatherResult.push("Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
-      break;
-    case 'None':
-      weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
-      break;
-    default:
-      weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
-  }
-
-  d3.csv(csvFileNameChoroplethMapNature, function (data) {
-
-    console.log(weatherResult )
-    let dataAboutWeather = [];
-    weatherResult.forEach(item => {
-     data.filter(function (row) {
-        if(row['CondizioneAtmosferica'] === item)
-          dataAboutWeather.push(row)
-      });
-    });
-
-    let dataAboutNature = []
-    dataAboutWeather.forEach(item => {
-      if (item['NaturaIncidente'] === d.NaturaIncidente.toString() )
-        dataAboutNature.push(item)
-    });
-
-    let groupedByTownHall = new Map();
-    dataAboutNature.forEach(item => {
-      let municipio = item.Municipio;
-      if (!groupedByTownHall.has(municipio)) {
-        groupedByTownHall.set(municipio, []);
+    console.log(d)
+    console.log(isActive)
+    if (buttonWeatherValue==="First") {
+        // Rimuovi le linee correlate alle barre cliccate in precedenza
+        clickedBars.forEach(function (bar) {
+            d3.select("#line_" + bar.NaturaIncidente).remove();
+        });
+        if (clickedNature!=="") d3.selectAll("." + clickedNature).remove();
+        // Aggiungi l'ID della barra corrente all'array delle barre cliccate
+        clickedBars.push(d);
+        clickedNature = d.NaturaIncidente.toString();
+      if (!isActive) { // Se il timer non è attivo
+        isActive = true;
+        timer = setTimeout(function () {
+          isActive = false; // Resetta lo stato del timer
+          resetTownHall();
+        }, 3000);
+      } else if (timer){ // Se il timer è già attivo
+        clearTimeout(timer); // Interrompi il timer corrente
+        timer = setTimeout(function () {
+          isActive = false; // Resetta lo stato del timer
+          resetTownHall();
+        }, 3000);
+       // isActive = false; // Resetta lo stato del timer
       }
-      groupedByTownHall.get(municipio).push(item);
-    });
+      resetTownHall();
 
-    let incidentCounts = new Map();
-    groupedByTownHall.forEach((data, municipio) => {
-      const count = data.length;
-      incidentCounts.set(municipio, count);
-    });
+      let result;
+      switch (d.NaturaIncidente.toString()) {
+        case 'C1':
+          result = "Pedestrian hit";
 
-    for (const [key, value] of incidentCounts) {
-      showNumberOfAccidents(key, value);
+          break;
+        case 'C2':
+          result = "Vehicles collision (moving)";
+          break;
+        case 'C3':
+          result = "Vehicles collision (stationary vehicle)";
+          break;
+        case 'C4':
+          result = "Rear-end collision";
+          break;
+        case 'C5':
+          result = "Collision with obstacle";
+          break;
+        case 'C6':
+          result = "Sudden braking and vehicle fall";
+          break;
+        case 'C7':
+          result = "Overturning and run-off-road";
+          break;
+        default:
+          result = "Side/head-on collision";
+      }
+
+      let weatherResult = [];
+      switch (buttonWeatherValue) {
+        case 'Cloudy':
+          weatherResult.push("Nuvoloso");
+          break;
+        case 'Sunny':
+          weatherResult.push("Sereno", "Sole radente");
+          break;
+        case 'Rainy':
+          weatherResult.push("Pioggia in atto");
+          break;
+        case 'Severe':
+          weatherResult.push("Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+          break;
+        case 'None':
+          weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+          break;
+        default:
+          weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
+      }
+
+      d3.csv(csvFileNameChoroplethMapNature, function (data) {
+
+        console.log(weatherResult )
+        let dataAboutWeather = [];
+        weatherResult.forEach(item => {
+         data.filter(function (row) {
+            if(row['CondizioneAtmosferica'] === item)
+              dataAboutWeather.push(row)
+          });
+        });
+
+        let dataAboutNature = []
+        dataAboutWeather.forEach(item => {
+          if (item['NaturaIncidente'] === d.NaturaIncidente.toString() )
+            dataAboutNature.push(item)
+        });
+
+        let groupedByTownHall = new Map();
+        dataAboutNature.forEach(item => {
+          let municipio = item.Municipio;
+          if (!groupedByTownHall.has(municipio)) {
+            groupedByTownHall.set(municipio, []);
+          }
+          groupedByTownHall.get(municipio).push(item);
+        });
+
+        let incidentCounts = new Map();
+        groupedByTownHall.forEach((data, municipio) => {
+          const count = data.length;
+          incidentCounts.set(municipio, count);
+        });
+
+        for (const [key, value] of incidentCounts) {
+          showNumberOfAccidents(key, value);
+        }
+        fillOtherTownHalls(incidentCounts);
+      });
+
+      let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
+        // Disegna la nuova linea per la barra corrente
+        let lineId = "line_" + d.NaturaIncidente;
+        if (setBarColor(d.NumeroIncidenti) == "#d73027" || setBarColor(d.NumeroIncidenti) == "#fc8d59") {
+
+            d3.csv(natureAccidents, function (data) {
+                convertData(data);
+                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), lineId);
+                addPoints(d.NaturaIncidente.toString());
+                switch (setBarColor(d.NumeroIncidenti)) {
+                    case '#d73027':
+                        drawPoints(data, "#b01810");
+                        break;
+                    default:
+                        drawPoints(data, "#de703c");
+                }
+                //drawPoints(timeSeriesData, "#524a32");
+            });
+        }
     }
-    fillOtherTownHalls(incidentCounts);
-  });
-
-  let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
-  d3.csv(natureAccidents, function (data) {
-    convertData(data);
-    drawLineWithValue(data,setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
-
-    addPoints();
-    drawPoints(data, "gray");
-  });
 }
 
 function setAccidentsNumberAndNatureAndYear(d) {
@@ -421,6 +445,7 @@ function setAccidentsNumberAndNatureAndYear(d) {
   }*/
 
 }
+
 
 
 

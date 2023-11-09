@@ -98,10 +98,10 @@ function drawLineWithValue(data, color, id){
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
-
     timeSeriesSvg.append("path")
       .datum(data)
       .attr("id", id)
+      .attr("class", "line"+ id)
       .attr("fill", "none")
       .attr("stroke", color)
       .attr("stroke-width", 2.5)
@@ -153,7 +153,6 @@ function drawAxes(data){
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
     .call(yAxisTimeSeries.tickFormat(function(d){return d;}));
-
 }
 
 function drawAxesPedestrianDeaths(data){
@@ -268,11 +267,11 @@ function drawGridPedestrianDeaths(){
     .style("stroke-width", 0.3);
 }
 
-
-function addPoints(){
+function addPoints(nature) {
   // Aggiungi un gruppo per i punti interattivi
   pointsGroup = timeSeriesSvg.append("g")
     .attr("id", idPoints++)
+    .attr("class", nature)
     .attr("transform", `translate(51, 50)`);
 }
 function drawPoints(data, color) {
@@ -281,6 +280,7 @@ function drawPoints(data, color) {
     return d.NumeroIncidenti !== 0;
   });
 
+   let MinMax = filteredData.map(function (d) { return d.NumeroIncidenti; })
   // Aggiungi cerchi per i punti di cambio di inclinazione solo con dati filtrati
   pointsGroup.selectAll(".point")
     .data(filteredData)
@@ -290,9 +290,15 @@ function drawPoints(data, color) {
     .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
     .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
     .attr("r", 3)
-    .style("fill", color)
+    .style("fill", function(filteredData) {
+        if (filteredData.NumeroIncidenti===Math.max.apply(null, MinMax)) return color
+        else return color
+     })
     .style("stroke", "white")
-    .style("stroke-width", 0.2)
+    .style("stroke-width", function(filteredData) {
+        if (filteredData.NumeroIncidenti===Math.max.apply(null, MinMax)) return "1.5"
+        else return "0.2"
+     })
     .on("mouseover", showIncidentCount)
     .on("mouseout", hideIncidentCount);
 }
@@ -309,7 +315,7 @@ function drawTimeSeriesChart(csvFileName, callback){
     drawAxes(timeSeriesData);
     drawLineWithValue(timeSeriesData, "#a1987d", "main");
     drawGrid();
-    addPoints()
+    addPoints("noNature");
     drawPoints(timeSeriesData, "#524a32");
   });
 }
