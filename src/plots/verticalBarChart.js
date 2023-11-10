@@ -138,10 +138,10 @@ function drawAxesAndBars(csvFileName){
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
-      .attr("x", -105)
+      .attr("x", -107)
       .attr("dy", "-5.1em")
       .attr("fill", "black")
-      .text("Number of accidents");
+      .text("Accidents' number");
 
   });
 }
@@ -403,7 +403,7 @@ function onclickBar(d) {
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
         // Disegna la nuova linea per la barra corrente
         let lineId = "line_" + d.NaturaIncidente;
-        if (setBarColor(d.NumeroIncidenti) == "#d73027" || setBarColor(d.NumeroIncidenti) == "#fc8d59") {
+        if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
 
             d3.csv(natureAccidents, function (data) {
                 convertData(data);
@@ -416,8 +416,11 @@ function onclickBar(d) {
                     default:
                         drawPoints(data, "#de703c");
                 }
-                //drawPoints(timeSeriesData, "#524a32");
             });
+        }
+        else {
+          timeSeriesSvg.selectAll("*").remove();
+          drawTimeSeriesChart(csvFileNameTimeSeries);
         }
     }
 }

@@ -70,7 +70,7 @@ body {
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 37.2%; /* aspect ratio */
+    padding-bottom: 41%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
 }

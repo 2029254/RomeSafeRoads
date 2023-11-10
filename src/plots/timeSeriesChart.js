@@ -19,7 +19,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
-  .append("g").attr("transform", "translate(0, -33)");
+  .append("g").attr("transform", "translate(9, -33)");
 
 
 let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;
@@ -144,15 +144,28 @@ function drawAxes(data){
     });
 
   yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
+
   timeSeriesSvg.append("g")
     .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .style("font-family", "Lora")
-    .call(xAxisTimeSeries);
+    .call(xAxisTimeSeries)
+    .append("text")
+    .attr("y", 37)
+    .attr("x", 247)
+    .attr("fill", "black")
+    .text("Time interval");
 
   timeSeriesSvg.append("g")
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
-    .call(yAxisTimeSeries.tickFormat(function(d){return d;}));
+    .call(yAxisTimeSeries.tickFormat(function(d){return d;}))
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -50)  // Imposta il nuovo valore di "y" per il punto di ancoraggio
+    .attr("x", -58) // Imposta il nuovo valore di "x" per il punto di ancoraggio
+    .attr("fill", "black")
+    .text("Accidents' number");
+
 }
 
 function drawAxesPedestrianDeaths(data){
@@ -280,27 +293,41 @@ function drawPoints(data, color) {
     return d.NumeroIncidenti !== 0;
   });
 
-   let MinMax = filteredData.map(function (d) { return d.NumeroIncidenti; })
-  // Aggiungi cerchi per i punti di cambio di inclinazione solo con dati filtrati
+  // Trova l'oggetto con il massimo NumeroIncidenti
+  const maxIncident = filteredData.reduce((acc, cur) => cur.NumeroIncidenti > acc.NumeroIncidenti ? cur : acc, filteredData[0]);
+
+// Crea cerchi per tutti i punti
   pointsGroup.selectAll(".point")
     .data(filteredData)
     .enter()
-    .append("circle")
+    .append("g")  // Gruppo per ogni cerchio
     .attr("class", "point")
-    .attr("cx", d => xScaleTimeSeries(d.DataOraIncidente))
-    .attr("cy", d => yScaleTimeSeries(d.NumeroIncidenti))
-    .attr("r", 3)
-    .style("fill", function(filteredData) {
-        if (filteredData.NumeroIncidenti===Math.max.apply(null, MinMax)) return color
-        else return color
-     })
-    .style("stroke", "white")
-    .style("stroke-width", function(filteredData) {
-        if (filteredData.NumeroIncidenti===Math.max.apply(null, MinMax)) return "1.5"
-        else return "0.2"
-     })
-    .on("mouseover", showIncidentCount)
-    .on("mouseout", hideIncidentCount);
+    .each(function(d) {
+      // Aggiungi cerchio più grande solo per il punto massimo
+      if (d === maxIncident) {
+        d3.select(this).append("circle")
+          .attr("class", "outer-point")
+          .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
+          .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
+          .attr("r", 8)
+          .style("stroke", "red")
+          .style("stroke-width", "1")
+          .style("fill", "none");
+      }
+
+      // Aggiungi cerchio più piccolo per tutti i punti
+      d3.select(this).append("circle")
+        .attr("class", "inner-point")
+        .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
+        .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
+        .attr("r", 3)
+        .style("fill", color)
+        .style("stroke", "white")
+        .style("stroke-width", "0.5")
+        .on("mouseover", showIncidentCount)
+        .on("mouseout", hideIncidentCount);
+    });
+
 }
 
 function drawTimeSeriesChart(csvFileName, callback){
