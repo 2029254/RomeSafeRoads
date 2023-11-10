@@ -337,7 +337,7 @@ button.bucket {
     background-color: rgb(128, 128, 128);
     color: white;
     border: black;
-    border-radius: 10%;
+    border-radius: 30%;
     width: 1vw;/*1vw;*/
     height: 1vw;/*1vw;*/
     font-size: 16px;
