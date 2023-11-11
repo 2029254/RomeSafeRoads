@@ -31,6 +31,7 @@ let line;
 let timeSeriesData;
 let arrayOfData = [];
 let idPoints;
+let tickValues;
 
 const dataTest = [
   { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
@@ -78,7 +79,7 @@ function setAxesScale(data){
     .range([0, widthTimeSeries]);
 
   yScaleTimeSeries = d3.scaleLinear()
-    .domain([0, 1200])
+    .domain([0, 160])
     .range([heightTimeSeries, 0]);
 }
 function setAxesScalePedestrianDeaths(data){
@@ -104,7 +105,7 @@ function drawLineWithValue(data, color, id){
       .attr("class", "line"+ id)
       .attr("fill", "none")
       .attr("stroke", color)
-      .attr("stroke-width", 2.5)
+      .attr("stroke-width", 0.8)
       .attr("d", line)
       .attr("transform", `translate(51, 50)`);
 
@@ -115,32 +116,23 @@ function drawAxes(data){
   const minDate = d3.min(data, d => d.DataOraIncidente);
   const maxDate = d3.max(data, d => d.DataOraIncidente);
 
-  let tickValues = [];
-  let currentDate = d3.timeMonth.floor(minDate);
-  while (currentDate <= maxDate) {
-    tickValues.push(currentDate);
-    for (let i = 0; i < 3; i++) {
-      let nextDateTen = d3.timeDay.offset(currentDate, 10);
-      if (nextDateTen <= maxDate)
-        tickValues.push(nextDateTen);
-    }
-    tickValues.push(d3.timeDay.offset(currentDate, 20));
-    currentDate = d3.timeMonth.offset(currentDate, 1);
-  }
-  tickValues.pop(tickValues.length)
+  var timeOrdered = [];
 
-  // Crea l'asse x con i tickValues
+  let minimaDate = minDate;
+  timeOrdered.push(minDate);
+  while (minimaDate <= maxDate) {
+    minimaDate = d3.timeDay.offset(minimaDate, 10);
+    timeOrdered.push(minimaDate);
+  }
+
+  // Estrai solo ogni 3 tick
+  tickValues = timeOrdered.filter((_, i) => i % 3 === 0);
+
+// Crea l'asse x con i tickValues
   xAxisTimeSeries = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
     .tickFormat(date => {
-      let day = d3.timeFormat("%d")(date);
-      let year = d3.timeFormat("%Y")(date);
-      let nextYear = parseInt(selectedYear) + 1;
-      if(parseInt(year) === nextYear)
-        return "";
-      else if (day === "01")
-        return d3.timeFormat("%b")(date);
-      return "";
+      return d3.timeFormat("%d %b")(date);
     });
 
   yAxisTimeSeries = d3.axisLeft(yScaleTimeSeries);
@@ -219,7 +211,7 @@ function drawAxesPedestrianDeaths(data){
 function drawGrid(){
   // Aggiungi linee tratteggiate verticali
   timeSeriesSvg.selectAll("line.vgrid")
-    .data(xScaleTimeSeries.ticks().slice(1))
+    .data(tickValues.slice(1))
     .enter()
     .append("line")
     .attr("class", "vgrid")
@@ -228,9 +220,9 @@ function drawGrid(){
     .attr("y1", heightTimeSeries)
     .attr("y2", 0)
     .attr("transform", `translate(50.5, 50)`)
-    .style("stroke", "gray")
-    .style("stroke-dasharray", "5, 5")
-    .style("stroke-width", 0.3)
+    .style("stroke", "#c7c2b5")
+    .style("stroke-dasharray", "3, 3")
+    .style("stroke-width", 0.5)
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
@@ -243,9 +235,9 @@ function drawGrid(){
     .attr("y1", d => yScaleTimeSeries(d))
     .attr("y2", d => yScaleTimeSeries(d))
     .attr("transform", `translate(52.5, 50.5)`)
-    .style("stroke", "gray")
-    .style("stroke-dasharray", "5, 5")
-    .style("stroke-width", 0.3);
+    .style("stroke", "#c7c2b5")
+    .style("stroke-dasharray", "3, 3")
+    .style("stroke-width", 0.5);
 }
 
 function drawGridPedestrianDeaths(){
@@ -313,20 +305,21 @@ function drawPoints(data, color) {
           .style("stroke", "red")
           .style("stroke-width", "1")
           .style("fill", "none");
-      }
 
-      // Aggiungi cerchio più piccolo per tutti i punti
-      d3.select(this).append("circle")
-        .attr("class", "inner-point")
-        .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
-        .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
-        .attr("r", 3)
-        .style("fill", color)
-        .style("stroke", "white")
-        .style("stroke-width", "0.5")
-        .on("mouseover", showIncidentCount)
-        .on("mouseout", hideIncidentCount);
+        // Aggiungi cerchio più piccolo per tutti i punti
+        d3.select(this).append("circle")
+          .attr("class", "inner-point")
+          .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
+          .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
+          .attr("r", 2)
+          .style("fill", color)
+          .style("stroke", "white")
+          .style("stroke-width", "0.5")
+          .on("mouseover", showIncidentCount)
+          .on("mouseout", hideIncidentCount);
+      }
     });
+
 
 }
 
