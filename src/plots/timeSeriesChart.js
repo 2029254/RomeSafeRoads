@@ -95,7 +95,10 @@ function setAxesScalePedestrianDeaths(data){
 
 
 function drawLineWithValue(data, color, id){
+  const curve = d3.curveCardinal;
+
   line = d3.line()
+    .curve(curve)
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
