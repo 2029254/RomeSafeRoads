@@ -113,6 +113,11 @@ function drawAxesAndBars(csvFileName){
       .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
       .style("stroke", "black") // Aggiungi un bordo nero
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
+      .style("cursor", function (d) {
+        //Applica il pointer solo se buttonWeatherValue è "First"
+        if ((setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") && (buttonWeatherValue === "First" || buttonWeatherValue === "None")) return "pointer"
+        else return "default"
+        })
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
       .on("mouseout", function (d) {handleMouseOut(d)})
