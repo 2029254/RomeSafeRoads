@@ -7,7 +7,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .append("g").attr("transform", "translate(0, 0)");
 
  */
-var margin = {top: 10, right: 30, bottom: 160, left: 40};
+var margin = {top: 10, right: 30, bottom: 160, left: 0};
 
 // append the svg object to the body of the page
 var timeSeriesSvg = d3.select("#timeSeries")
@@ -82,7 +82,7 @@ function setAxesScale(data){
     .domain([0, 160])
     .range([heightTimeSeries, 0]);
 }
-function setAxesScalePedestrianDeaths(data){
+function setAxesScalePedestrianDeaths(data) {
 
   xScaleTimeSeries = d3.scaleTime()
     .domain(d3.extent(data, d => d.DataOraIncidente))
@@ -93,8 +93,7 @@ function setAxesScalePedestrianDeaths(data){
     .range([heightTimeSeries, 0]);
 }
 
-
-function drawLineWithValue(data, color, id){
+function drawLineWithValue(data, color, id) {
   const curve = d3.curveCardinal;
 
   line = d3.line()
@@ -102,17 +101,63 @@ function drawLineWithValue(data, color, id){
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
-    timeSeriesSvg.append("path")
-      .datum(data)
-      .attr("id", id)
-      .attr("class", "line"+ id)
-      .attr("fill", "none")
-      .attr("stroke", color)
-      .attr("stroke-width", 0.8)
-      .attr("d", line)
-      .attr("transform", `translate(51, 50)`);
+  const path = timeSeriesSvg.append("path")
+    .datum(data)
+    .attr("id", id)
+    .attr("class", "line" + id)
+    .attr("fill", "none")
+    .attr("stroke", color)
+    .attr("stroke-width", 0.8)
+    .attr("d", line)
+    .attr("transform", `translate(51, 50)`);
+
+  const focus = timeSeriesSvg.append('g')
+    .attr('class', 'focus')
+    .style('display', 'none');
+
+  focus.append('line')
+    .attr('class', 'x-hover-line hover-line')
+    .attr('y1', 0)
+    .attr('y2', height);
+
+  focus.append('circle')
+    .attr('r', 5)
+    .attr('fill', color)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+
+  timeSeriesSvg.append('rect')
+    .attr('width', width)
+    .attr('height', height)
+    .style('fill', 'none')
+    .style('pointer-events', 'all')
+    .on('mouseover', () => focus.style('display', null))
+    .on('mouseout', () => focus.style('display', 'none'))
+    .on('mousemove', mousemove);
+
+  function mousemove() {
+    const x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
+    const bisect = d3.bisector(d => d.DataOraIncidente).left;
+    const i = bisect(data, x0, 1);
+
+    // Check if the index is within the bounds of the data array
+    if (i > 0 && i < data.length) {
+      const d0 = data[i - 1];
+      const d1 = data[i];
+      const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
+
+      focus.transition()
+        .duration(75) // Adjust the duration as needed
+        .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
+
+      focus.select('.x-hover-line').transition()
+        .duration(1000) // Adjust the duration as needed
+        .attr('y2', height - yScaleTimeSeries(d.NumeroIncidenti));
+    }
+  }
 
 }
+
 
 function drawAxes(data){
   // Trova la data minima e massima nei tuoi dati
@@ -322,8 +367,6 @@ function drawPoints(data, color) {
           .on("mouseout", hideIncidentCount);
       }
     });
-
-
 }
 
 function drawTimeSeriesChart(csvFileName, callback){
