@@ -9,6 +9,8 @@ var timeSeriesSvg = d3.select("#timeSeries")
  */
 var margin = {top: 10, right: 30, bottom: 160, left: 0};
 
+
+
 // append the svg object to the body of the page
 var timeSeriesSvg = d3.select("#timeSeries")
   .append("div")
