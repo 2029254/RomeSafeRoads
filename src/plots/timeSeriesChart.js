@@ -81,7 +81,7 @@ function setAxesScale(data){
     .range([0, widthTimeSeries]);
 
   yScaleTimeSeries = d3.scaleLinear()
-    .domain([0, 160])
+    .domain([0, 1100])
     .range([heightTimeSeries, 0]);
 }
 function setAxesScalePedestrianDeaths(data) {
@@ -120,7 +120,8 @@ function drawLineWithValue(data, color, id) {
   focus.append('line')
     .attr('class', 'x-hover-line hover-line')
     .attr('y1', 0)
-    .attr('y2', height);
+    .attr('y2', 100)
+    .attr('stroke', 'transparent')
 
   focus.append('circle')
     .attr('r', 5)
@@ -149,12 +150,14 @@ function drawLineWithValue(data, color, id) {
       const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
 
       focus.transition()
-        .duration(75) // Adjust the duration as needed
+        .duration(40) // Adjust the duration as needed
         .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
 
-      focus.select('.x-hover-line').transition()
-        .duration(1000) // Adjust the duration as needed
-        .attr('y2', height - yScaleTimeSeries(d.NumeroIncidenti));
+      focus.select('.x-hover-line')
+        .attr('y1', 300)  // Altezza dell'asse Y
+        .attr('y2', -100)
+
+
     }
   }
 

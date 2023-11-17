@@ -398,7 +398,8 @@ button.btn-small {
 #container1, #container2 {
    text-align: -webkit-center;
    border: 1px solid #d4d0c5;
-   border-radius: 7px;
+   border-radius: 23px;
    box-shadow: 0 2px 4px darkslategray;
    transition: border 15.8s ease;
+    background-color: white;
 }

@@ -73,11 +73,11 @@
         <div class="col-1" style="align-self:center;">
             <svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 150 370">
                 <rect width="100%" height="100%" x="0" y="0" fill="transparent" />
-                <foreignObject x="0" y="0" width="100%" height="100%">
-                    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 100%; height: 100%; padding-bottom:50px;">
-                        <p id="choose">What do you want to compare?</p>
-                        <div class="collapse-container" id="container1">
-                            <button class="btn btn-small" type="button" data-toggle="collapse" data-target="#option1Collapse" aria-expanded="false" aria-controls="option1Collapse">
+                <foreignObject x="0" y="0" width="100%" height="100%" >
+                    <p id="choose" style="padding-top: 40px;">Custom your insight: </p>
+                    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 100%; height: 100%; padding-bottom:150px;">
+                        <div class="collapse-container" id="container1" style="max-height: 128px; overflow: hidden; transition: max-height 0.5s ease-out;">
+                            <button id="firstTimesSeriesButton" class="btn btn-small" type="button" data-toggle="collapse" data-target="#option1Collapse" aria-expanded="false" aria-controls="option1Collapse">
                                 Compare the main trend with that of an accident nature
                             </button>
                             <div class="collapse" id="option1Collapse">
@@ -85,8 +85,8 @@
                             </div>
                         </div>
                         <div style="margin: 10px 0;"></div> <!-- Spazio tra i bottoni -->
-                        <div class="collapse-container" id="container2">
-                            <button class="btn btn-small" type="button" data-toggle="collapse" data-target="#option2Collapse" aria-expanded="false" aria-controls="option2Collapse">
+                        <div class="collapse-container" id="container2" style="max-height: 128px; overflow: hidden; transition: max-height 0.5s ease-out;">
+                            <button id="secondTimesSeriesButton" class="btn btn-small" type="button" data-toggle="collapse" data-target="#option2Collapse" aria-expanded="false" aria-controls="option2Collapse">
                                 Compare different accident nature trends among them
                             </button>
                             <div class="collapse" id="option2Collapse">
@@ -97,6 +97,7 @@
                 </foreignObject>
             </svg>
         </div>
+
 
         <div class="col">
             <div><p id="tooltip" style="display:none;"></p></div>
@@ -111,15 +112,6 @@
 <div id="popup" style="opacity:0;"></div>
 <div id="popupChoropleth" style="opacity:0;"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        $('#option1Collapse, #option2Collapse').on('show.bs.collapse', function () {
-            // Chiude tutti gli altri collapse aperti
-            $('#option1Collapse, #option2Collapse').not(this).collapse('hide');
-        });
-    });
-</script>
-
 
 
 
@@ -130,6 +122,8 @@
 <script src="src/plots/choroplethMap.js"></script>
 <script src="src/plots/timeSeriesChart.js"></script>
 <script src="src/plots/scatterPlot.js"></script>
+<script src="src/plots/timeSeriesButtons.js"></script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
