@@ -177,48 +177,92 @@ function drawLineWithValue(data, color, id) {
   function mousemove() {
     const x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
     const bisect = d3.bisector(d => d.DataOraIncidente).left;
-    const i = bisect(data, x0, 1);
+    const i = bisect(timeSeriesData, x0, 1);
 
     // Check if the index is within the bounds of the data array
-    if (i > 0 && i < data.length) {
-      const d0 = data[i - 1];
-      const d1 = data[i];
+    if (i > 0 && i < timeSeriesData.length) {
+      const d0 = timeSeriesData[i - 1];
+      const d1 = timeSeriesData[i];
       const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
 
-      focus.transition()
-        .duration(75) // Adjust the duration as needed
-        .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
+      // Aggiorna la posizione del focus
+      focus.attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
 
-      //Aggiorna la posizione della linea lungo l'asse x
+      // Aggiorna la posizione della linea lungo l'asse x
+      xHoverLine.attr('x1', xScaleTimeSeries(d.DataOraIncidente) + 51)
+        .attr('x2', xScaleTimeSeries(d.DataOraIncidente) + 51);
+
+      // Aggiorna la posizione del riquadro di informazioni
+      infoBox.attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 61},${yScaleTimeSeries(d.NumeroIncidenti) + 10})`);
+
+      infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
+      const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      const accidentsText = `${formattedDate}`;
+      const accidentsCountText = `${d.NumeroIncidenti} accidents`;
+
+      infoBox.select('text')
+        .append('tspan')
+        .text(accidentsText)
+        .attr('x', 5)
+        .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+
+      infoBox.select('text')
+        .append('tspan')
+        .text(accidentsCountText)
+        .attr('x', 5)
+        .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+    }
+  }
+  function mousemove() {
+    const x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
+    const bisect = d3.bisector(d => d.DataOraIncidente).left;
+    const i = bisect(timeSeriesData, x0, 1);
+
+    // Check if the index is within the bounds of the data array
+    if (i > 0 && i < timeSeriesData.length) {
+      const d0 = timeSeriesData[i - 1];
+      const d1 = timeSeriesData[i];
+      const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
+
+      // Calcola la posizione desiderata del focus
+      const focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+      const focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+
+      // Imposta la posizione del focus senza utilizzare una transizione
+      focus.transition()
+        .duration(50)  // specifica la durata dell'animazione in millisecondi
+        .attr('transform', `translate(${focusX},${focusY})`);
+
+      // Aggiorna la posizione della linea lungo l'asse x
       xHoverLine.transition()
-        .attr('x1', xScaleTimeSeries(d.DataOraIncidente) + 51)
-        .attr('x2', xScaleTimeSeries(d.DataOraIncidente) + 51)
-        .duration(75);
+        .duration(50)
+        .attr('x1', focusX)
+        .attr('x2', focusX);
 
       // Aggiorna la posizione del riquadro di informazioni
       infoBox.transition()
-        .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 61},${yScaleTimeSeries(d.NumeroIncidenti) + 10})`)
-        .duration(75);
+        .duration(50).attr('transform', `translate(${focusX + 10},${focusY - 40})`);
 
-        infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
-        const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-        const accidentsText = `${formattedDate}`;
-        const accidentsCountText = `${d.NumeroIncidenti} accidents`;
+      infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
+      const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      const accidentsText = `${formattedDate}`;
+      const accidentsCountText = `${d.NumeroIncidenti} accidents`;
 
-        infoBox.select('text')
-          .append('tspan')
-          .text(accidentsText)
-          .attr('x', 5)
-          .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+      infoBox.select('text')
+        .append('tspan')
+        .text(accidentsText)
+        .attr('x', 5)
+        .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
 
-        infoBox.select('text')
-          .append('tspan')
-          .text(accidentsCountText)
-          .attr('x', 5)
-          .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
-
+      infoBox.select('text')
+        .append('tspan')
+        .text(accidentsCountText)
+        .attr('x', 5)
+        .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
     }
   }
+
+
 }
 
 function drawAxes(data){
