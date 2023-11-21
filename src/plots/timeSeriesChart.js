@@ -117,11 +117,9 @@ function drawLineWithValue(data, color, id) {
     .attr('class', 'focus')
     .style('display', 'none');
 
-  focus.append('line')
+  timeSeriesSvg.append('line')
     .attr('class', 'x-hover-line hover-line')
-    .attr('y1', 0)
-    .attr('y2', 100)
-    .attr('stroke', 'transparent')
+    .attr('stroke', 'gray')
 
   focus.append('circle')
     .attr('r', 5)
@@ -130,9 +128,10 @@ function drawLineWithValue(data, color, id) {
     .attr('stroke-width', 2);
 
   timeSeriesSvg.append('rect')
-    .attr('width', width)
-    .attr('height', height)
+    .attr('width', 500)
+    .attr('height', 300)
     .style('fill', 'none')
+    .style('translate', '50px')
     .style('pointer-events', 'all')
     .on('mouseover', () => focus.style('display', null))
     .on('mouseout', () => focus.style('display', 'none'))
@@ -150,14 +149,12 @@ function drawLineWithValue(data, color, id) {
       const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
 
       focus.transition()
-        .duration(40) // Adjust the duration as needed
+        .duration(75) // Adjust the duration as needed
         .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
 
       focus.select('.x-hover-line')
-        .attr('y1', 300)  // Altezza dell'asse Y
-        .attr('y2', -100)
-
-
+        .attr('y1', 50)  // Altezza dell'asse Y
+        .attr('y2', 150)
     }
   }
 
@@ -211,6 +208,17 @@ function drawAxes(data){
     .attr("fill", "black")
     .text("Accidents' number");
 
+  /*
+  // Crea l'asse x per l'elemento di brush
+ // var xAxisBrush = d3.axisBottom(xScaleTimeSeries);
+
+  // Aggiungi l'asse x per l'elemento di brush
+  timeSeriesSvg.append("g")
+    .attr("class", "brush-axis")
+    .attr("transform", "translate(0, " + (heightTimeSeries + 50 + 20) + ")")
+    .style("font-family", "Lora")
+    //.call(xAxisBrush);
+   */
 }
 
 function drawAxesPedestrianDeaths(data){
@@ -388,8 +396,38 @@ function drawTimeSeriesChart(csvFileName, callback){
     drawGrid();
     addPoints("noNature");
     drawPoints(timeSeriesData, "#524a32");
+/*
+
+    // Crea un elemento di brush per la selezione
+    var brush = d3.brushX()
+      .extent([[0, 0], [widthTimeSeries, heightTimeSeries]])
+      .on("end", brushed);
+
+// Aggiungi il brush all'elemento g del tuo grafico
+    timeSeriesSvg.append("g")
+      .attr("class", "brush")
+      .call(brush);
+
+ */
+
   });
 }
+
+function brushed() {
+  if (!d3.event.selection) return; // Se la selezione è nulla, esci dalla funzione
+
+  // Ottieni la data iniziale e finale selezionate
+  var [x0, x1] = d3.event.selection.map(xScaleTimeSeries.invert);
+
+  // Formatta le date nel formato desiderato (ad esempio, "YYYY-MM-DD")
+  var formattedStartDate = d3.timeFormat("%Y-%m-%d")(x0);
+  var formattedEndDate = d3.timeFormat("%Y-%m-%d")(x1);
+
+  // Stampa le date iniziale e finale
+  console.log("Data Iniziale:", formattedStartDate);
+  console.log("Data Finale:", formattedEndDate);
+}
+
 
 // Funzione per mostrare il numero di incidenti
 function showIncidentCount(d) {

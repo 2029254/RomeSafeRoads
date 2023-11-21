@@ -408,3 +408,9 @@ button.btn-small {
    max-height: 250px;
    /*transition: max-height 0.5s ease-out;*/
 }
+
+.selection-rect {
+    fill: rgba(0, 0, 255, 0.2); /* Colore di riempimento azzurro trasparente */
+    stroke: #000;
+    stroke-width: 0.5;
+}
