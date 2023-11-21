@@ -134,21 +134,24 @@ function drawLineWithValue(data, color, id) {
 
     infoBox.append('rect')
       .attr('width', 60)
-      .attr('height', 40)
-      .attr('rx', 5) // Arrotonda gli angoli orizzontali
-      .attr('ry', 5) // Arrotonda gli angoli verticali
-      .style('fill', 'white')
-      .style('stroke', '#e6e1d5')
-      .style('stroke-width', '1px')
+      .attr('height', 30)
+      .attr('rx', 8) // Arrotonda gli angoli orizzontali
+      .attr('ry', 8) // Arrotonda gli angoli verticali
+      .style("opacity", "0.7")
+      .style("stroke", "#524a32") // Colore del bordo
+      .style("stroke-width", "0.3px") // Larghezza del bordo
+      .style("fill", "white");
       //.style('border-radius', '15px');
 
     infoBox.append('text')
       .attr('x', 5)
-      .attr('y', 20)
+      .attr('y', 13)
+      .attr('text-anchor', 'middle') // Imposta l'ancoraggio del testo al centro
+      .attr('dominant-baseline', 'middle') // Imposta la linea di base dominante al centro
+      .style('translate', '25px')
       .style('font', '12px sans-serif')
       .style('font', '8px Lora')
-      .style('fill', '#524a32')
-      .style('font-weight', 'bold');
+      .style('fill', '#524a32');
 
   focus.append('circle')
     .attr('r', 5)
@@ -185,45 +188,6 @@ function drawLineWithValue(data, color, id) {
       const d1 = timeSeriesData[i];
       const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
 
-      // Aggiorna la posizione del focus
-      focus.attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
-
-      // Aggiorna la posizione della linea lungo l'asse x
-      xHoverLine.attr('x1', xScaleTimeSeries(d.DataOraIncidente) + 51)
-        .attr('x2', xScaleTimeSeries(d.DataOraIncidente) + 51);
-
-      // Aggiorna la posizione del riquadro di informazioni
-      infoBox.attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 61},${yScaleTimeSeries(d.NumeroIncidenti) + 10})`);
-
-      infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
-      const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-      const accidentsText = `${formattedDate}`;
-      const accidentsCountText = `${d.NumeroIncidenti} accidents`;
-
-      infoBox.select('text')
-        .append('tspan')
-        .text(accidentsText)
-        .attr('x', 5)
-        .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
-
-      infoBox.select('text')
-        .append('tspan')
-        .text(accidentsCountText)
-        .attr('x', 5)
-        .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
-    }
-  }
-  function mousemove() {
-    const x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
-    const bisect = d3.bisector(d => d.DataOraIncidente).left;
-    const i = bisect(timeSeriesData, x0, 1);
-
-    // Check if the index is within the bounds of the data array
-    if (i > 0 && i < timeSeriesData.length) {
-      const d0 = timeSeriesData[i - 1];
-      const d1 = timeSeriesData[i];
-      const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
-
       // Calcola la posizione desiderata del focus
       const focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
       const focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
@@ -244,12 +208,18 @@ function drawLineWithValue(data, color, id) {
         .duration(50).attr('transform', `translate(${focusX + 10},${focusY - 40})`);
 
       infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
-      const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      const date = new Date(d.DataOraIncidente);
+      const day = date.getDate();
+      const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+      const formattedDate = `${day} ${month}`;
       const accidentsText = `${formattedDate}`;
-      const accidentsCountText = `${d.NumeroIncidenti} accidents`;
+      const accidentsCountText = `accidents: ${d.NumeroIncidenti}`;
 
       infoBox.select('text')
         .append('tspan')
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "8px")
         .text(accidentsText)
         .attr('x', 5)
         .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
@@ -257,6 +227,10 @@ function drawLineWithValue(data, color, id) {
       infoBox.select('text')
         .append('tspan')
         .text(accidentsCountText)
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "8px")
+        .style('font-weight', 'bold')
         .attr('x', 5)
         .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
     }
@@ -496,10 +470,11 @@ function drawTimeSeriesChart(csvFileName, callback){
     convertData(timeSeriesData);
     setAxesScale(timeSeriesData);
     drawAxes(timeSeriesData);
-    drawLineWithValue(timeSeriesData, "#a1987d", "main");
+
     drawGrid();
     addPoints("noNature");
-    drawPoints(timeSeriesData, "#524a32");
+    drawPoints(timeSeriesData, "#524a32")
+    drawLineWithValue(timeSeriesData, "#a1987d", "main");
 /*
 
     // Crea un elemento di brush per la selezione
