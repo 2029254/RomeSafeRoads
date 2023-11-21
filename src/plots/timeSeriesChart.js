@@ -120,8 +120,9 @@ function drawLineWithValue(data, color, id) {
   // Aggiungi la nuova linea che si muove lungo l'asse x
   const xHoverLine = timeSeriesSvg.append('line')
     .attr('class', 'x-hover-line hover-line')
-    .attr('stroke', 'gray')
-    .attr('stroke-width', 1)
+    .attr('stroke-width', 0.6)
+    .style("opacity", "0.7")
+    .style("stroke", "#524a32") // Colore del bordo
     .attr('y1', 50)  // Altezza dell'asse Y
     .attr('y2', 250)
     .attr('stroke-dasharray', '3,3')  // Imposta la linea tratteggiata
@@ -205,7 +206,7 @@ function drawLineWithValue(data, color, id) {
 
       // Aggiorna la posizione del riquadro di informazioni
       infoBox.transition()
-        .duration(50).attr('transform', `translate(${focusX + 10},${focusY - 40})`);
+        .duration(50).attr('transform', `translate(${focusX + 3},50)`);
 
       infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
       const date = new Date(d.DataOraIncidente);
@@ -361,7 +362,7 @@ function drawGrid(){
     .attr("transform", `translate(50.5, 50)`)
     .style("stroke", "#c7c2b5")
     .style("stroke-dasharray", "3, 3")
-    .style("stroke-width", 0.5)
+    .style("stroke-width", 0.3)
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
@@ -376,7 +377,7 @@ function drawGrid(){
     .attr("transform", `translate(52.5, 50.5)`)
     .style("stroke", "#c7c2b5")
     .style("stroke-dasharray", "3, 3")
-    .style("stroke-width", 0.5);
+    .style("stroke-width", 0.3);
 }
 
 function drawGridPedestrianDeaths(){
