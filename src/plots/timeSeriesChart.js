@@ -117,9 +117,38 @@ function drawLineWithValue(data, color, id) {
     .attr('class', 'focus')
     .style('display', 'none');
 
-  timeSeriesSvg.append('line')
+  // Aggiungi la nuova linea che si muove lungo l'asse x
+  const xHoverLine = timeSeriesSvg.append('line')
     .attr('class', 'x-hover-line hover-line')
     .attr('stroke', 'gray')
+    .attr('stroke-width', 1)
+    .attr('y1', 50)  // Altezza dell'asse Y
+    .attr('y2', 250)
+    .attr('stroke-dasharray', '3,3')  // Imposta la linea tratteggiata
+    .style('display', 'none');  // Nascondi la linea all'inizio
+
+    // Aggiungi il riquadro di informazioni con rect e text
+    const infoBox = timeSeriesSvg.append('g')
+      .attr('class', 'info-box')
+      .style('display', 'none');
+
+    infoBox.append('rect')
+      .attr('width', 60)
+      .attr('height', 40)
+      .attr('rx', 5) // Arrotonda gli angoli orizzontali
+      .attr('ry', 5) // Arrotonda gli angoli verticali
+      .style('fill', 'white')
+      .style('stroke', '#e6e1d5')
+      .style('stroke-width', '1px')
+      //.style('border-radius', '15px');
+
+    infoBox.append('text')
+      .attr('x', 5)
+      .attr('y', 20)
+      .style('font', '12px sans-serif')
+      .style('font', '8px Lora')
+      .style('fill', '#524a32')
+      .style('font-weight', 'bold');
 
   focus.append('circle')
     .attr('r', 5)
@@ -133,8 +162,16 @@ function drawLineWithValue(data, color, id) {
     .style('fill', 'none')
     .style('translate', '50px')
     .style('pointer-events', 'all')
-    .on('mouseover', () => focus.style('display', null))
-    .on('mouseout', () => focus.style('display', 'none'))
+    .on('mouseover', () => {
+      focus.style('display', null);
+      xHoverLine.style('display', 'block');  // Mostra la linea quando il mouse entra nell'area
+      infoBox.style('display', 'block');
+    })
+    .on('mouseout', () => {
+      focus.style('display', 'none');
+      xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
+      infoBox.style('display', 'none');
+    })
     .on('mousemove', mousemove);
 
   function mousemove() {
@@ -152,14 +189,37 @@ function drawLineWithValue(data, color, id) {
         .duration(75) // Adjust the duration as needed
         .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 51},${yScaleTimeSeries(d.NumeroIncidenti) + 50})`);
 
-      focus.select('.x-hover-line')
-        .attr('y1', 50)  // Altezza dell'asse Y
-        .attr('y2', 150)
+      //Aggiorna la posizione della linea lungo l'asse x
+      xHoverLine.transition()
+        .attr('x1', xScaleTimeSeries(d.DataOraIncidente) + 51)
+        .attr('x2', xScaleTimeSeries(d.DataOraIncidente) + 51)
+        .duration(75);
+
+      // Aggiorna la posizione del riquadro di informazioni
+      infoBox.transition()
+        .attr('transform', `translate(${xScaleTimeSeries(d.DataOraIncidente) + 61},${yScaleTimeSeries(d.NumeroIncidenti) + 10})`)
+        .duration(75);
+
+        infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
+        const formattedDate = new Date(d.DataOraIncidente).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        const accidentsText = `${formattedDate}`;
+        const accidentsCountText = `${d.NumeroIncidenti} accidents`;
+
+        infoBox.select('text')
+          .append('tspan')
+          .text(accidentsText)
+          .attr('x', 5)
+          .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+
+        infoBox.select('text')
+          .append('tspan')
+          .text(accidentsCountText)
+          .attr('x', 5)
+          .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+
     }
   }
-
 }
-
 
 function drawAxes(data){
   // Trova la data minima e massima nei tuoi dati
