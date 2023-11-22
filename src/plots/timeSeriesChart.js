@@ -461,7 +461,7 @@ function drawPoints(data, color) {
     });
 }
 
-function drawTimeSeriesChart(csvFileName, callback){
+function drawTimeSeriesChart(csvFileName){
 
   d3.csv(csvFileName, function (data) {
     timeSeriesData = data.filter(function (row) {

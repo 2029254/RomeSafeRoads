@@ -408,7 +408,7 @@ function onclickBar(d) {
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
         // Disegna la nuova linea per la barra corrente
         let lineId = "line_" + d.NaturaIncidente;
-        if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
+       if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
 
             d3.csv(natureAccidents, function (data) {
                 convertData(data);

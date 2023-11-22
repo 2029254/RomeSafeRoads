@@ -37,35 +37,44 @@ dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
 
 dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
 
+# Creare una lista di dizionari contenenti i dati
+result_data = []
 
-# Define a function to round the date to the nearest 10 days
-def round_date_to_10_days(date):
-    day = 10
-    month = date.month
-    year = date.year
-    if date == 1/1/2022:
-        day = 1
-    elif date.month == 12 and date.day >= 20:
-        day = 1
-        month = 1
-        year = year + 1
-    elif date.day < 10:
-        day = 10
-    elif date.day < 20:
-        day = 20
-    elif date.day > 20 and date.month < 12:
-        day = 1
-        month = month + 1
-    else:
-        day = 1
-        month = month
-    return pd.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
+# Aggiungi il conteggio per il 1 gennaio separatamente
+start_date = pd.to_datetime('2022-01-02')
+incidents_on_jan_1 = dataset_rows[
+    (dataset_rows['DataOraIncidente'] < start_date)
+]
+num_incidents_on_jan_1 = len(incidents_on_jan_1)
 
+result_data.append({
+    'DataOraIncidente':  pd.to_datetime('2022-01-01'),
+    'NumeroIncidenti': num_incidents_on_jan_1
+})
 
-# Apply the function to round the date
-dataset_rows['DataOraIncidente'] = dataset_rows['DataOraIncidente'].apply(round_date_to_10_days)
+# Date range da 1 gennaio 2022 a 31 dicembre 2022, con intervallo di 10 giorni
+date_range = pd.date_range(start='2022-01-01', end='2022-12-31', freq='10D')
 
-incidenti_per_data = dataset_rows.groupby('DataOraIncidente').size().reset_index(name='NumeroIncidenti')
+# Iterare sugli intervalli di 10 giorni
+for start_date in date_range:
+    end_date = start_date + pd.Timedelta(days=10)  # Calcola la data di fine intervallo
+    incidents_in_interval = dataset_rows[
+        (dataset_rows['DataOraIncidente'] >= start_date) &
+        (dataset_rows['DataOraIncidente'] <= end_date)
+        ]
+    # Calcola il numero di incidenti nell'intervallo
+    num_incidents = len(incidents_in_interval)
+
+    # Aggiungi un dizionario ai dati risultanti
+    result_data.append({
+        'DataOraIncidente': end_date,
+        'NumeroIncidenti': num_incidents
+    })
+
+result_data[-1]['End Date'] = pd.to_datetime('2022-12-31')
+
+# Creare il DataFrame risultante
+result_df = pd.DataFrame(result_data)
 
 # Save the processed DataFrame
-incidenti_per_data.to_csv('dataset/processed/timeSeries/2022/timeSeriesNatureC5.csv', header=True, index=False)
+result_df.to_csv('dataset/processed/timeSeries/2022/timeSeriesNatureC5.csv', header=True, index=False)

@@ -1,7 +1,7 @@
 import pandas as pd
 
 # paths of csv files about 2021
-csv = [
+csv_2021 = [
     'dataset/source/accidents-2021/02-Febbraio.csv',
     'dataset/source/accidents-2021/03-Marzo.csv',
     'dataset/source/accidents-2021/04-Aprile.csv',
@@ -16,19 +16,20 @@ csv = [
 ]
 
 # import the first csv file
-dataset = pd.read_csv('dataset/source/accidents-2021/01-Gennaio.csv', sep=';', encoding='latin-1')
+dataset_2021 = pd.read_csv('dataset/source/accidents-2021/01-Gennaio.csv', sep=';', encoding='latin-1')
 
 
 # import and concatenate all following csv files
-for file in csv:
-    dataset = pd.concat([dataset, pd.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
+for file in csv_2021:
+    dataset_2021 = pd.concat([dataset_2021, pd.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # Select the columns of interest
 columns = ['NaturaIncidente', 'Protocollo', 'DataOraIncidente']
 
-dataset_columns = dataset[columns]
+dataset_columns = dataset_2021[columns]
 
 dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Scontro frontale/laterale DX fra veicoli in marcia', 'Scontro frontale/laterale SX fra veicoli in marcia'])]
+
 
 # Convert the 'DataOraIncidente' column to a datetime object
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
@@ -40,35 +41,44 @@ dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
 
 dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
 
+# Creare una lista di dizionari contenenti i dati
+result_data = []
 
-# Define a function to round the date to the nearest 10 days
-def round_date_to_10_days(date):
-    day = 10
-    month = date.month
-    year = date.year
-    if date == 1/1/2021:
-        day = 1
-    elif date.month == 12 and date.day >= 20:
-        day = 1
-        month = 1
-        year = year + 1
-    elif date.day < 10:
-        day = 10
-    elif date.day < 20:
-        day = 20
-    elif date.day > 20 and date.month < 12:
-        day = 1
-        month = month + 1
-    else:
-        day = 1
-        month = month
-    return pd.to_datetime(f"{day}/{month}/{year}", format='%d/%m/%Y')
+# Aggiungi il conteggio per il 1 gennaio separatamente
+start_date = pd.to_datetime('2021-01-02')
+incidents_on_jan_1 = dataset_rows[
+    (dataset_rows['DataOraIncidente'] < start_date)
+]
+num_incidents_on_jan_1 = len(incidents_on_jan_1)
 
+result_data.append({
+    'DataOraIncidente':  pd.to_datetime('2021-01-01'),
+    'NumeroIncidenti': num_incidents_on_jan_1
+})
 
-# Apply the function to round the date
-dataset_rows['DataOraIncidente'] = dataset_rows['DataOraIncidente'].apply(round_date_to_10_days)
+# Date range da 1 gennaio 2021 a 31 dicembre 2021, con intervallo di 10 giorni
+date_range = pd.date_range(start='2021-01-01', end='2021-12-31', freq='10D')
 
-incidenti_per_data = dataset_rows.groupby('DataOraIncidente').size().reset_index(name='NumeroIncidenti')
+# Iterare sugli intervalli di 10 giorni
+for start_date in date_range:
+    end_date = start_date + pd.Timedelta(days=10)  # Calcola la data di fine intervallo
+    incidents_in_interval = dataset_rows[
+        (dataset_rows['DataOraIncidente'] >= start_date) &
+        (dataset_rows['DataOraIncidente'] <= end_date)
+        ]
+    # Calcola il numero di incidenti nell'intervallo
+    num_incidents = len(incidents_in_interval)
+
+    # Aggiungi un dizionario ai dati risultanti
+    result_data.append({
+        'DataOraIncidente': end_date,
+        'NumeroIncidenti': num_incidents
+    })
+
+result_data[-1]['End Date'] = pd.to_datetime('2021-12-31')
+
+# Creare il DataFrame risultante
+result_df = pd.DataFrame(result_data)
 
 # Save the processed DataFrame
-incidenti_per_data.to_csv('dataset/processed/timeSeries/2021/timeSeriesNatureC8.csv', header=True, index=False)
+result_df.to_csv('dataset/processed/timeSeries/2021/timeSeriesNatureC8.csv', header=True, index=False)
