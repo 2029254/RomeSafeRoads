@@ -29,7 +29,7 @@ let townHallClicked = false;
 let widthTimeSeries = 500;
 let heightTimeSeries = 200;
 let parseTime = d3.timeParse("%Y-%m-%d");
-let line;
+let line, focus, xHoverLine, infoBox;
 let timeSeriesData;
 let arrayOfData = [];
 let idPoints;
@@ -95,30 +95,24 @@ function setAxesScalePedestrianDeaths(data) {
     .range([heightTimeSeries, 0]);
 }
 
-function drawLineWithValue(data, color, id) {
-  const curve = d3.curveCardinal;
-
-  line = d3.line()
-    .curve(curve)
-    .x(d => xScaleTimeSeries(d.DataOraIncidente))
-    .y(d => yScaleTimeSeries(d.NumeroIncidenti));
-
-  const path = timeSeriesSvg.append("path")
-    .datum(data)
+function drawFocus(color, id){
+  focus = timeSeriesSvg.append('g')
     .attr("id", id)
-    .attr("class", "line" + id)
-    .attr("fill", "none")
-    .attr("stroke", color)
-    .attr("stroke-width", 0.8)
-    .attr("d", line)
-    .attr("transform", `translate(51, 50)`);
-
-  const focus = timeSeriesSvg.append('g')
-    .attr('class', 'focus')
+    .attr('class', 'focus'  + id)
     .style('display', 'none');
 
+  focus.append('circle')
+    .attr('r', 5)
+    .attr('fill', color)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+
+}
+
+function drawXHoverLine(){
+
   // Aggiungi la nuova linea che si muove lungo l'asse x
-  const xHoverLine = timeSeriesSvg.append('line')
+  xHoverLine = timeSeriesSvg.append('line')
     .attr('class', 'x-hover-line hover-line')
     .attr('stroke-width', 0.6)
     .style("opacity", "0.7")
@@ -128,37 +122,57 @@ function drawLineWithValue(data, color, id) {
     .attr('stroke-dasharray', '3,3')  // Imposta la linea tratteggiata
     .style('display', 'none');  // Nascondi la linea all'inizio
 
-    // Aggiungi il riquadro di informazioni con rect e text
-    const infoBox = timeSeriesSvg.append('g')
-      .attr('class', 'info-box')
-      .style('display', 'none');
+}
 
-    infoBox.append('rect')
-      .attr('width', 60)
-      .attr('height', 30)
-      .attr('rx', 8) // Arrotonda gli angoli orizzontali
-      .attr('ry', 8) // Arrotonda gli angoli verticali
-      .style("opacity", "0.7")
-      .style("stroke", "#524a32") // Colore del bordo
-      .style("stroke-width", "0.3px") // Larghezza del bordo
-      .style("fill", "white");
-      //.style('border-radius', '15px');
+function drawInfoBox(){
+  // Aggiungi il riquadro di informazioni con rect e text
+  infoBox = timeSeriesSvg.append('g')
+    .attr('class', 'info-box')
+    .style('display', 'none');
 
-    infoBox.append('text')
-      .attr('x', 5)
-      .attr('y', 13)
-      .attr('text-anchor', 'middle') // Imposta l'ancoraggio del testo al centro
-      .attr('dominant-baseline', 'middle') // Imposta la linea di base dominante al centro
-      .style('translate', '25px')
-      .style('font', '12px sans-serif')
-      .style('font', '8px Lora')
-      .style('fill', '#524a32');
+  infoBox.append('rect')
+    .attr('width', 60)
+    .attr('height', 30)
+    .attr('rx', 8) // Arrotonda gli angoli orizzontali
+    .attr('ry', 8) // Arrotonda gli angoli verticali
+    .style("opacity", "0.7")
+    .style("stroke", "#524a32") // Colore del bordo
+    .style("stroke-width", "0.3px") // Larghezza del bordo
+    .style("fill", "white");
+  //.style('border-radius', '15px');
 
-  focus.append('circle')
-    .attr('r', 5)
-    .attr('fill', color)
-    .attr('stroke', '#fff')
-    .attr('stroke-width', 2);
+  infoBox.append('text')
+    .attr('x', 5)
+    .attr('y', 13)
+    .attr('text-anchor', 'middle') // Imposta l'ancoraggio del testo al centro
+    .attr('dominant-baseline', 'middle') // Imposta la linea di base dominante al centro
+    .style('translate', '25px')
+    .style('font', '12px sans-serif')
+    .style('font', '8px Lora')
+    .style('fill', '#524a32');
+
+}
+
+function drawLineWithValue(data, color, id) {
+  const curve = d3.curveCardinal;
+
+  line = d3.line()
+    .curve(curve)
+    .x(d => xScaleTimeSeries(d.DataOraIncidente))
+    .y(d => yScaleTimeSeries(d.NumeroIncidenti));
+
+  timeSeriesSvg.append("path")
+    .datum(data)
+    .attr("id", id)
+    .attr("class", "line" + id)
+    .attr("fill", "none")
+    .attr("stroke", color)
+    .attr("stroke-width", 0.8)
+    .attr("d", line)
+    .attr("transform", `translate(51, 50)`);
+
+  drawFocus(color, id + "pallino");
+  drawInfoBox();
 
   timeSeriesSvg.append('rect')
     .attr('width', 500)
@@ -475,7 +489,8 @@ function drawTimeSeriesChart(csvFileName){
     drawGrid();
     addPoints("noNature");
     drawPoints(timeSeriesData, "#524a32")
-    drawLineWithValue(timeSeriesData, "#a1987d", "main");
+    drawLineWithValue(timeSeriesData, "#a1987d", "main")
+    drawXHoverLine();
 /*
 
     // Crea un elemento di brush per la selezione
