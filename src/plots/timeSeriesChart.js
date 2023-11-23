@@ -24,16 +24,22 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .append("g").attr("transform", "translate(9, -33)");
 
 
-let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup;
+let xScaleTimeSeries, yScaleTimeSeries, xAxisTimeSeries, yAxisTimeSeries, pointsGroup, focusGroup;
 let townHallClicked = false;
 let widthTimeSeries = 500;
 let heightTimeSeries = 200;
 let parseTime = d3.timeParse("%Y-%m-%d");
-let line, focus, xHoverLine, infoBox;
+let line, xHoverLine, infoBox;
 let timeSeriesData;
 let arrayOfData = [];
 let idPoints;
 let tickValues;
+let focusArray = [];
+let focusNatureArray = [];
+
+let infoBoxArray = [];
+let infoBoxNatureArray = [];
+
 
 const dataTest = [
   { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
@@ -96,16 +102,22 @@ function setAxesScalePedestrianDeaths(data) {
 }
 
 function drawFocus(color, id){
-  focus = timeSeriesSvg.append('g')
-    .attr("id", id)
-    .attr('class', 'focus'  + id)
-    .style('display', 'none');
+
+  let focus = timeSeriesSvg.append("g")
+    .attr('id', "focus_" + id)
+    .attr('class', "focus")
+    .style('display', 'block');
 
   focus.append('circle')
     .attr('r', 5)
     .attr('fill', color)
     .attr('stroke', '#fff')
     .attr('stroke-width', 2);
+
+  if(id === "main")
+    focusArray.push(focus);
+  else
+    focusNatureArray.push(focus);
 
 }
 
@@ -124,9 +136,10 @@ function drawXHoverLine(){
 
 }
 
-function drawInfoBox(){
+function drawInfoBox(id){
   // Aggiungi il riquadro di informazioni con rect e text
   infoBox = timeSeriesSvg.append('g')
+    .attr('id', "infobox_" + id)
     .attr('class', 'info-box')
     .style('display', 'none');
 
@@ -151,8 +164,13 @@ function drawInfoBox(){
     .style('font', '8px Lora')
     .style('fill', '#524a32');
 
-}
+  if(id === "main")
+    infoBoxArray.push(infoBox);
+  else
+    infoBoxNatureArray.push(infoBox);
 
+}
+/*
 function drawLineWithValue(data, color, id) {
   const curve = d3.curveCardinal;
 
@@ -163,16 +181,16 @@ function drawLineWithValue(data, color, id) {
 
   timeSeriesSvg.append("path")
     .datum(data)
-    .attr("id", id)
-    .attr("class", "line" + id)
+    .attr("id", "line_"+ id)
+    .attr("class", "line_" + id)
     .attr("fill", "none")
     .attr("stroke", color)
     .attr("stroke-width", 0.8)
     .attr("d", line)
     .attr("transform", `translate(51, 50)`);
 
-  drawFocus(color, id + "pallino");
-  drawInfoBox();
+  drawFocus(color, id);
+  //drawInfoBox();
 
   timeSeriesSvg.append('rect')
     .attr('width', 500)
@@ -181,12 +199,22 @@ function drawLineWithValue(data, color, id) {
     .style('translate', '50px')
     .style('pointer-events', 'all')
     .on('mouseover', () => {
-      focus.style('display', null);
+      focusArray.forEach((focus, index) => {
+        focus.style('display', 'block');
+      });
+      focusNatureArray.forEach((focus, index) => {
+        focus.style('display', 'block');
+      });
       xHoverLine.style('display', 'block');  // Mostra la linea quando il mouse entra nell'area
       infoBox.style('display', 'block');
     })
     .on('mouseout', () => {
-      focus.style('display', 'none');
+      focusArray.forEach((focus, index) => {
+        focus.style('display', 'none');
+      });
+      focusNatureArray.forEach((focus, index) => {
+        focus.style('display', 'none');
+      });
       xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
       infoBox.style('display', 'none');
     })
@@ -195,22 +223,38 @@ function drawLineWithValue(data, color, id) {
   function mousemove() {
     const x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
     const bisect = d3.bisector(d => d.DataOraIncidente).left;
-    const i = bisect(timeSeriesData, x0, 1);
+    const i = bisect(data, x0, 1);
 
     // Check if the index is within the bounds of the data array
-    if (i > 0 && i < timeSeriesData.length) {
-      const d0 = timeSeriesData[i - 1];
-      const d1 = timeSeriesData[i];
+    if (i > 0 && i < data.length) {
+      const d0 = data[i - 1];
+      const d1 = data[i];
       const d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
 
       // Calcola la posizione desiderata del focus
       const focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
       const focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
 
-      // Imposta la posizione del focus senza utilizzare una transizione
-      focus.transition()
-        .duration(50)  // specifica la durata dell'animazione in millisecondi
-        .attr('transform', `translate(${focusX},${focusY})`);
+      console.log("FOCUS GROUP")
+      console.log(focusArray)
+
+      focusArray.forEach((focus, index) => {
+        const focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+        const focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+        focus.transition()
+          .duration(50)
+          .attr('transform', `translate(${focusX},${focusY})`);
+      });
+
+
+      focusArray.forEach((f, index) => {
+        const focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+        const focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+        f.transition()
+          .duration(50)
+          .attr('transform', `translate(${focusX},${focusY})`);
+      });
+
 
       // Aggiorna la posizione della linea lungo l'asse x
       xHoverLine.transition()
@@ -220,7 +264,7 @@ function drawLineWithValue(data, color, id) {
 
       // Aggiorna la posizione del riquadro di informazioni
       infoBox.transition()
-        .duration(50).attr('transform', `translate(${focusX + 3},50)`);
+        .duration(50).attr('transform', `translate(${focusX + 3}, 50)`);
 
       infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
       const date = new Date(d.DataOraIncidente);
@@ -250,8 +294,205 @@ function drawLineWithValue(data, color, id) {
         .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
     }
   }
+}
+
+*/
+
+function drawLineWithValue(data, color, id) {
+  let curve = d3.curveCardinal;
+
+  line = d3.line()
+    .curve(curve)
+    .x(d => xScaleTimeSeries(d.DataOraIncidente))
+    .y(d => yScaleTimeSeries(d.NumeroIncidenti));
+
+  timeSeriesSvg.append("path")
+    .datum(data)
+    .attr("id", "line_"+ id)
+    .attr("class", "line_" + id)
+    .attr("fill", "none")
+    .attr("stroke", color)
+    .attr("stroke-width", 0.8)
+    .attr("d", line)
+    .attr("transform", `translate(51, 50)`);
+
+   drawFocus(color, id);
+   drawInfoBox(id);
+
+  timeSeriesSvg.append('rect')
+    .attr('width', 500)
+    .attr('height', 300)
+    .style('fill', 'none')
+    .style('translate', '50px')
+    .style('pointer-events', 'all')
+    .on('mouseover', () => {
+      focusArray.forEach((focus, index) => {
+        focus.style('display', 'block');
+      });
+      focusNatureArray.forEach((focus, index) => {
+        focus.style('display', 'block');
+      });
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.style('display', 'block');
+      });
+      infoBoxNatureArray.forEach((infoBox, index) => {
+        infoBox.style('display', 'block');
+      });
+      xHoverLine.style('display', 'block');  // Mostra la linea quando il mouse entra nell'area
+    })
+    .on('mouseout', () => {
+      focusArray.forEach((focus, index) => {
+        focus.style('display', 'none');
+      });
+      focusNatureArray.forEach((focus, index) => {
+        focus.style('display', 'none');
+      });
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.style('display', 'none');
+      });
+      infoBoxNatureArray.forEach((infoBox, index) => {
+        infoBox.style('display', 'none');
+      });
+      xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
+    })
+    .on('mousemove', mousemove);
+
+  function mousemove() {
+    let x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
+    let bisect = d3.bisector(d => d.DataOraIncidente).left;
+    let i = bisect(timeSeriesData, x0, 1);
+
+    // Check if the index is within the bounds of the data array
+    if (i > 0 && i < timeSeriesData.length) {
+      let d0 = timeSeriesData[i - 1];
+      let d1 = timeSeriesData[i];
+      let d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
+
+      // Calcola la posizione desiderata del focus
+      let focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+      let focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+
+      console.log("FOCUS GROUP")
+
+      focusArray.forEach((f, index) => {
+        let focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+        let focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+        f.transition()
+          .duration(50)
+          .attr('transform', `translate(${focusX},${focusY})`);
+      });
+
+      // Aggiorna la posizione della linea lungo l'asse x
+      xHoverLine.transition()
+        .duration(50)
+        .attr('x1', focusX)
+        .attr('x2', focusX);
+
+      // Aggiorna la posizione del riquadro di informazioni
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.transition()
+          .duration(50).attr('transform', `translate(${focusX + 3}, 50)`);
+      });
+
+      // Aggiorna la posizione del riquadro di informazioni
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
+      });
 
 
+      let date = new Date(d.DataOraIncidente);
+      let day = date.getDate();
+      let month = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date);
+      let formattedDate = `${day} ${month}`;
+      let accidentsText = `${formattedDate}`;
+      let accidentsCountText = `accidents: ${d.NumeroIncidenti}`;
+
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.select('text')
+        .append('tspan')
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "8px")
+        .text(accidentsText)
+        .attr('x', 5)
+        .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+
+        infoBox.select('text')
+        .append('tspan')
+        .text(accidentsCountText)
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "8px")
+        .style('font-weight', 'bold')
+        .attr('x', 5)
+        .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+
+      });
+
+      if (focusNatureArray.length !== 0) {
+        let x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
+        let bisect = d3.bisector(d => d.DataOraIncidente).left;
+        let i = bisect(data, x0, 1);
+
+        // Check if the index is within the bounds of the data array
+        if (i > 0 && i < data.length) {
+          let d0 = data[i - 1];
+          let d1 = data[i];
+          let d = x0 - d0.DataOraIncidente > d1.DataOraIncidente - x0 ? d1 : d0;
+
+          // Calcola la posizione desiderata del focus
+          let focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+          let focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+
+          focusNatureArray.forEach((focus, index) => {
+            let focusX = xScaleTimeSeries(d.DataOraIncidente) + 51;
+            let focusY = yScaleTimeSeries(d.NumeroIncidenti) + 50;
+            focus.transition()
+              .duration(50)
+              .attr('transform', `translate(${focusX},${focusY})`);
+          });
+
+          // Aggiorna la posizione della linea lungo l'asse x
+          xHoverLine.transition()
+            .duration(50)
+            .attr('x1', focusX)
+            .attr('x2', focusX);
+
+          // Aggiorna la posizione del riquadro di informazioni
+          infoBoxNatureArray[0].transition()
+            .duration(50).attr('transform', `translate(${focusX - 65}, 50)`);
+
+          infoBoxNatureArray[0].select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
+          let date = new Date(d.DataOraIncidente);
+          let day = date.getDate();
+          let month = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date);
+          let formattedDate = `${day} ${month}`;
+          let accidentsText = `${formattedDate}`;
+          let accidentsCountText = `accidents: ${d.NumeroIncidenti}`;
+
+          infoBoxNatureArray[0].select('text')
+            .append('tspan')
+            .style("color", "#524a32")
+            .style("font-family", "Lora")
+            .style("font-size", "8px")
+            .text(accidentsText)
+            .attr('x', 5)
+            .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+
+          infoBoxNatureArray[0].select('text')
+            .append('tspan')
+            .text(accidentsCountText)
+            .style("color", "#524a32")
+            .style("font-family", "Lora")
+            .style("font-size", "8px")
+            .style('font-weight', 'bold')
+            .attr('x', 5)
+            .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+
+        }
+      }
+    }
+  }
 }
 
 function drawAxes(data){

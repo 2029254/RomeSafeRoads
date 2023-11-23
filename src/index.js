@@ -51,9 +51,12 @@ let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
 let selectedYear;
 function updatePlotsBasingOnSelectedYear(){
-console.log("SONO QUIIIII")
   idPoints = 0
   arrayOfData = [];
+  focusArray = [];
+  focusNatureArray = [];
+  infoBoxArray = [];
+  infoBoxNatureArray = [];
 
   let csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";

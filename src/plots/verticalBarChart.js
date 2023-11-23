@@ -322,7 +322,6 @@ function onclickBar(d) {
       switch (d.NaturaIncidente.toString()) {
         case 'C1':
           result = "Pedestrian hit";
-
           break;
         case 'C2':
           result = "Vehicles collision (moving)";
@@ -407,13 +406,15 @@ function onclickBar(d) {
 
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
         // Disegna la nuova linea per la barra corrente
-        let lineId = "line_" + d.NaturaIncidente;
        if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
 
             d3.csv(natureAccidents, function (data) {
+
                 convertData(data);
-                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), lineId);
+                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
+                console.log(focusArray);
                 addPoints(d.NaturaIncidente.toString());
+
                 switch (setBarColor(d.NumeroIncidenti)) {
                     case '#d73027':
                         drawPoints(data, "#b01810");
@@ -422,6 +423,7 @@ function onclickBar(d) {
                         drawPoints(data, "#de703c");
                 }
             });
+
         }
         else {
           timeSeriesSvg.selectAll("*").remove();
