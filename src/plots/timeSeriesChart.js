@@ -144,15 +144,17 @@ function drawInfoBox(id){
     .style('display', 'none');
 
   infoBox.append('rect')
-    .attr('width', 60)
-    .attr('height', 30)
+    .attr('class', 'info-box-rect')
+    .attr('width', 49)
+    .attr('height', 35.5)
     .attr('rx', 8) // Arrotonda gli angoli orizzontali
     .attr('ry', 8) // Arrotonda gli angoli verticali
-    .style("opacity", "0.7")
+    .style("opacity", "0.8")
     .style("stroke", "#524a32") // Colore del bordo
     .style("stroke-width", "0.3px") // Larghezza del bordo
     .style("fill", "white");
   //.style('border-radius', '15px');
+
 
   infoBox.append('text')
     .attr('x', 5)
@@ -164,10 +166,6 @@ function drawInfoBox(id){
     .style('font', '8px Lora')
     .style('fill', '#524a32');
 
-  if(id === "main")
-    infoBoxArray.push(infoBox);
-  else
-    infoBoxNatureArray.push(infoBox);
 
 }
 /*
@@ -317,7 +315,11 @@ function drawLineWithValue(data, color, id) {
     .attr("transform", `translate(51, 50)`);
 
    drawFocus(color, id);
-   drawInfoBox(id);
+  if(id === "main") {
+    drawInfoBox(id)
+    infoBoxArray.push(infoBox);
+  }else
+    infoBoxNatureArray.push(infoBox);
 
   timeSeriesSvg.append('rect')
     .attr('width', 500)
@@ -398,38 +400,13 @@ function drawLineWithValue(data, color, id) {
       infoBoxArray.forEach((infoBox, index) => {
         infoBox.select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
       });
+      let accidentsCountText= `${d.NumeroIncidenti}`;
+      let accidentsCountTextNature = "";
 
-
-      let date = new Date(d.DataOraIncidente);
-      let day = date.getDate();
-      let month = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date);
-      let formattedDate = `${day} ${month}`;
-      let accidentsText = `${formattedDate}`;
-      let accidentsCountText = `accidents: ${d.NumeroIncidenti}`;
-
-      infoBoxArray.forEach((infoBox, index) => {
-        infoBox.select('text')
-        .append('tspan')
-        .style("color", "#524a32")
-        .style("font-family", "Lora")
-        .style("font-size", "8px")
-        .text(accidentsText)
-        .attr('x', 5)
-        .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
-
-        infoBox.select('text')
-        .append('tspan')
-        .text(accidentsCountText)
-        .style("color", "#524a32")
-        .style("font-family", "Lora")
-        .style("font-size", "8px")
-        .style('font-weight', 'bold')
-        .attr('x', 5)
-        .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
-
-      });
 
       if (focusNatureArray.length !== 0) {
+        timeSeriesSvg.selectAll(".info-box-rect").attr('height', 46.5);
+
         let x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
         let bisect = d3.bisector(d => d.DataOraIncidente).left;
         let i = bisect(data, x0, 1);
@@ -458,39 +435,75 @@ function drawLineWithValue(data, color, id) {
             .attr('x1', focusX)
             .attr('x2', focusX);
 
-          // Aggiorna la posizione del riquadro di informazioni
-          infoBoxNatureArray[0].transition()
-            .duration(50).attr('transform', `translate(${focusX - 65}, 50)`);
-
-          infoBoxNatureArray[0].select('text').selectAll('tspan').remove(); // Rimuovi eventuali elementi tspan esistenti
-          let date = new Date(d.DataOraIncidente);
-          let day = date.getDate();
-          let month = new Intl.DateTimeFormat('en-US', {month: 'long'}).format(date);
-          let formattedDate = `${day} ${month}`;
-          let accidentsText = `${formattedDate}`;
-          let accidentsCountText = `accidents: ${d.NumeroIncidenti}`;
-
-          infoBoxNatureArray[0].select('text')
-            .append('tspan')
-            .style("color", "#524a32")
-            .style("font-family", "Lora")
-            .style("font-size", "8px")
-            .text(accidentsText)
-            .attr('x', 5)
-            .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
-
-          infoBoxNatureArray[0].select('text')
-            .append('tspan')
-            .text(accidentsCountText)
-            .style("color", "#524a32")
-            .style("font-family", "Lora")
-            .style("font-size", "8px")
-            .style('font-weight', 'bold')
-            .attr('x', 5)
-            .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
-
+          accidentsCountTextNature = `${d.NumeroIncidenti}`;
         }
+
       }
+
+
+      let date = new Date(d.DataOraIncidente);
+      let day = date.getDate();
+      let monthAbbreviation = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+      let formattedDate = `${day} ${monthAbbreviation}`;
+      let accidentsText = `${formattedDate}`;
+
+      infoBoxArray.forEach((infoBox, index) => {
+        infoBox.select('text')
+          .append('tspan')
+          .style("color", "#524a32")
+          .style("font-family", "Lora")
+          .style("font-size", "10px")
+          .style('font-weight', 'bold')
+          .text(accidentsText)
+          .attr('x', 0)
+          .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
+
+        infoBox.select('text')
+          .append('tspan')
+          .style("fill", "#524a32")
+          .style("font-family", "Lora")
+          .style("font-size", "10px")
+          .style("text-align", "left")
+          .attr('x', 0)
+          .attr('dy', '15.2px') // Imposta l'offset verticale per la terza riga
+          .text("n1 ");
+
+        infoBox.select('text')
+          .append('tspan')
+          .style("fill", "#524a32")
+          .style("font-family", "Lora")
+          .style("font-size", "10px")
+          .text(accidentsCountText);
+
+
+        infoBox.select('text')
+          .append('tspan')
+          .html("<br>")
+          .attr('x', 0)
+          .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+
+        if(infoBoxNatureArray.length > 0) {
+
+
+          infoBox.select('text')
+            .append('tspan')
+            .style("fill", color)
+            .style("font-family", "Lora")
+            .style("font-size", "10px")
+            .style("text-align", "left")
+            .attr('x', 0)
+            .attr('dy', '11.2px') // Imposta l'offset verticale per la terza riga
+            .text("n2 ");
+
+          infoBox.select('text')
+            .append('tspan')
+            .style("fill", color)
+            .style("font-family", "Lora")
+            .style("font-size", "10px")
+            .text(accidentsCountTextNature);
+        }
+      });
+
     }
   }
 }

@@ -411,7 +411,8 @@ function onclickBar(d) {
             d3.csv(natureAccidents, function (data) {
 
                 convertData(data);
-                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
+             // timeSeriesSvg.selectAll(".info-box").remove();
+              drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
                 console.log(focusArray);
                 addPoints(d.NaturaIncidente.toString());
 
