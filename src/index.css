@@ -196,6 +196,11 @@ svg {
     animation-direction: normal ;
 }
 
+#animTwo { position: relative;
+    animation: myfirst 1.7s 1;
+    animation-direction: normal ;
+}
+
 @keyframes myfirst {
     0%   { top: -32px;}
     100% { top: 0px;}
@@ -413,4 +418,78 @@ button.btn-small {
     fill: rgba(0, 0, 255, 0.2); /* Colore di riempimento azzurro trasparente */
     stroke: #000;
     stroke-width: 0.5;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 65px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-switch {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider-switch:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: black;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.slider-labels {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+.slider-labels span {
+  flex: 1;
+  text-align: center;
+  padding: 0 5px;
+}
+
+.switch input:checked + .slider-switch {
+  background-color: #2196F3;
+}
+
+.switch input:checked + .slider-switch:before {
+  transform: translateX(31px);
+}
+
+input[type="checkbox"]:checked + .slider-switch .slider-labels .on {
+  display: block;
+}
+
+input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
+  display: none;
+}
+.slider-switch.checked:before {
+    transform: translateX(31px);
 }

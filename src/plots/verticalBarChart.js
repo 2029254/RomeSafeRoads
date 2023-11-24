@@ -115,7 +115,7 @@ function drawAxesAndBars(csvFileName){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .style("cursor", function (d) {
         //Applica il pointer solo se buttonWeatherValue è "First"
-        if ((setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") && (buttonWeatherValue === "First" || buttonWeatherValue === "None")) return "pointer"
+        if (/*(setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") &&*/ (buttonWeatherValue === "First" || buttonWeatherValue === "None")) return "pointer"
         else return "default"
         })
       .on("click", function (d) {onclickBar(d)})
@@ -406,7 +406,7 @@ function onclickBar(d) {
 
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
         // Disegna la nuova linea per la barra corrente
-       if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
+       //if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
 
             d3.csv(natureAccidents, function (data) {
 
@@ -425,11 +425,11 @@ function onclickBar(d) {
                 }
             });
 
-        }
+        /*}
         else {
           timeSeriesSvg.selectAll("*").remove();
           drawTimeSeriesChart(csvFileNameTimeSeries);
-        }
+        }*/
     }
 }
 
