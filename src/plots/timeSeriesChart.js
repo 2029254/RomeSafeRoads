@@ -109,10 +109,10 @@ function drawFocus(color, id){
     .style('display', 'block');
 
   focus.append('circle')
-    .attr('r', 5)
+    .attr('r', 4.5)
     .attr('fill', color)
-    .attr('stroke', '#fff')
-    .attr('stroke-width', 2);
+    .attr('stroke', '#f7f3eb')
+    .attr('stroke-width', 1.8);
 
   if(id === "main")
     focusArray.push(focus);
@@ -295,7 +295,6 @@ function drawLineWithValue(data, color, id) {
 }
 
 */
-
 function drawLineWithValue(data, color, id) {
   let curve = d3.curveCardinal;
 
@@ -310,16 +309,12 @@ function drawLineWithValue(data, color, id) {
     .attr("class", "line_" + id)
     .attr("fill", "none")
     .attr("stroke", color)
-    .attr("stroke-width", 0.8)
+    .attr("stroke-width", 1.8)
     .attr("d", line)
     .attr("transform", `translate(51, 50)`);
 
    drawFocus(color, id);
-  if(id === "main") {
-    drawInfoBox(id)
-    infoBoxArray.push(infoBox);
-  }else
-    infoBoxNatureArray.push(infoBox);
+
 
   timeSeriesSvg.append('rect')
     .attr('width', 500)
@@ -710,7 +705,7 @@ function drawPoints(data, color) {
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
           .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
           .attr("r", 8)
-          .style("stroke", "red")
+          .style("stroke", "#f00c0c")
           .style("stroke-width", "1")
           .style("fill", "none");
 
@@ -719,16 +714,13 @@ function drawPoints(data, color) {
           .attr("class", "inner-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
           .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
-          .attr("r", 2)
-          .style("fill", color)
-          .style("stroke", "white")
-          .style("stroke-width", "0.5")
-          .on("mouseover", showIncidentCount)
-          .on("mouseout", hideIncidentCount);
+          .attr("r", 1.3)
+          .style("fill", "#524a32");
+        //  .on("mouseover", showIncidentCount)
+        //  .on("mouseout", hideIncidentCount);
       }
     });
 }
-
 function drawTimeSeriesChart(csvFileName){
 
   d3.csv(csvFileName, function (data) {
@@ -741,10 +733,12 @@ function drawTimeSeriesChart(csvFileName){
     drawAxes(timeSeriesData);
 
     drawGrid();
+    drawLineWithValue(timeSeriesData, "#ded6bf", "main");
     addPoints("noNature");
-    drawPoints(timeSeriesData, "#524a32")
-    drawLineWithValue(timeSeriesData, "#a1987d", "main")
+    drawPoints(timeSeriesData, "#ded6bf");
     drawXHoverLine();
+    drawInfoBox("main")
+    infoBoxArray.push(infoBox);
 /*
 
     // Crea un elemento di brush per la selezione

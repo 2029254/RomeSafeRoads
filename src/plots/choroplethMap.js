@@ -120,8 +120,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
                   const finalDatasetWithMissingDates = addMissingDatesWithZeroes(finalDataset);
 
-                  console.log(finalDatasetWithMissingDates);
-
+/*
                   timeSeriesSvg.selectAll("*").remove();
                   arrayOfData = []
                 timeSeriesSvg.append("text")
@@ -143,8 +142,8 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                   drawPoints(finalDatasetWithMissingDates );
                   drawGridPedestrianDeaths();
 
+ */
                   // Vertical bar chart interaction
-                  console.log("Interaction")
                   console.log(dataResult)
                   const conteggiNature = {};
 
@@ -166,8 +165,11 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
                   console.log(resultVerticalChart);
                   barChartSvg.selectAll("*").remove();
-                  drawAxesAndBarsFromChoroplethMap(resultVerticalChart);
+                  drawAxesAndBarsFromChoroplethMap(resultVerticalChart, true);
                   drawColorsLegend();
+
+                  timeSeriesSvg.selectAll("*").remove();
+                  drawTimeSeriesChart(csvFileNameTimeSeries);
 
                   })
                 }

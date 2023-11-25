@@ -151,7 +151,7 @@ function drawAxesAndBars(csvFileName){
   });
 }
 
-function drawAxesAndBarsFromChoroplethMap(data){
+function drawAxesAndBarsFromChoroplethMap(data, choropleth){
 
   // definition of axes  height and width
   xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
@@ -181,7 +181,7 @@ function drawAxesAndBarsFromChoroplethMap(data){
       .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
       .style("stroke", "black") // Aggiungi un bordo nero
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
-      .on("click", function (d) {onclickBar(d)})
+      .on("click", function (d) {if(!choropleth)onclickBar(d)})
       .on("mouseover", handleMouseOver)
       .on("mouseout", function (d) {handleMouseOut(d)})
       .on("mousemove", handleMouseOver)
@@ -292,7 +292,6 @@ let timer; // Variabile per il timer
 let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
     console.log(d)
-    console.log(isActive)
     if (buttonWeatherValue==="First") {
         // Rimuovi le linee correlate alle barre cliccate in precedenza
         clickedBars.forEach(function (bar) {
@@ -368,7 +367,6 @@ function onclickBar(d) {
 
       d3.csv(csvFileNameChoroplethMapNature, function (data) {
 
-        console.log(weatherResult )
         let dataAboutWeather = [];
         weatherResult.forEach(item => {
          data.filter(function (row) {
@@ -412,17 +410,11 @@ function onclickBar(d) {
 
                 convertData(data);
              // timeSeriesSvg.selectAll(".info-box").remove();
-              drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
+                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
                 console.log(focusArray);
                 addPoints(d.NaturaIncidente.toString());
-
-                switch (setBarColor(d.NumeroIncidenti)) {
-                    case '#d73027':
-                        drawPoints(data, "#b01810");
-                        break;
-                    default:
-                        drawPoints(data, "#de703c");
-                }
+                drawPoints(data, setBarColor(d.NumeroIncidenti));
+                infoBoxNatureArray.push(infoBox);
             });
 
         /*}
