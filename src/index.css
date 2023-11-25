@@ -441,7 +441,8 @@ button.btn-small {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #f7f3eb;
+  box-shadow: 0 2px 4px darkslategray;
   transition: .4s;
   border-radius: 34px;
 }
@@ -453,9 +454,12 @@ button.btn-small {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: black;
+  background-color: #827c68;
+  opacity: 0.8;
   transition: .4s;
   border-radius: 50%;
+  cursor: pointer;
+
 }
 
 .slider-labels {
@@ -465,8 +469,6 @@ button.btn-small {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  font-family: Arial, sans-serif;
-  color: #000;
 }
 
 .slider-labels span {
@@ -492,4 +494,12 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
 }
 .slider-switch.checked:before {
     transform: translateX(31px);
+}
+
+.off, .on {
+    color: #9b9482;
+    font-family: Lora;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
 }
