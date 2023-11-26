@@ -39,7 +39,8 @@ let focusNatureArray = [];
 
 let infoBoxArray = [];
 let infoBoxNatureArray = [];
-
+let keysLegends = [];
+let vBarChart = false;
 
 const dataTest = [
   { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
@@ -737,8 +738,16 @@ function drawTimeSeriesChart(csvFileName){
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
     drawXHoverLine();
-    drawInfoBox("main")
+    keysLegends.push("General \n accidents")
+    drawLegend("General \n accidents","#ded6bf");
+    timeSeriesSvg.selectAll("rect.mydots").remove();
+    vBarChart=true;
+    keysLegends.push("test")
+    drawLegend("Overturning \n and \n run-off-road","#ded6bf");
+    //vBarChart=false;
+    drawInfoBox("main");
     infoBoxArray.push(infoBox);
+
 /*
 
     // Crea un elemento di brush per la selezione
@@ -809,3 +818,124 @@ function hideIncidentCount() {
   pointsGroup.selectAll(".incident-count").remove();
   d3.selectAll("#num").remove();
 }
+/*
+function drawLegend(nature, color){
+
+  keysLegends.push(nature);
+  let size = 13;
+
+  timeSeriesSvg.selectAll("mydots")
+    .data(keysLegends)
+    .enter()
+    .append("rect")
+    .attr("x", 580)
+    .attr("y", function(d,i){ return 60 + i*(size+5)}) // 30 is where the first dot appears. 25 is the distance between dots
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", color)
+    .style("stroke", "#524a32")
+    .style("stroke-width", 0.1);
+
+
+  timeSeriesSvg.selectAll("mylabels")
+    .data(keysLegends)
+    .enter()
+    .append("text")
+    .attr("x", 580 + size*1.2)
+    .attr("y", function(d,i){ return 60 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
+    .text(function(d){ return d})
+    .style("fill", "#524a32")
+    .style("font-family", "Lora")
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle");
+
+  let groups = ["[C1] Pedestrian hit",
+    "[C2] Vehicles collision (moving)",
+    "[C3] Vehicles collision with a stationary vehicle",
+    "[C4] Rear-end collision",
+    "[C5] Collision with obstacle",
+    "[C6] Sudden braking and vehicle fall",
+    "[C7] Overturning and run-off-road",
+    "[C8] Side/head-on collision",
+  ];
+
+  timeSeriesSvg.selectAll("mylabels")
+    .data(groups)
+    .enter()
+    .append("text")
+    .attr("x", 480 + size*1.2)
+    .attr("y", function(d,i){ return 180 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .text(function(d){ return d})
+    .html(function(d) {
+      let parts = d.split(" "); // Dividi la stringa in parti
+      return "<tspan font-weight='bold' >" + parts[0] + ' '+"</tspan>" + "<tspan id='" + parts[0].slice(1, -1)+"'>"+parts.slice(1).join(" ")+"</tspan>";
+    })
+    .attr("text-anchor", "left")
+    .style("font-family", "Lora")
+    .style("fill", "#524a32")
+    .style("alignment-baseline", "middle")
+}
+
+ */
+
+function drawLegend(text, color) {
+
+  const legend = timeSeriesSvg.append("g");
+  let size = 13;
+
+  if(vBarChart) {// Aggiungi un'area di testo per la legenda
+    const textElementTwo = legend.append("text")
+      .attr("x", 587 + size * 1.2)
+      .attr("y", function (d, i) {
+        return 93 + i * (size + 5) + (size / 2)
+      }) // 30 is where the first dot appears. 25 is the distance between dots
+      .style("fill", "#524a32")
+      .style("font-family", "Lora")
+      .style("text-anchor", "middle"); // Imposta l'allineamento sul centro
+
+    // Suddividi il testo in righe usando il tag <tspan>
+    const linesTwo = text.split('\n');
+    for (let i = 0; i < linesTwo.length; i++) {
+      textElementTwo.append("tspan")
+        .text(linesTwo[i])
+        .attr("x", 605 + size * 1.2)
+        .attr("dy", i === 0 ? 0 : "1.1em");
+    }
+  }else {
+    // Aggiungi un'area di testo per la legenda
+    const textElement = legend.append("text")
+      .attr("x", 587 + size * 1.2)
+      .attr("y", function(d,i){
+        return 58 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
+      .style("fill", "#524a32")
+      .style("font-family", "Lora")
+      .attr("text-anchor", "middle");
+
+    // Suddividi il testo in righe usando il tag <tspan>
+    const lines = text.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      textElement.append("tspan")
+        .text(lines[i])
+        .attr("x", 605 + size * 1.2)
+        .attr("text-anchor", "center")
+    .attr("dy", i === 0 ? 0 : "1.1em");
+    }
+
+  }
+
+  // Aggiungi nuovi rettangoli in base all'array keysLegends
+  timeSeriesSvg.selectAll("mydots")
+    .data(keysLegends)
+    .enter()
+    .append("rect")
+    .attr("class", "mydots")
+    .attr("x", 568)
+    .attr("y", function(d, i){ return 60 + i * (size + 25)})
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", color)
+    .style("stroke", "#524a32")
+    .style("stroke-width", 0.1);
+}
+
+
