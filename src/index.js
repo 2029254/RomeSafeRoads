@@ -57,6 +57,7 @@ function updatePlotsBasingOnSelectedYear(){
   focusNatureArray = [];
   infoBoxArray = [];
   infoBoxNatureArray = [];
+  keysLegends = [];
 
   let csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";

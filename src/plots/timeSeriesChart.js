@@ -17,7 +17,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .classed("svg-container-largo", true)
   .append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 660 270")
+  .attr("viewBox", "0 0 690 270")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
@@ -738,12 +738,19 @@ function drawTimeSeriesChart(csvFileName){
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
     drawXHoverLine();
-    keysLegends.push("General \n accidents")
-    drawLegend("General \n accidents","#ded6bf");
-    timeSeriesSvg.selectAll("rect.mydots").remove();
-    vBarChart=true;
-    keysLegends.push("test")
-    drawLegend("Overturning \n and \n run-off-road","#ded6bf");
+    drawLegend("General\naccidents","#ded6bf", 15.5);
+
+   // drawLegend("Pedestrian hit","#ded6bf", 15.5);  //Una riga
+    //drawLegend("Vehicles collision\n(moving)","#ded6bf", 21); //Due righe
+    //drawLegend("Vehicles collision\nwith a stationary\nvehicle","#ded6bf", 27); //Tre righe
+    //drawLegend("Rear-end collision","#ded6bf", 15.5); //Una riga
+    //drawLegend("Collision\nwith obstacle","#ded6bf", 21); //Due righe
+    //drawLegend("Sudden braking\nand vehicle fall","#ded6bf", 21); //Due righe
+    //drawLegend("Overturning and\nrun-off-road","#ded6bf", 21); //Due righe
+    //drawLegend("Side/head-on\ncollision","#ded6bf", 21); //Due righe
+
+
+
     //vBarChart=false;
     drawInfoBox("main");
     infoBoxArray.push(infoBox);
@@ -877,30 +884,35 @@ function drawLegend(nature, color){
 }
 
  */
+let legend, textElementTwo;
+function drawLegend(text, color, value) {
 
-function drawLegend(text, color) {
+  keysLegends.push(text)
 
-  const legend = timeSeriesSvg.append("g");
+  legend = timeSeriesSvg.append("g");
   let size = 13;
 
-  if(vBarChart) {// Aggiungi un'area di testo per la legenda
-    const textElementTwo = legend.append("text")
+  if(vBarChart) { // Aggiungi un'area di testo per la legenda
+    textElementTwo = legend.append("text")
+      .attr("class", "txt")
       .attr("x", 587 + size * 1.2)
       .attr("y", function (d, i) {
         return 93 + i * (size + 5) + (size / 2)
       }) // 30 is where the first dot appears. 25 is the distance between dots
       .style("fill", "#524a32")
       .style("font-family", "Lora")
-      .style("text-anchor", "middle"); // Imposta l'allineamento sul centro
+      .style("text-anchor", "left"); // Imposta l'allineamento sul centro
 
     // Suddividi il testo in righe usando il tag <tspan>
     const linesTwo = text.split('\n');
     for (let i = 0; i < linesTwo.length; i++) {
       textElementTwo.append("tspan")
         .text(linesTwo[i])
-        .attr("x", 605 + size * 1.2)
+        .attr("class", "txt")
+        .attr("x", 570 + size * 1.2)
         .attr("dy", i === 0 ? 0 : "1.1em");
     }
+    vBarChart = false;
   }else {
     // Aggiungi un'area di testo per la legenda
     const textElement = legend.append("text")
@@ -909,33 +921,36 @@ function drawLegend(text, color) {
         return 58 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
       .style("fill", "#524a32")
       .style("font-family", "Lora")
-      .attr("text-anchor", "middle");
+      .attr("text-anchor", "left");
 
     // Suddividi il testo in righe usando il tag <tspan>
     const lines = text.split('\n');
     for (let i = 0; i < lines.length; i++) {
       textElement.append("tspan")
         .text(lines[i])
-        .attr("x", 605 + size * 1.2)
-        .attr("text-anchor", "center")
+        .attr("x", 570 + size * 1.2)
+        .attr("text-anchor", "left")
     .attr("dy", i === 0 ? 0 : "1.1em");
     }
 
   }
 
   // Aggiungi nuovi rettangoli in base all'array keysLegends
-  timeSeriesSvg.selectAll("mydots")
+  timeSeriesSvg.selectAll(".mydotss")  // Aggiungi il punto (.) prima di "mydotss"
     .data(keysLegends)
     .enter()
     .append("rect")
-    .attr("class", "mydots")
+    .attr("class", "mydotss")
     .attr("x", 568)
-    .attr("y", function(d, i){ return 60 + i * (size + 25)})
+    .attr("y", function(d, i) { return 61 + i * (size + value); })
     .attr("width", size)
     .attr("height", size)
-    .style("fill", color)
+    .style("fill", function(d, i) {
+      return i === 0 ? "#ded6bf" : color;
+    })
     .style("stroke", "#524a32")
     .style("stroke-width", 0.1);
+
 }
 
 

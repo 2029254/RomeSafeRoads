@@ -405,8 +405,40 @@ function onclickBar(d) {
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
         // Disegna la nuova linea per la barra corrente
        //if (setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") {
+      let natureTimeSeries;
+      let value  = 21;
 
             d3.csv(natureAccidents, function (data) {
+
+              switch(d.NaturaIncidente.toString()) {
+                case 'C1':
+                   natureTimeSeries = "Pedestrian hit";
+                   value = 15.5;
+                   break;
+                case 'C2':
+                   natureTimeSeries = "Vehicles collision\n(moving)";
+                   break;
+                case 'C3':
+                   natureTimeSeries ="Vehicles collision\nwith a stationary\nvehicle";
+                   value = 27;
+                   break;
+                case 'C4':
+                   natureTimeSeries = "Rear-end collision";
+                   value = 15.5;
+                   break;
+                case 'C5':
+                   natureTimeSeries = "Collision\nwith obstacle";
+                   break;
+                case 'C6':
+                   natureTimeSeries = "Sudden braking\nand vehicle fall";
+                   break;
+                case 'C7':
+                   natureTimeSeries = "Overturning and\nrun-off-road";
+                   break;
+                default:
+                   natureTimeSeries = "Side/head-on\ncollision"
+              }
+
 
                 convertData(data);
              // timeSeriesSvg.selectAll(".info-box").remove();
@@ -415,6 +447,12 @@ function onclickBar(d) {
                 addPoints(d.NaturaIncidente.toString());
                 drawPoints(data, setBarColor(d.NumeroIncidenti));
                 infoBoxNatureArray.push(infoBox);
+                vBarChart=true;
+              timeSeriesSvg.selectAll(".mydotss").remove();
+              legend.selectAll(".txt").remove();
+              keysLegends = []
+              keysLegends.push("")
+              drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
             });
 
         /*}
