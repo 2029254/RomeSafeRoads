@@ -36,7 +36,7 @@ let idPoints;
 let tickValues;
 let focusArray = [];
 let focusNatureArray = [];
-
+let switchValue;
 let infoBoxArray = [];
 let infoBoxNatureArray = [];
 let keysLegends = [];
@@ -353,9 +353,12 @@ function drawLineWithValue(data, color, id) {
       });
       xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
     })
-    .on('mousemove', mousemove);
+    .on('mousemove', function(event) {
+      if (switchValue === "OFF" || switchValue === undefined)
+        mousemove.call(this, event); // Usa call per garantire il corretto contesto 'this'
+    });
 
-  function mousemove() {
+  function mousemove(event) {
     let x0 = xScaleTimeSeries.invert(d3.mouse(this)[0]);
     let bisect = d3.bisector(d => d.DataOraIncidente).left;
     let i = bisect(timeSeriesData, x0, 1);
@@ -737,7 +740,7 @@ function drawTimeSeriesChart(csvFileName){
     drawLineWithValue(timeSeriesData, "#ded6bf", "main");
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
-    drawXHoverLine();
+    if (switchValue === "OFF" || switchValue === undefined) drawXHoverLine();
     if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
     drawLegend("General\naccidents","#ded6bf", 15.5);
 
@@ -750,11 +753,10 @@ function drawTimeSeriesChart(csvFileName){
     //drawLegend("Overturning and\nrun-off-road","#ded6bf", 21); //Due righe
     //drawLegend("Side/head-on\ncollision","#ded6bf", 21); //Due righe
 
-
-
-    //vBarChart=false;
-    drawInfoBox("main");
-    infoBoxArray.push(infoBox);
+    if (switchValue === "OFF" || switchValue === undefined) {
+      drawInfoBox("main");
+      infoBoxArray.push(infoBox);
+    }
 
 /*
 
@@ -990,5 +992,20 @@ function drawLegend(text, color, value) {
     .style("stroke-width", 0.1);
 
 }
+document.addEventListener('DOMContentLoaded', function() {
+  const switchInput = document.getElementById('switch');
+  const sliderSwitch = document.querySelector('.slider-switch');
 
+  switchInput.addEventListener('change', function() {
+    switchValue = $(this).is(":checked") ? "ON" : "OFF";
+    console.log("Switch value:", switchValue);
+    sliderSwitch.classList.toggle('checked');
+    keysLegends = []
+    infoBoxNatureArray = []
+    focusNatureArray = []
+    timeSeriesSvg.selectAll("*").remove();
+    drawTimeSeriesChart(csvFileNameTimeSeries);
+
+  });
+});
 

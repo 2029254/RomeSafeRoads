@@ -103,20 +103,6 @@
 <div id="popup" style="opacity:0;"></div>
 <div id="popupChoropleth" style="opacity:0;"></div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const switchInput = document.getElementById('switch');
-    console.log(switchInput);
-    const off = document.getElementById('off');
-    const on = document.getElementById('on');
-    const sliderSwitch = document.querySelector('.slider-switch');
-
-    switchInput.addEventListener('change', function() {
-        sliderSwitch.classList.toggle('checked');
-
-    });
-});
-</script>
 <!-- reference to the javascript file that draws the barchart -->
 <script src="src/index.js"></script>
 <script src="src/plots/verticalBarChart.js"></script>
