@@ -738,6 +738,7 @@ function drawTimeSeriesChart(csvFileName){
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
     drawXHoverLine();
+    if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
     drawLegend("General\naccidents","#ded6bf", 15.5);
 
    // drawLegend("Pedestrian hit","#ded6bf", 15.5);  //Una riga
@@ -885,11 +886,48 @@ function drawLegend(nature, color){
 
  */
 let legend, textElementTwo;
+
+function drawUnit(val) {
+  legend = timeSeriesSvg.append("g");
+  // Aggiungi il trattino sopra a tutto
+  legend.append("line")
+    .attr("x1", 568)
+    .attr("y1", 70)  // Regola la posizione verticale del trattino
+    .attr("x2", 628 - val)
+    .attr("y2", 70)
+    .style("stroke", "#524a32")
+    .style("stroke-width", 1);
+
+  // Aggiungi le stanghette laterali
+  legend.append("line")
+    .attr("x1", 568)
+    .attr("y1", 67)  // Regola la posizione verticale della stanghetta
+    .attr("x2", 568)
+    .attr("y2", 73)
+    .style("stroke", "#524a32")
+    .style("stroke-width", 1);
+
+  legend.append("line")
+    .attr("x1", 628 - val)
+    .attr("y1", 67)  // Regola la posizione verticale della stanghetta
+    .attr("x2", 628 - val)
+    .attr("y2", 73)
+    .style("stroke", "#524a32")
+    .style("stroke-width", 1);
+
+  // Aggiungi la scritta sotto il trattino
+  legend.append("text")
+    .text("30 days")
+    .attr("x", 599 - (val/2))
+    .attr("y", 83)  // Regola la posizione verticale della scritta
+    .style("fill", "#524a32")
+    .style("font-family", "Lora")
+    .style("text-anchor", "middle");
+}
+
 function drawLegend(text, color, value) {
 
   keysLegends.push(text)
-
-  legend = timeSeriesSvg.append("g");
   let size = 13;
 
   if(vBarChart) { // Aggiungi un'area di testo per la legenda
@@ -897,7 +935,7 @@ function drawLegend(text, color, value) {
       .attr("class", "txt")
       .attr("x", 587 + size * 1.2)
       .attr("y", function (d, i) {
-        return 93 + i * (size + 5) + (size / 2)
+        return 143 + i * (size + 5) + (size / 2)
       }) // 30 is where the first dot appears. 25 is the distance between dots
       .style("fill", "#524a32")
       .style("font-family", "Lora")
@@ -918,7 +956,7 @@ function drawLegend(text, color, value) {
     const textElement = legend.append("text")
       .attr("x", 587 + size * 1.2)
       .attr("y", function(d,i){
-        return 58 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
+        return 108 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
       .style("fill", "#524a32")
       .style("font-family", "Lora")
       .attr("text-anchor", "left");
@@ -942,7 +980,7 @@ function drawLegend(text, color, value) {
     .append("rect")
     .attr("class", "mydotss")
     .attr("x", 568)
-    .attr("y", function(d, i) { return 61 + i * (size + value); })
+    .attr("y", function(d, i) { return 111 + i * (size + value); })
     .attr("width", size)
     .attr("height", size)
     .style("fill", function(d, i) {
