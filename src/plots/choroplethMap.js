@@ -167,6 +167,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                   barChartSvg.selectAll("*").remove();
                   drawAxesAndBarsFromChoroplethMap(resultVerticalChart, true);
                   drawColorsLegend();
+                  keysLegends = [];
 
                   timeSeriesSvg.selectAll("*").remove();
                   drawTimeSeriesChart(csvFileNameTimeSeries);
