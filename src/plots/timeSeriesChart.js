@@ -540,7 +540,6 @@ function drawAxes(data){
   timeSeriesSvg.append("g")
     .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .style("font-family", "Lora")
-    .attr("class", "fixed-x-axis")
     .call(xAxisTimeSeries)
     .append("text")
     .attr("y", 37)
@@ -1013,7 +1012,7 @@ function drawZoom(data) {
   timeSeriesSvg.append("rect")
     .attr("width", 500)
     .attr("height", 200)
-    .style("fill", "red")
+    .style("fill", "none")  //red
     .style("pointer-events", "all")
     .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
     .call(d3.zoom()
@@ -1024,6 +1023,7 @@ function drawZoom(data) {
   timeSeriesSvg.append("defs").append("clipPath")
     .attr("id", "clip-path-red")
     .append("rect")
+    .style("fill", "none")  //red
     .attr("width", 500)
     .attr("height", 200);
 
@@ -1031,6 +1031,7 @@ function drawZoom(data) {
   timeSeriesSvg.append("defs").append("clipPath")
     .attr("id", "clip-path-x")
     .append("rect")
+    .style("fill", "none")  //red
     .attr("width", 500)
     .attr("height", 200);
 
@@ -1040,9 +1041,6 @@ function drawZoom(data) {
     .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .style("font-family", "Lora")
     .call(xAxisTimeSeries)
-    .call(g => g.select(".domain").remove())  // Rimuovi la linea della base dell'asse x
-
-    // Applica il clip path solo per l'asse x e il rettangolo rosso
     .attr("clip-path", "url(#clip-path-x)")
     .append("text")
     .attr("y", 37)
@@ -1056,7 +1054,7 @@ function drawZoom(data) {
     .attr("class", "line")
     .attr("clip-path", "url(#clip-path-red)")  // Applica il clip path solo per il rettangolo rosso
     .attr("fill", "none")
-    .attr("stroke", "black")
+    .attr("stroke", "#ded6bf")
     .attr("stroke-width", 1.8)
     .attr("d", line)
     .attr("transform", "translate(51, 50)");
@@ -1130,17 +1128,6 @@ function drawZoom(data) {
     .tickValues(tickValues)
     .tickFormat(date => d3.timeFormat("%d %b")(date));
 
-  timeSeriesSvg.append("g")
-    .attr("class", "fixed-x-axis")
-    .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
-    .style("font-family", "Lora")
-    .call(xAxisZoom)
-    .call(g => g.select(".domain").remove())  // Rimuovi la linea della base dell'asse x
-    .append("text")
-    .attr("y", 37)
-    .attr("x", 247)
-    .attr("fill", "black")
-    .text("Time interval");
 
   const yAxisTimeSeriesZoom = d3.axisLeft(yScaleTimeSeries);
 
@@ -1148,7 +1135,7 @@ function drawZoom(data) {
     .attr("class", "y-axis")
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
-    .call(yAxisTimeSeriesZoom)
+    .call(yAxisTimeSeries.tickFormat(function(d){return d;}))
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", -50)
