@@ -17,7 +17,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
   .classed("svg-container-largo", true)
   .append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 690 270")
+  .attr("viewBox", "0 0 800 270")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
@@ -41,6 +41,10 @@ let infoBoxArray = [];
 let infoBoxNatureArray = [];
 let keysLegends = [];
 let vBarChart = false;
+const overviewHeight = 50; // or any desired height for the overview
+const overviewMargin = { top: 10, right: 50, bottom: 20, left: 50 }; // or adjust as needed
+const overviewWidth = widthTimeSeries + overviewMargin.left + overviewMargin.right;
+
 
 const dataTest = [
   { DataOraIncidente: "2023-01-01", NumeroIncidenti: 1 },
@@ -319,7 +323,7 @@ function drawLineWithValue(data, color, id) {
 
   timeSeriesSvg.append('rect')
     .attr('width', 500)
-    .attr('height', 300)
+    .attr('height', 500)
     .style('fill', 'none')
     .style('translate', '50px')
     .style('pointer-events', 'all')
@@ -536,6 +540,7 @@ function drawAxes(data){
   timeSeriesSvg.append("g")
     .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
     .style("font-family", "Lora")
+    .attr("class", "fixed-x-axis")
     .call(xAxisTimeSeries)
     .append("text")
     .attr("y", 37)
@@ -744,18 +749,12 @@ function drawTimeSeriesChart(csvFileName){
     if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
     drawLegend("General\naccidents","#ded6bf", 15.5);
 
-   // drawLegend("Pedestrian hit","#ded6bf", 15.5);  //Una riga
-    //drawLegend("Vehicles collision\n(moving)","#ded6bf", 21); //Due righe
-    //drawLegend("Vehicles collision\nwith a stationary\nvehicle","#ded6bf", 27); //Tre righe
-    //drawLegend("Rear-end collision","#ded6bf", 15.5); //Una riga
-    //drawLegend("Collision\nwith obstacle","#ded6bf", 21); //Due righe
-    //drawLegend("Sudden braking\nand vehicle fall","#ded6bf", 21); //Due righe
-    //drawLegend("Overturning and\nrun-off-road","#ded6bf", 21); //Due righe
-    //drawLegend("Side/head-on\ncollision","#ded6bf", 21); //Due righe
-
     if (switchValue === "OFF" || switchValue === undefined) {
       drawInfoBox("main");
       infoBoxArray.push(infoBox);
+    } else {
+      timeSeriesSvg.selectAll("*").remove();
+      drawZoom(timeSeriesData);
     }
 
 /*
@@ -1008,4 +1007,113 @@ document.addEventListener('DOMContentLoaded', function() {
 
   });
 });
+
+function drawZoom(data) {
+  // Aggiungi un'area di sfondo rettangolare per catturare gli eventi di zoom
+  timeSeriesSvg.append("rect")
+    .attr("width", 500)
+    .attr("height", 200)
+    .style("fill", "red")
+    .style("pointer-events", "all")
+    .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
+    .call(d3.zoom()
+      .scaleExtent([1, 8])  // Limita gli estremi del livello di zoom
+      .on("zoom", zoomed));
+
+  // Aggiungi un clip path solo per il rettangolo rosso
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "clip-path-red")
+    .append("rect")
+    .attr("width", 500)
+    .attr("height", 200);
+
+  // Aggiungi un secondo clip path solo per l'asse x e il rettangolo rosso
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "clip-path-x")
+    .append("rect")
+    .attr("width", 500)
+    .attr("height", 200);
+
+  // Aggiungi gli assi come gruppi separati
+  timeSeriesSvg.append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
+    .style("font-family", "Lora")
+    .call(xAxisTimeSeries)
+    .call(g => g.select(".domain").remove())  // Rimuovi la linea della base dell'asse x
+
+    // Applica il clip path solo per l'asse x e il rettangolo rosso
+    .attr("clip-path", "url(#clip-path-x)")
+    .append("text")
+    .attr("y", 37)
+    .attr("x", 247)
+    .attr("fill", "black")
+    .text("Time interval");
+
+  // Aggiorna la linea del grafico per utilizzare il clip path solo per il rettangolo rosso
+  timeSeriesSvg.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("clip-path", "url(#clip-path-red)")  // Applica il clip path solo per il rettangolo rosso
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.8)
+    .attr("d", line)
+    .attr("transform", "translate(51, 50)");
+
+// Funzione chiamata durante l'evento di zoom
+  function zoomed() {
+    const { transform } = d3.event;
+
+    // Aggiorna l'asse x zoomato con la trasformazione di zoom
+    timeSeriesSvg.select(".x-axis").call(xAxisZoom.scale(transform.rescaleX(xScaleTimeSeries)));
+
+    timeSeriesSvg.select(".y-axis").call(yAxisTimeSeries.scale(transform.rescaleY(yScaleTimeSeries)));
+
+
+    // Aggiorna la linea del grafico con la trasformazione di zoom
+    timeSeriesSvg.selectAll(".line")
+      .attr("d", line.x(d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+        .y(d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti))));
+
+    // Nascondi l'asse x fisso durante lo zoom
+    timeSeriesSvg.selectAll(".fixed-x-axis")
+      .style("display", "none");
+  }
+
+
+
+// Aggiungi l'asse x zoomato senza clip path
+  const xAxisZoom = d3.axisBottom(xScaleTimeSeries)
+    .tickValues(tickValues)
+    .tickFormat(date => d3.timeFormat("%d %b")(date));
+
+  timeSeriesSvg.append("g")
+    .attr("class", "fixed-x-axis")
+    .attr("transform", `translate(50, ${heightTimeSeries + 50})`)
+    .style("font-family", "Lora")
+    .call(xAxisZoom)
+    .call(g => g.select(".domain").remove())  // Rimuovi la linea della base dell'asse x
+    .append("text")
+    .attr("y", 37)
+    .attr("x", 247)
+    .attr("fill", "black")
+    .text("Time interval");
+
+
+  const yAxisTimeSeriesZoom = d3.axisLeft(yScaleTimeSeries);
+
+  timeSeriesSvg.append("g")
+    .attr("class", "y-axis")
+    .attr("transform", `translate(50, 50)`)
+    .style("font-family", "Lora")
+    .call(yAxisTimeSeriesZoom)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -50)
+    .attr("x", -58)
+    .attr("fill", "black")
+    .text("Accidents' number");
+}
+
 
