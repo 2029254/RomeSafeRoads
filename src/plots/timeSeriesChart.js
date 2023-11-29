@@ -44,6 +44,10 @@ let vBarChart = false;
 const overviewHeight = 50; // or any desired height for the overview
 const overviewMargin = { top: 10, right: 50, bottom: 20, left: 50 }; // or adjust as needed
 const overviewWidth = widthTimeSeries + overviewMargin.left + overviewMargin.right;
+let grid;
+let vGridLines;
+let hGridLines;
+
 
 
 const dataTest = [
@@ -620,6 +624,15 @@ function drawAxesPedestrianDeaths(data){
 
 
 function drawGrid(){
+
+  // Crea un clip path per la griglia
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "grid-clip-path")
+    .append("rect")
+    .attr("width", 500)
+    .attr("height", 200);
+
+
   // Aggiungi linee tratteggiate verticali
   timeSeriesSvg.selectAll("line.vgrid")
     .data(tickValues.slice(1))
@@ -634,6 +647,8 @@ function drawGrid(){
     .style("stroke", "#c7c2b5")
     .style("stroke-dasharray", "3, 3")
     .style("stroke-width", 0.3)
+    .attr("clip-path", "url(#grid-clip-path)");
+
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
@@ -648,7 +663,16 @@ function drawGrid(){
     .attr("transform", `translate(52.5, 50.5)`)
     .style("stroke", "#c7c2b5")
     .style("stroke-dasharray", "3, 3")
-    .style("stroke-width", 0.3);
+    .style("stroke-width", 0.3)
+    .attr("clip-path", "url(#grid-clip-path)");
+
+
+  // Memorizza le linee della griglia in variabili globali
+  vGridLines = timeSeriesSvg.selectAll("line.vgrid");
+  hGridLines = timeSeriesSvg.selectAll("line.hgrid");
+
+  // Crea un gruppo per la griglia
+  grid = timeSeriesSvg.append("g").attr("class", "grid-group");
 }
 
 function drawGridPedestrianDeaths(){
@@ -753,6 +777,7 @@ function drawTimeSeriesChart(csvFileName){
       infoBoxArray.push(infoBox);
     } else {
       timeSeriesSvg.selectAll("*").remove();
+      drawGrid();
       drawZoom(timeSeriesData);
     }
 
@@ -1023,7 +1048,7 @@ function drawZoom(data) {
   timeSeriesSvg.append("defs").append("clipPath")
     .attr("id", "clip-path-red")
     .append("rect")
-    .style("fill", "none")  //red
+    .style("fill", "none")
     .attr("width", 500)
     .attr("height", 200);
 
@@ -1031,7 +1056,7 @@ function drawZoom(data) {
   timeSeriesSvg.append("defs").append("clipPath")
     .attr("id", "clip-path-x")
     .append("rect")
-    .style("fill", "none")  //red
+    .style("fill", "none")
     .attr("width", 500)
     .attr("height", 200);
 
@@ -1112,9 +1137,18 @@ function drawZoom(data) {
     // Nascondi l'asse x fisso durante lo zoom
     timeSeriesSvg.selectAll(".fixed-x-axis")
       .style("display", "none");
-  }
 
-// ...
+    // Aggiorna il clip path della griglia durante lo zoom
+    d3.select("#grid-clip-path rect")
+      .attr("width", widthTimeSeries )
+      .attr("height", heightTimeSeries);
+
+    // Aggiorna la posizione e la dimensione delle linee della griglia durante lo zoom
+    vGridLines.attr("x1", d => transform.applyX(xScaleTimeSeries(d))).attr("x2", d => transform.applyX(xScaleTimeSeries(d)));
+    hGridLines.attr("y1", d => transform.applyY(yScaleTimeSeries(d))).attr("y2", d => transform.applyY(yScaleTimeSeries(d)));
+
+
+  }
 
 
 // Alla fine della tua funzione zoomed, puoi aggiungere il seguente codice per reimpostare il flag dopo lo zoom
