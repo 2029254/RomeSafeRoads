@@ -1017,7 +1017,7 @@ function drawZoom(data) {
     .style("pointer-events", "all")
     .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
     .call(d3.zoom()
-      .scaleExtent([1, 8])  // Limita gli estremi del livello di zoom
+      .scaleExtent([1, 10])  // Limita gli estremi del livello di zoom
       .on("zoom", zoomed));
 
   // Aggiungi un clip path solo per il rettangolo rosso
@@ -1061,15 +1061,50 @@ function drawZoom(data) {
     .attr("d", line)
     .attr("transform", "translate(51, 50)");
 
+// ...
+
+  let isZooming = false;
+  const xExtent = d3.extent(data, d => d.DataOraIncidente);
+  const yExtent = d3.extent(data, d => d.NumeroIncidenti);  // Calcola l'estensione dei valori y nel tuo set di dati
+
+
 // Funzione chiamata durante l'evento di zoom
   function zoomed() {
     const { transform } = d3.event;
 
+    if (transform.k === 1) {
+      // Se lo zoom è 1, non stiamo effettuando uno zoom, quindi fissiamo l'asse x
+      transform.x = 0;
+      transform.y = 0;
+    } else {
+      // Se lo zoom non è 1, stiamo effettuando uno zoom
+      isZooming = true;
+    }
+
+    // Limita il movimento dell'asse x ai limiti della data nel set di dati
+    const xMin = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
+    const xMax = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
+
+    // Verifica se il primo valore a sinistra è visibile nel rettangolo rosso
+    const firstVisibleX = xScaleTimeSeries.domain()[0];
+    const firstVisibleXPosition = transform.applyX(xScaleTimeSeries(firstVisibleX));
+    const isLeftOverflow = firstVisibleXPosition < xMin;
+
+    // Se il primo valore è fuori dal rettangolo rosso, applica uno spostamento minimo
+    if (isLeftOverflow) {
+      transform.x = Math.min(0, xMin + 10); // 10 è un valore arbitrario, puoi regolarlo a seconda delle tue esigenze
+    } else {
+      transform.x = Math.min(xMax, Math.max(xMin, transform.x));
+    }
+
+    // Limita il movimento dell'asse y ai limiti dei valori y nel set di dati
+    transform.y = Math.min(0, Math.max(heightTimeSeries - heightTimeSeries * transform.k, transform.y));
+
     // Aggiorna l'asse x zoomato con la trasformazione di zoom
     timeSeriesSvg.select(".x-axis").call(xAxisZoom.scale(transform.rescaleX(xScaleTimeSeries)));
 
+    // Aggiorna l'asse y con la trasformazione di zoom
     timeSeriesSvg.select(".y-axis").call(yAxisTimeSeries.scale(transform.rescaleY(yScaleTimeSeries)));
-
 
     // Aggiorna la linea del grafico con la trasformazione di zoom
     timeSeriesSvg.selectAll(".line")
@@ -1081,9 +1116,16 @@ function drawZoom(data) {
       .style("display", "none");
   }
 
+// ...
 
 
-// Aggiungi l'asse x zoomato senza clip path
+// Alla fine della tua funzione zoomed, puoi aggiungere il seguente codice per reimpostare il flag dopo lo zoom
+  timeSeriesSvg.on("end", function () {
+    isZooming = false;
+  });
+
+// ...
+
   const xAxisZoom = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
     .tickFormat(date => d3.timeFormat("%d %b")(date));
@@ -1099,7 +1141,6 @@ function drawZoom(data) {
     .attr("x", 247)
     .attr("fill", "black")
     .text("Time interval");
-
 
   const yAxisTimeSeriesZoom = d3.axisLeft(yScaleTimeSeries);
 
