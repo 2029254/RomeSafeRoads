@@ -778,6 +778,9 @@ function drawTimeSeriesChart(csvFileName){
     } else {
       timeSeriesSvg.selectAll("*").remove();
       drawGrid();
+      if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
+      keysLegends = []
+      drawLegend("General\naccidents","#ded6bf", 15.5);
       drawZoom(timeSeriesData);
     }
 

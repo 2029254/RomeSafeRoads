@@ -439,21 +439,23 @@ function onclickBar(d) {
                    natureTimeSeries = "Side/head-on\ncollision"
               }
 
-
+              if (switchValue === "OFF" || switchValue === undefined){
                 convertData(data);
-             // timeSeriesSvg.selectAll(".info-box").remove();
+                // timeSeriesSvg.selectAll(".info-box").remove();
                 drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
                 console.log(focusArray);
                 addPoints(d.NaturaIncidente.toString());
                 drawPoints(data, setBarColor(d.NumeroIncidenti));
                 infoBoxNatureArray.push(infoBox);
-                vBarChart=true;
-              timeSeriesSvg.selectAll(".mydotss").remove();
-              legend.selectAll(".txt").remove();
-              keysLegends = []
-              keysLegends.push("")
-              drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
+                vBarChart = true;
+                timeSeriesSvg.selectAll(".mydotss").remove();
+                legend.selectAll(".txt").remove();
+                keysLegends = []
+                keysLegends.push("")
+                drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
+              }
             });
+
 
         /*}
         else {
