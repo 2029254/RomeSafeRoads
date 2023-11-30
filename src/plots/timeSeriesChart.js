@@ -9,6 +9,7 @@ var timeSeriesSvg = d3.select("#timeSeries")
  */
 var margin = {top: 10, right: 30, bottom: 160, left: 0};
 
+let currentTransform = d3.zoomIdentity;
 
 
 // append the svg object to the body of the page
@@ -748,7 +749,7 @@ function drawPoints(data, color) {
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
           .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
           .attr("r", 1.3)
-          .style("fill", "#524a32")
+          .style("fill", "#827c68")
           .on("mouseover", showIncidentCount)
           .on("mouseout", hideIncidentCount);
       }
@@ -759,8 +760,8 @@ function drawPoints(data, color) {
                .attr("class", "inner-point")
                .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
                .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
-               .attr("r", 1.7)
-               .style("fill", "#524a32")
+               .attr("r", 2.5)
+               .style("fill", "#827c68")
                .attr("clip-path", "url(#points-clip-path)")
                .on("mouseover", showIncidentCount)
                .on("mouseout", hideIncidentCount);
@@ -837,24 +838,24 @@ function brushed() {
 // Funzione per mostrare il numero di incidenti
 function showIncidentCount(d) {
   let incidentCount = d.NumeroIncidenti;
-  let xPosition = xScaleTimeSeries(d.DataOraIncidente) - 6;
-  let yPosition = yScaleTimeSeries(incidentCount) - 10;
+  let xPosition = currentTransform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6;
+  let yPosition = currentTransform.applyY(yScaleTimeSeries(incidentCount)) - 10;
   let marginNumberCircleX;
 
-  if (incidentCount < 10) marginNumberCircleX = 2.5
-  else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5
-  else marginNumberCircleX = 8.5
+  if (incidentCount < 10) marginNumberCircleX = 2.5;
+  else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5;
+  else marginNumberCircleX = 8.5;
 
   pointsGroup.append("circle")
     .attr("id", "num")
     .attr("class", "show")
     .attr("cx", xPosition + marginNumberCircleX)
     .attr("cy", yPosition - 3.5)
-    .attr("r", 9) // Imposta il raggio del cerchio
+    .attr("r", 9)
     .style("font-family", "Lora")
     .style("opacity", "0.6")
-    .style("stroke", "#524a32") // Colore del bordo
-    .style("stroke-width", "0.3px") // Larghezza del bordo
+    .style("stroke", "#524a32")
+    .style("stroke-width", "0.3px")
     .style("fill", "white");
 
   pointsGroup.append("text")
@@ -863,7 +864,6 @@ function showIncidentCount(d) {
     .attr("y", yPosition)
     .text(incidentCount)
     .style("font-size", "10px")
-    //.style("fill", "white");
     .style("color", "#524a32");
 }
 
@@ -1056,7 +1056,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function drawZoom(data) {
   // Aggiungi un'area di sfondo rettangolare per catturare gli eventi di zoom
   timeSeriesSvg.append("rect")
-    .attr("width", 500)
+    .attr("width", 502)
     .attr("height", 200)
     .style("fill", "none")  //red
     .style("pointer-events", "all")
@@ -1070,7 +1070,7 @@ function drawZoom(data) {
     .attr("id", "clip-path-red")
     .append("rect")
     .style("fill", "none")
-    .attr("width", 500)
+    .attr("width", 502)
     .attr("height", 200);
 
   // Aggiungi un secondo clip path solo per l'asse x e il rettangolo rosso
@@ -1078,7 +1078,7 @@ function drawZoom(data) {
     .attr("id", "clip-path-x")
     .append("rect")
     .style("fill", "none")
-    .attr("width", 500)
+    .attr("width", 502)
     .attr("height", 200);
 
    // Inizializza un clip path per i punti
@@ -1086,7 +1086,7 @@ function drawZoom(data) {
      .attr("id", "points-clip-path")
      .append("rect")
      .style("fill", "none")
-     .attr("width", 500)
+     .attr("width", 502)
      .attr("height", 200);
 
   // Aggiungi gli assi come gruppi separati
@@ -1122,6 +1122,7 @@ function drawZoom(data) {
 
 // Funzione chiamata durante l'evento di zoom
   function zoomed() {
+    currentTransform = d3.event.transform;
     const { transform } = d3.event;
 
     if (transform.k === 1) {
@@ -1177,15 +1178,14 @@ function drawZoom(data) {
     hGridLines.attr("y1", d => transform.applyY(yScaleTimeSeries(d))).attr("y2", d => transform.applyY(yScaleTimeSeries(d)));
 
 
-    // Aggiorna il clip path circle durante lo zoom
-    d3.select("#points-clip-path rect")
-      .attr("width", widthTimeSeries )
-      .attr("height", heightTimeSeries);
+    // Alla fine della tua funzione zoomed
+    pointsGroup.selectAll(".point").selectAll(".inner-point")
+      .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+      .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
 
-      // Applica la trasformazione anche ai punti
-      pointsGroup.selectAll(".point").selectAll(".inner-point")
-        .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
-        .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+    pointsGroup.selectAll(".incident-count")
+      .attr("x", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6)
+      .attr("y", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)) - 10);
 
   }
 
