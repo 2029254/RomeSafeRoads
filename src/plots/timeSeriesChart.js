@@ -47,6 +47,7 @@ const overviewWidth = widthTimeSeries + overviewMargin.left + overviewMargin.rig
 let grid;
 let vGridLines;
 let hGridLines;
+let allPoints;
 
 
 
@@ -731,7 +732,7 @@ function drawPoints(data, color) {
     .attr("class", "point")
     .each(function(d) {
       // Aggiungi cerchio più grande solo per il punto massimo
-      if (d === maxIncident) {
+      if (d === maxIncident && (switchValue==="OFF" || switchValue===undefined)) {
         d3.select(this).append("circle")
           .attr("class", "outer-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
@@ -747,12 +748,26 @@ function drawPoints(data, color) {
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
           .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
           .attr("r", 1.3)
-          .style("fill", "#524a32");
-        //  .on("mouseover", showIncidentCount)
-        //  .on("mouseout", hideIncidentCount);
+          .style("fill", "#524a32")
+          .on("mouseover", showIncidentCount)
+          .on("mouseout", hideIncidentCount);
+      }
+      if (switchValue==="ON") {
+
+       // Aggiungi cerchio più piccolo per tutti i punti con clip path
+             d3.select(this).append("circle")
+               .attr("class", "inner-point")
+               .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
+               .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
+               .attr("r", 1.7)
+               .style("fill", "#524a32")
+               .attr("clip-path", "url(#points-clip-path)")
+               .on("mouseover", showIncidentCount)
+               .on("mouseout", hideIncidentCount);
       }
     });
 }
+
 function drawTimeSeriesChart(csvFileName){
 
   d3.csv(csvFileName, function (data) {
@@ -782,6 +797,8 @@ function drawTimeSeriesChart(csvFileName){
       keysLegends = []
       drawLegend("General\naccidents","#ded6bf", 15.5);
       drawZoom(timeSeriesData);
+      addPoints("noNature");
+      drawPoints(timeSeriesData, "#ded6bf");
     }
 
 /*
@@ -830,6 +847,7 @@ function showIncidentCount(d) {
 
   pointsGroup.append("circle")
     .attr("id", "num")
+    .attr("class", "show")
     .attr("cx", xPosition + marginNumberCircleX)
     .attr("cy", yPosition - 3.5)
     .attr("r", 9) // Imposta il raggio del cerchio
@@ -837,7 +855,7 @@ function showIncidentCount(d) {
     .style("opacity", "0.6")
     .style("stroke", "#524a32") // Colore del bordo
     .style("stroke-width", "0.3px") // Larghezza del bordo
-    .style("fill", "white")
+    .style("fill", "white");
 
   pointsGroup.append("text")
     .attr("class", "incident-count")
@@ -1063,6 +1081,14 @@ function drawZoom(data) {
     .attr("width", 500)
     .attr("height", 200);
 
+   // Inizializza un clip path per i punti
+   timeSeriesSvg.append("defs").append("clipPath")
+     .attr("id", "points-clip-path")
+     .append("rect")
+     .style("fill", "none")
+     .attr("width", 500)
+     .attr("height", 200);
+
   // Aggiungi gli assi come gruppi separati
   timeSeriesSvg.append("g")
     .attr("class", "x-axis")
@@ -1151,7 +1177,18 @@ function drawZoom(data) {
     hGridLines.attr("y1", d => transform.applyY(yScaleTimeSeries(d))).attr("y2", d => transform.applyY(yScaleTimeSeries(d)));
 
 
+    // Aggiorna il clip path circle durante lo zoom
+    d3.select("#points-clip-path rect")
+      .attr("width", widthTimeSeries )
+      .attr("height", heightTimeSeries);
+
+      // Applica la trasformazione anche ai punti
+      pointsGroup.selectAll(".point").selectAll(".inner-point")
+        .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+        .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+
   }
+
 
 
 // Alla fine della tua funzione zoomed, puoi aggiungere il seguente codice per reimpostare il flag dopo lo zoom
