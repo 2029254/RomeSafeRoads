@@ -752,8 +752,9 @@ function drawPoints(data, color) {
           .style("fill", "#827c68")
           .on("mouseover", showIncidentCount)
           .on("mouseout", hideIncidentCount);
+
       }
-      if (switchValue==="ON") {
+      if (switchValue==="ON" || switchValue==="OFF" || switchValue===undefined) {
 
        // Aggiungi cerchio più piccolo per tutti i punti con clip path
              d3.select(this).append("circle")
@@ -1086,7 +1087,8 @@ function drawZoom(data) {
      .attr("id", "points-clip-path")
      .append("rect")
      .style("fill", "none")
-     .attr("width", 502)
+     .attr("transform", `translate(-2.5, 0)`)
+     .attr("width", 505)
      .attr("height", 200);
 
   // Aggiungi gli assi come gruppi separati
