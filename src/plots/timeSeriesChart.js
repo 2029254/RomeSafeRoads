@@ -754,7 +754,7 @@ function drawPoints(data, color) {
           .on("mouseout", hideIncidentCount);
 
       }
-      if (switchValue==="ON" || switchValue==="OFF" || switchValue===undefined) {
+      if (switchValue==="ON") {
 
        // Aggiungi cerchio più piccolo per tutti i punti con clip path
              d3.select(this).append("circle")
