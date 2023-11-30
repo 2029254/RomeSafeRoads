@@ -1063,7 +1063,7 @@ function drawZoom(data) {
     .style("pointer-events", "all")
     .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
     .call(d3.zoom()
-      .scaleExtent([1, 10])  // Limita gli estremi del livello di zoom
+      .scaleExtent([1, 3])  // Limita gli estremi del livello di zoom
       .on("zoom", zoomed));
 
   // Aggiungi un clip path solo per il rettangolo rosso
@@ -1079,17 +1079,17 @@ function drawZoom(data) {
     .attr("id", "clip-path-x")
     .append("rect")
     .style("fill", "none")
-    .attr("width", 502)
+    .attr("width", 505)
     .attr("height", 200);
 
-   // Inizializza un clip path per i punti
-   timeSeriesSvg.append("defs").append("clipPath")
-     .attr("id", "points-clip-path")
-     .append("rect")
-     .style("fill", "none")
-     .attr("transform", `translate(-2.5, 0)`)
-     .attr("width", 505)
-     .attr("height", 200);
+  // Inizializza un clip path per i punti
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "points-clip-path")
+    .append("rect")
+    .style("fill", "none")
+    .attr("transform", `translate(-2.5, 0)`)
+    .attr("width", 505)
+    .attr("height", 200);
 
   // Aggiungi gli assi come gruppi separati
   timeSeriesSvg.append("g")
@@ -1128,59 +1128,77 @@ function drawZoom(data) {
     const { transform } = d3.event;
 
     if (transform.k === 1) {
-      // Se lo zoom è 1, non stiamo effettuando uno zoom, quindi fissiamo l'asse x
       transform.x = 0;
       transform.y = 0;
     } else {
-      // Se lo zoom non è 1, stiamo effettuando uno zoom
       isZooming = true;
     }
 
-    // Limita il movimento dell'asse x ai limiti della data nel set di dati
     const xMin = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
     const xMax = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
 
-    // Verifica se il primo valore a sinistra è visibile nel rettangolo rosso
-    const firstVisibleX = xScaleTimeSeries.domain()[0];
-    const firstVisibleXPosition = transform.applyX(xScaleTimeSeries(firstVisibleX));
-    const isLeftOverflow = firstVisibleXPosition < xMin;
+    const originalTickDistance = xScaleTimeSeries(tickValues[1]) - xScaleTimeSeries(tickValues[0]);
+    const numIntermediateTicks = Math.floor((tickValues.length - 1) * (transform.k - 1));
+    const newTickDistance = originalTickDistance / (numIntermediateTicks + 1);
 
-    // Se il primo valore è fuori dal rettangolo rosso, applica uno spostamento minimo
-    if (isLeftOverflow) {
-      transform.x = Math.min(0, xMin + 10); // 10 è un valore arbitrario, puoi regolarlo a seconda delle tue esigenze
-    } else {
-      transform.x = Math.min(xMax, Math.max(xMin, transform.x));
+    const intermediateTicks = [];
+    let intermediateTickValue;
+    let valueToReach;
+    let valueToReachOne;
+    if(selectedYear === "2022") valueToReachOne = 5.7; else valueToReachOne = 8.4;
+
+
+    for (let i = valueToReachOne; i <= numIntermediateTicks; i= i+valueToReachOne) {
+      if(selectedYear === "2022") valueToReach = 8; else valueToReach = 12;
+      for(let n = 0; n <= valueToReach; n=n+1) {
+        if(i!==0) {
+          intermediateTickValue = xScaleTimeSeries.invert(xScaleTimeSeries(tickValues[n]) + i * newTickDistance);
+          console.log(intermediateTickValue)
+          intermediateTicks.push(intermediateTickValue);
+        }
+      }
     }
 
-    // Limita il movimento dell'asse y ai limiti dei valori y nel set di dati
+    const allTicks = [...tickValues, ...intermediateTicks];
+
+    if (transform.k > 2.7) {
+      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(allTicks));
+    } else {
+      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(tickValues));
+    }
+
+    const xMinNew = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
+    const xMaxNew = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
+
+    const firstVisibleX = xScaleTimeSeries.domain()[0];
+    const firstVisibleXPosition = transform.applyX(xScaleTimeSeries(firstVisibleX));
+    const isLeftOverflow = firstVisibleXPosition < xMinNew;
+
+    if (isLeftOverflow) {
+      transform.x = Math.min(0, xMinNew + 10);
+    } else {
+      transform.x = Math.min(xMaxNew, Math.max(xMinNew, transform.x));
+    }
+
     transform.y = Math.min(0, Math.max(heightTimeSeries - heightTimeSeries * transform.k, transform.y));
 
-    // Aggiorna l'asse x zoomato con la trasformazione di zoom
     timeSeriesSvg.select(".x-axis").call(xAxisZoom.scale(transform.rescaleX(xScaleTimeSeries)));
-
-    // Aggiorna l'asse y con la trasformazione di zoom
     timeSeriesSvg.select(".y-axis").call(yAxisTimeSeries.scale(transform.rescaleY(yScaleTimeSeries)));
 
-    // Aggiorna la linea del grafico con la trasformazione di zoom
     timeSeriesSvg.selectAll(".line")
       .attr("d", line.x(d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
         .y(d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti))));
 
-    // Nascondi l'asse x fisso durante lo zoom
     timeSeriesSvg.selectAll(".fixed-x-axis")
       .style("display", "none");
 
-    // Aggiorna il clip path della griglia durante lo zoom
     d3.select("#grid-clip-path rect")
-      .attr("width", widthTimeSeries )
+      .attr("width", widthTimeSeries)
       .attr("height", heightTimeSeries);
 
-    // Aggiorna la posizione e la dimensione delle linee della griglia durante lo zoom
     vGridLines.attr("x1", d => transform.applyX(xScaleTimeSeries(d))).attr("x2", d => transform.applyX(xScaleTimeSeries(d)));
     hGridLines.attr("y1", d => transform.applyY(yScaleTimeSeries(d))).attr("y2", d => transform.applyY(yScaleTimeSeries(d)));
 
-
-    // Alla fine della tua funzione zoomed
     pointsGroup.selectAll(".point").selectAll(".inner-point")
       .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
       .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
@@ -1188,7 +1206,6 @@ function drawZoom(data) {
     pointsGroup.selectAll(".incident-count")
       .attr("x", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6)
       .attr("y", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)) - 10);
-
   }
 
 
@@ -1219,5 +1236,3 @@ function drawZoom(data) {
     .attr("fill", "black")
     .text("Accidents' number");
 }
-
-
