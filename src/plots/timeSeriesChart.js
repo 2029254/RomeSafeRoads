@@ -885,7 +885,6 @@ pointsGroup.append("text")
 function hideIncidentCount() {
   pointsGroup.selectAll(".incident-count").remove();
   d3.selectAll("#num").remove();
-  tooltipTime.style("opacity", 0);
 }
 /*
 function drawLegend(nature, color){
