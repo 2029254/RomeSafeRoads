@@ -11,7 +11,6 @@ var margin = {top: 10, right: 30, bottom: 160, left: 0};
 
 let currentTransform = d3.zoomIdentity;
 
-
 // append the svg object to the body of the page
 var timeSeriesSvg = d3.select("#timeSeries")
   .append("div")
@@ -1040,10 +1039,22 @@ function drawLegend(text, color, value) {
 document.addEventListener('DOMContentLoaded', function() {
   const switchInput = document.getElementById('switch');
   const sliderSwitch = document.querySelector('.slider-switch');
+  var onLabel = document.getElementById("on");
+  var offLabel = document.getElementById("off");
 
   switchInput.addEventListener('change', function() {
     switchValue = $(this).is(":checked") ? "ON" : "OFF";
     console.log("Switch value:", switchValue);
+    if (switchValue === "ON") {
+       sliderSwitch.style.backgroundColor = "#c2e0bc"; //provare anche "#c2e0bc" #b6e0af;
+       onLabel.style.display = "block"; // Mostra l'etichetta ON
+       offLabel.style.display = "none"; // Nascondi l'etichetta OFF
+    }
+    else {
+       sliderSwitch.style.backgroundColor = "#facdcd";
+       onLabel.style.display = "none"; // Mostra l'etichetta ON
+       offLabel.style.display = "block"; // Nascondi l'etichetta OFF
+    }
     sliderSwitch.classList.toggle('checked');
     keysLegends = []
     infoBoxNatureArray = []
@@ -1055,9 +1066,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function drawZoom(data) {
+
   // Aggiungi un'area di sfondo rettangolare per catturare gli eventi di zoom
   timeSeriesSvg.append("rect")
-    .attr("width", 502)
+    .attr("width", 500)
     .attr("height", 200)
     .style("fill", "none")  //red
     .style("pointer-events", "all")
@@ -1071,7 +1083,7 @@ function drawZoom(data) {
     .attr("id", "clip-path-red")
     .append("rect")
     .style("fill", "none")
-    .attr("width", 502)
+    .attr("width", 500)
     .attr("height", 200);
 
   // Aggiungi un secondo clip path solo per l'asse x e il rettangolo rosso
@@ -1079,7 +1091,7 @@ function drawZoom(data) {
     .attr("id", "clip-path-x")
     .append("rect")
     .style("fill", "none")
-    .attr("width", 505)
+    .attr("width", 514)
     .attr("height", 200);
 
   // Inizializza un clip path per i punti
@@ -1121,6 +1133,14 @@ function drawZoom(data) {
   const xExtent = d3.extent(data, d => d.DataOraIncidente);
   const yExtent = d3.extent(data, d => d.NumeroIncidenti);  // Calcola l'estensione dei valori y nel tuo set di dati
 
+    // Crea un singolo rettangolo senza l'uso di un array di dati
+    timeSeriesSvg.append("rect")
+      .attr("class", "mydotss")
+      .attr("x", 552)
+      .attr("y", 247)
+      .attr("width", 15)
+      .attr("height", 10)
+      .style("fill", "#f7f3eb");
 
 // Funzione chiamata durante l'evento di zoom
   function zoomed() {

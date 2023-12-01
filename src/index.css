@@ -441,7 +441,7 @@ button.btn-small {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #f7f3eb;
+  background-color: #facdcd; /*provare anche #fca9a9*/
   box-shadow: 0 2px 4px darkslategray;
   transition: .4s;
   border-radius: 34px;
@@ -492,14 +492,27 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .on {
 input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
   display: none;
 }
+
 .slider-switch.checked:before {
     transform: translateX(31px);
 }
 
 .off, .on {
-    color: #9b9482;
+    color: #524a32;
     font-family: Lora;
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
+}
+
+#zoom {
+    font-family: Lora;
+    color: #524a32;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 3;
+}
+
+.pop-animation {
+    animation: pop 0.5s ease-in-out forwards; /* Modifica la durata e l'effetto desiderato */
 }
