@@ -48,6 +48,7 @@ let grid;
 let vGridLines;
 let hGridLines;
 let allPoints;
+let tooltipTime;
 
 
 
@@ -90,16 +91,23 @@ function convertData(data){
 
   arrayOfData.push(data)
 }
-function setAxesScale(data){
+function setAxesScale(data) {
 
   xScaleTimeSeries = d3.scaleTime()
     .domain(d3.extent(data, d => d.DataOraIncidente))
     .range([0, widthTimeSeries]);
 
-  yScaleTimeSeries = d3.scaleLinear()
-    .domain([0, 1100])
-    .range([heightTimeSeries, 0]);
+  yScaleTimeSeries = d3.scaleLinear();
+
+  if (switchValue == "ON") {
+    yScaleTimeSeries.domain([0, 1200])
+  } else {
+    yScaleTimeSeries.domain([0, 1100])
+  }
+
+  yScaleTimeSeries.range([heightTimeSeries, 0]);
 }
+
 function setAxesScalePedestrianDeaths(data) {
 
   xScaleTimeSeries = d3.scaleTime()
@@ -754,7 +762,6 @@ function drawPoints(data, color) {
 
       }
       if (switchValue==="ON") {
-
        // Aggiungi cerchio più piccolo per tutti i punti con clip path
              d3.select(this).append("circle")
                .attr("class", "inner-point")
@@ -841,36 +848,44 @@ function showIncidentCount(d) {
   let xPosition = currentTransform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6;
   let yPosition = currentTransform.applyY(yScaleTimeSeries(incidentCount)) - 10;
   let marginNumberCircleX;
+  let fontSize = incidentCount.toString().length === 4 ? "9px" : "10px";
 
   if (incidentCount < 10) marginNumberCircleX = 2.5;
   else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5;
   else marginNumberCircleX = 8.5;
 
-  pointsGroup.append("circle")
+
+pointsGroup.append("circle")
     .attr("id", "num")
     .attr("class", "show")
     .attr("cx", xPosition + marginNumberCircleX)
-    .attr("cy", yPosition - 3.5)
-    .attr("r", 9)
-    .style("font-family", "Lora")
-    .style("opacity", "0.6")
-    .style("stroke", "#524a32")
-    .style("stroke-width", "0.3px")
-    .style("fill", "white");
+    .attr("cy", yPosition - 7.5)
+    .attr("r", 11)
+    .style("stroke", "#d4d0c5") // Colore del bordo
+    .style("stroke-width", "1px") // Spessore del bordo
+    .style("fill", "white")
+    .style("opacity", "0.4")
+    .style("filter", "drop-shadow(0 1px 1px darkslategray)"); // Ombra
 
-  pointsGroup.append("text")
+pointsGroup.append("text")
     .attr("class", "incident-count")
-    .attr("x", xPosition)
-    .attr("y", yPosition)
+    .style("font-family", "Lora")
+    .attr("x", xPosition + marginNumberCircleX)
+    .attr("y", yPosition - 7.5)
+    .attr("text-anchor", "middle")
+    .attr("dy", "0.40em") // Aggiungi questa linea per centrare verticalmente
     .text(incidentCount)
-    .style("font-size", "10px")
-    .style("color", "#524a32");
+    .style("font-size", fontSize)
+    .style("fill", "#524a32")
+    .style("opacity", "0.8")
+    .style("font-weight", "bold");
 }
 
 // Funzione per nascondere il numero di incidenti
 function hideIncidentCount() {
   pointsGroup.selectAll(".incident-count").remove();
   d3.selectAll("#num").remove();
+  tooltipTime.style("opacity", 0);
 }
 /*
 function drawLegend(nature, color){
