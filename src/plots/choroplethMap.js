@@ -361,19 +361,24 @@ function showNumberOfAccidents(townHall, number) {
     .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
     .attr("r", 8) // Imposta il raggio del cerchio
     .style("font-family", "Lora")
-    .style("opacity", "0.6")
-    .style("stroke", "#524a32") // Colore del bordo
-    .style("stroke-width", "0.3px") // Larghezza del bordo
-    .style("fill", "white");
+    .style("stroke", "#d4d0c5") // Colore del bordo
+    .style("stroke-width", "1px") // Spessore del bordo
+    .style("fill", "white")
+    .style("opacity", "0.7")
+    .style("filter", "drop-shadow(0 1px 1px darkslategray)");
 
   choroplethMapSvg.append("text")
     .text(number)
     .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
-    .attr("x", centroidInterested[0] - marginNumberX) // Coordinata x del testo
+    .attr("x", centroidInterested[0] - marginNumberX + 3) // Coordinata x del testo
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
-    .style("color", "#524a32")
+    .attr("text-anchor", "middle")
     //.style("fill", "white")
-    .style("font-size", "9px");
+    .style("font-size", "9px")
+    .style("fill", "#524a32")
+    .style("opacity", "0.8")
+    .style("font-family", "Lora")
+    .style("font-weight", "bold");
 }
 function fillOtherTownHalls(map){
   Array.from(centroidTownHalls.keys()).forEach(item => {
