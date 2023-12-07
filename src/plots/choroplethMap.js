@@ -370,7 +370,14 @@ function showNumberOfAccidents(townHall, number) {
   choroplethMapSvg.append("text")
     .text(number)
     .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
-    .attr("x", centroidInterested[0] - marginNumberX + 3) // Coordinata x del testo
+    .attr("x", function() {
+            // Verifica se il numero ha due cifre
+            if (number >= 10) {
+                return centroidInterested[0] - marginNumberX + 5.5;
+            } else {
+                return centroidInterested[0] - marginNumberX + 3;
+            }
+    })
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
     .attr("text-anchor", "middle")
     //.style("fill", "white")
