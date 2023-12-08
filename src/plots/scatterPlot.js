@@ -25,16 +25,12 @@ function drawScatterPlot(csvFileNameScatterPlot) {
 
 // Definisci la scala per l'asse x
   var xScale = d3.scaleLinear()
-    .domain([-7, d3.max(data, function (d) {
-      return 3+d.PC1;
-    })])
-    .range([0, 500]);
+    .domain([-6, 8])
+    .range([0, 650]);
 
 // Definisci la scala per l'asse y
   var yScale = d3.scaleLinear()
-    .domain([-6, d3.max(data, function (d) {
-      return 3+d.PC2;
-    })])
+    .domain([-6, 8])
     .range([300, 0]);
 
 // Crea gli elementi circolari per il tuo scatterplot
@@ -48,7 +44,11 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     .attr("cy", function (d) {
       return yScale(d.PC2);
     })
-    .attr("r", 2); // Raggio del cerchio
+    .attr("r", 4) // Raggio del cerchio
+    .style("stroke", "#f7f3eb")
+    .style("stroke-width", "0.1")
+    .style("fill", function(d){ return setPointColor(d.TipoVeicolo)})
+
 
 // Aggiungi gli assi x e y
   scatterPlotpSvg.append("g")
@@ -58,5 +58,60 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   scatterPlotpSvg.append("g")
     .call(d3.axisLeft(yScale));
 
+    drawScatterPlotLegend();
+
   });
+
+}
+
+function setPointColor(tipoVeicolo) {
+  if (tipoVeicolo === "Autovettura" || tipoVeicolo === "Car")
+    return "#cab2d6"
+  else if (tipoVeicolo === "Motociclo" || tipoVeicolo === "Motorcycle")
+    return "#b2df8a";
+  else if (tipoVeicolo === "Autocarro" || tipoVeicolo === "Truck")
+    return "#fdbf6f";
+  else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
+    return "#a6cee3";
+}
+
+
+function drawScatterPlotLegend() {
+
+  let keys = ["Car", "Motorcycle", "Truck", "Unknown"];
+  let size = 13;
+
+  scatterPlotpSvg.selectAll("mydots")
+    .data(keys)
+    .enter()
+    .append("rect")
+    .attr("x", 650)
+    .attr("y", function (d, i) {
+      return 30 + i * (size + 5)
+    }) // 30 is where the first dot appears. 25 is the distance between dots
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", function (d, i) {
+      return setPointColor(keys[i])
+    })
+    .style("stroke", "#524a32")
+    .style("stroke-width", 0.1);
+
+
+  scatterPlotpSvg.selectAll("mylabels")
+    .data(keys)
+    .enter()
+    .append("text")
+    .attr("x", 650 + size * 1.2)
+    .attr("y", function (d, i) {
+      return 30 + i * (size + 5) + (size / 2)
+    }) // 30 is where the first dot appears. 25 is the distance between dots
+    .text(function (d) {
+      return d
+    })
+    .style("fill", "#524a32")
+    .style("font-family", "Lora")
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle");
+
 }
