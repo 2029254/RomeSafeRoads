@@ -7,7 +7,7 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
-  .append("g").attr("transform", "translate(100, 23)");
+  .append("g").attr("transform", "translate(100, 30)");
 
 
 var dataset = [
@@ -21,33 +21,34 @@ var dataset = [
 
 function drawScatterPlot(csvFileNameScatterPlot) {
 
+  d3.csv(csvFileNameScatterPlot , function (data) {
 
 // Definisci la scala per l'asse x
   var xScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, function (d) {
-      return d.x;
+    .domain([-7, d3.max(data, function (d) {
+      return 3+d.PC1;
     })])
     .range([0, 500]);
 
 // Definisci la scala per l'asse y
   var yScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, function (d) {
-      return d.y;
+    .domain([-6, d3.max(data, function (d) {
+      return 3+d.PC2;
     })])
     .range([300, 0]);
 
 // Crea gli elementi circolari per il tuo scatterplot
   scatterPlotpSvg.selectAll("circle")
-    .data(dataset)
+    .data(data)
     .enter()
     .append("circle")
     .attr("cx", function (d) {
-      return xScale(d.x);
+      return xScale(d.PC1);
     })
     .attr("cy", function (d) {
-      return yScale(d.y);
+      return yScale(d.PC2);
     })
-    .attr("r", 5); // Raggio del cerchio
+    .attr("r", 2); // Raggio del cerchio
 
 // Aggiungi gli assi x e y
   scatterPlotpSvg.append("g")
@@ -57,4 +58,5 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   scatterPlotpSvg.append("g")
     .call(d3.axisLeft(yScale));
 
+  });
 }
