@@ -9,15 +9,7 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
   //.attr("height", height + margin.top + margin.bottom)
   .append("g").attr("transform", "translate(100, 30)");
 
-
-var dataset = [
-  { x: 30, y: 50 },
-  { x: 80, y: 100 },
-  { x: 110, y: 80 },
-  { x: 140, y: 150 },
-  { x: 170, y: 120 }
-];
-
+let tooltipScatter;
 
 function drawScatterPlot(csvFileNameScatterPlot) {
 
@@ -48,6 +40,19 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     .style("stroke", "#f7f3eb")
     .style("stroke-width", "0.1")
     .style("fill", function(d){ return setPointColor(d.TipoVeicolo)})
+    .on("mousemove",  function(d) {
+      tooltipScatter = d3.select("#popupScatterPlot");
+      tooltipScatter.style("opacity", 0.9);
+
+      tooltipScatter.html(setPointText(d.TipoVeicolo))
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "10px")
+        //.style("font-weight", "bold")
+        .style("left", (d3.event.pageX + 9 + "px"))
+        .style("top", (d3.event.pageY - 9 + "px"));
+    })
+   .on("mouseout", function(d) {tooltipScatter.style("opacity", 0)})
 
 
 // Aggiungi gli assi x e y
@@ -62,6 +67,17 @@ function drawScatterPlot(csvFileNameScatterPlot) {
 
   });
 
+}
+
+function setPointText(tipoVeicolo) {
+  if (tipoVeicolo === "Autovettura")
+    return "Car"
+  else if (tipoVeicolo === "Motociclo")
+    return "Motorcycle";
+  else if (tipoVeicolo === "Autocarro")
+    return "Truck";
+  else if (tipoVeicolo === "Ignoto")
+    return "Unknown";
 }
 
 function setPointColor(tipoVeicolo) {

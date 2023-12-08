@@ -56,6 +56,17 @@ body {
     text-align: center;
 }
 
+#popupScatterPlot {
+    position: absolute;
+    background-color: white;
+    border: 0.1px solid #d4d0c5;
+    border-radius: 9px;
+    padding: 5px;
+    z-index: 1;
+    font-family: "Lora";
+    text-align: center;
+}
+
 .svg-container {
     display: inline-block;
     width: 100%;
