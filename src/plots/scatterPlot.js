@@ -79,7 +79,7 @@ function setPointColor(tipoVeicolo) {
 function drawScatterPlotLegend() {
 
   let keys = ["Car", "Motorcycle", "Truck", "Unknown"];
-  let size = 13;
+  let size = 17;
 
   scatterPlotpSvg.selectAll("mydots")
     .data(keys)
@@ -111,6 +111,7 @@ function drawScatterPlotLegend() {
     })
     .style("fill", "#524a32")
     .style("font-family", "Lora")
+    .style("font-size", "12px")
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
 
