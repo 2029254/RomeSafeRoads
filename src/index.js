@@ -50,6 +50,8 @@ decrementButton.addEventListener("click", () => {
 let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
 let selectedYear;
+let csvFileNameScatterPlot;
+
 function updatePlotsBasingOnSelectedYear(){
   idPoints = 0
   arrayOfData = [];
@@ -63,6 +65,7 @@ function updatePlotsBasingOnSelectedYear(){
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
   csvFileNameTimeSeries = "dataset/processed/timeSeries/";
   csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/";
+  csvFileNameScatterPlot = "dataset/processed/scatterPlot/";
   selectedYear = document.getElementById("yearSlider").value;
 
   console.log(selectedYear)
@@ -75,36 +78,43 @@ function updatePlotsBasingOnSelectedYear(){
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2022.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2022.csv")
+        csvFileNameScatterPlot = csvFileNameScatterPlot.concat("PCA-2022.csv")
         break;
       case '2021':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2021.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2021.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2021.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2021.csv")
+        csvFileNameScatterPlot = csvFileNameScatterPlot.concat("PCA-2021.csv")
         break;
       case '2020':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2020.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2020.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2020.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2020.csv")
+        csvFileNameScatterPlot = csvFileNameScatterPlot.concat("PCA-2020.csv")
         break;
       case '2019':
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2019.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2019.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2019.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2019.csv")
+        csvFileNameScatterPlot = csvFileNameScatterPlot.concat("PCA-2019.csv")
         break;
       default:
         csvFileNameVerticalBarChart = csvFileNameVerticalBarChart.concat("verticalBarChartData2022.csv")
         csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap2022.csv")
         csvFileNameTimeSeries = csvFileNameTimeSeries.concat("timeSeriesData2022.csv")
         csvFileNameChoroplethMapNature = csvFileNameChoroplethMapNature.concat("choroplethMapNature2022.csv")
+        csvFileNameScatterPlot = csvFileNameScatterPlot.concat("PCA-2022.csv")
     }
   } else {
     csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
     csvFileNameChoroplethMap = csvFileNameChoroplethMap.concat("choroplethMap"+ selectedYear +".csv")
     csvFileNameTimeSeries = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + ".csv";
     csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
+    csvFileNameScatterPlot = "dataset/processed/scatterPlot/PCA-" + selectedYear + ".csv";
+
   }
 
   barChartSvg.selectAll("*").remove();
@@ -119,5 +129,8 @@ function updatePlotsBasingOnSelectedYear(){
 
   timeSeriesSvg.selectAll("*").remove();
   drawTimeSeriesChart(csvFileNameTimeSeries);
+
+  scatterPlotpSvg.selectAll("*").remove();
+  drawScatterPlot(csvFileNameScatterPlot);
 
 }
