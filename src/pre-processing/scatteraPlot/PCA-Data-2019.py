@@ -30,19 +30,26 @@ dataset_columns = dataset_2019[columns]
 # select the rows of interest
 dataset_rows = dataset_columns
 
-dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('')
+dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('Asciutto')
 
 # Mappatura dei valori di FondoStradale
 mappa_qualita_fondo = {
-    'Asciutto': 4,
-    'Bagnato (pioggia)': 3,
-    'Bagnato (umidità in atto)': 2,
-    'Viscido da liquidi oleosi': 1,
-    '': 4
+    'Asciutto': 5,
+    'Una carreggiata a doppio senso': 5,
+    'Bagnato (pioggia)': 4,
+    'Bagnato (umidità in atto)': 3,
+    'Bagnato (brina)': 3,
+    'Viscido da liquidi oleosi': 2,
+    'Sdrucciolevole (fango)': 2,
+    'Sdrucciolevole (pietrisco)': 2,
+    'Sdrucciolevole (terriccio)': 2,
+    'Con neve': 1,
+    'Ghiacciato': 1,
+    '': 5
 }
 
 # Aggiungi la colonna QualitàFondoStradale al DataFrame
-dataset_columns['QualitaFondoStradale'] = dataset_columns['FondoStradale'].map(mappa_qualita_fondo)
+dataset_columns['QualitaFondoStradale'] = dataset_columns['FondoStradale'].map(mappa_qualita_fondo).fillna(5)
 
 # Rimuovi la colonna FondoStradale
 dataset_columns = dataset_columns.drop(['FondoStradale'], axis=1)
@@ -58,7 +65,7 @@ mappa_intensita_traffico = {
 }
 
 # Aggiungi la colonna IntensitaTraffico al DataFrame
-dataset_columns['IntensitaTraffico'] = dataset_columns['Traffico'].map(mappa_intensita_traffico)
+dataset_columns['IntensitaTraffico'] = dataset_columns['Traffico'].map(mappa_intensita_traffico).fillna(1)
 
 # Rimuovi la colonna Traffico
 dataset_columns = dataset_columns.drop(['Traffico'], axis=1)
@@ -75,7 +82,7 @@ mappa_utilizzo_protezioni = {
 }
 
 # Aggiungi la colonna UtilizzoProtezioni al DataFrame
-dataset_columns['UtilizzoProtezioni'] = dataset_columns['CinturaCascoUtilizzato'].map(mappa_utilizzo_protezioni)
+dataset_columns['UtilizzoProtezioni'] = dataset_columns['CinturaCascoUtilizzato'].map(mappa_utilizzo_protezioni).fillna(1)
 
 # Rimuovi la colonna CinturaCascoUtilizzato
 dataset_columns = dataset_columns.drop(['CinturaCascoUtilizzato'], axis=1)
@@ -93,18 +100,30 @@ mappa_deceduti_dopo = {
 }
 
 # Aggiungi la colonna UtilizzoProtezioni al DataFrame
-dataset_columns['DecedutoDopo'] = dataset_columns['DecedutoDopo'].map(mappa_deceduti_dopo)
+dataset_columns['DecedutoDopo'] = dataset_columns['DecedutoDopo'].map(mappa_deceduti_dopo).fillna(0)
 
-dataset_columns['NUM_FERITI'] = dataset_columns['NUM_FERITI'].fillna(0)
-dataset_columns['NUM_MORTI'] = dataset_columns['NUM_MORTI'].fillna(0)
-dataset_columns['NUM_ILLESI'] = dataset_columns['NUM_ILLESI'].fillna(0)
-dataset_columns['NUM_RISERVATA'] = dataset_columns['NUM_RISERVATA'].fillna(0)
-dataset_columns['Deceduto'] = dataset_columns['Deceduto'].fillna(0)
+dataset_columns['NUM_FERITI'] = dataset_columns['NUM_FERITI'].fillna(0.0)
+dataset_columns['NUM_MORTI'] = dataset_columns['NUM_MORTI'].fillna(0.0)
+dataset_columns['NUM_ILLESI'] = dataset_columns['NUM_ILLESI'].fillna(0.0)
+dataset_columns['NUM_RISERVATA'] = dataset_columns['NUM_RISERVATA'].fillna(0.0)
+
+
+
+dataset_columns['Deceduto'] = dataset_columns['Deceduto'].fillna('')
+
+# Mappatura dei valori di DecedutoDopo
+mappa_deceduti_dopo = {
+    'illeso': 0,
+    '': 0
+}
+
+# Aggiungi la colonna UtilizzoProtezioni al DataFrame
+dataset_columns['Deceduto'] = dataset_columns['Deceduto'].map(mappa_deceduti_dopo).fillna(0.0)
 
 groups = {
     'Autovettura': ['Autovettura privata',
                     'Autovettura di polizia',
-                     'Autoveicolo transp.promisc.'],
+                    'Autoveicolo transp.promisc.'],
     'Motociclo': ['Motociclo a solo',
                   'Motociclo con passeggero'],
     'Autocarro': ['Autocarro inferiore 35 q.',
