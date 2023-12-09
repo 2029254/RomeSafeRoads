@@ -70,30 +70,43 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.append("g")
       .attr("transform", "translate(0," + (yScale(0)) + ")")
       .call(d3.axisBottom(xScale))
+      .attr("class", "xAxis")
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
-      .style("font-size", "10px")
+      .style("font-size", "11px")
       .style("opacity", 1);   // Imposta l'opacità per i numeri dell'asse x a 1
 
-    scatterPlotpSvg.select(".domain")  // Seleziona l'elemento domain dell'asse x
-      .style("opacity", 0.5);   // Imposta l'opacità per l'asse x a 0.3
+    // Imposta l'opacità per l'asse x
+    scatterPlotpSvg.select(".xAxis").select(".domain")
+      .style("opacity", 0.5);
 
-    scatterPlotpSvg.selectAll(".tick line")  // Seleziona tutti gli elementi della griglia sull'asse x
+    scatterPlotpSvg.select(".xAxis").selectAll(".tick line")  // Seleziona tutti gli elementi della griglia sull'asse x
       .style("opacity", 0.5);   // Imposta l'opacità per la griglia dell'asse x a 0.3
+
+    // Imposta l'opacità per il primo e l'ultimo tick dell'asse x
+    scatterPlotpSvg.select(".xAxis").selectAll(".tick:first-of-type line, .tick:last-of-type line")
+      .style("opacity", 0.5);
 
     scatterPlotpSvg.append("g")
       .attr("transform", "translate(" + (xScale(0)) + ", 0)")
       .call(d3.axisLeft(yScale))
+      .attr("class", "yAxis")
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
-      .style("font-size", "10px")
-      .style("opacity", 1);  // Imposta l'opacità per i numeri dell'asse x a 1
+      .style("font-size", "11px")
+      .style("opacity", 1);  // Imposta l'opacità per i numeri dell'asse y a 1
 
-    scatterPlotpSvg.select(".domain")  // Seleziona l'elemento domain dell'asse x
-      .style("opacity", 0.5);   // Imposta l'opacità per l'asse x a 0.3
+    // Imposta l'opacità per l'asse y
+    scatterPlotpSvg.select(".yAxis").select(".domain")
+      .style("opacity", 0.5);
 
-    scatterPlotpSvg.selectAll(".tick line")  // Seleziona tutti gli elementi della griglia sull'asse x
+    scatterPlotpSvg.select(".yAxis").selectAll(".tick line")  // Seleziona tutti gli elementi della griglia sull'asse x
       .style("opacity", 0.5);   // Imposta l'opacità per la griglia dell'asse x a 0.3
+
+    // Imposta l'opacità per il primo e l'ultimo tick dell'asse y
+    scatterPlotpSvg.select(".yAxis").selectAll(".tick:first-of-type line, .tick:last-of-type line")
+      .style("opacity", 0.5);
+
 
     drawScatterPlotLegend();
 
