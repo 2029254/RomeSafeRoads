@@ -74,7 +74,13 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
       .style("font-size", "11px")
-      .style("opacity", 1);   // Imposta l'opacità per i numeri dell'asse x a 1
+      //.style("opacity", 1)
+      .style("opacity", function(d) { return d === 0 ? 0 : 1; })  // Imposta l'opacità per i numeri dell'asse x a 1, tranne per 0;  // Imposta l'opacità per i numeri dell'asse y a 1
+      /*.attr("transform", function(d) {
+        if (d === 0) {
+            return "translate(-10, -1)"
+        } else return null;
+      })*/
 
     // Imposta l'opacità per l'asse x
     scatterPlotpSvg.select(".xAxis").select(".domain")
@@ -94,7 +100,13 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
       .style("font-size", "11px")
-      .style("opacity", 1);  // Imposta l'opacità per i numeri dell'asse y a 1
+      .style("opacity", 1);
+      //per spostare la posizione dello 0
+      /*.attr("transform", function(d) {
+        if (d === 0) {
+            return "translate(-10, -1)"
+        } else return null;
+      })*/
 
     // Imposta l'opacità per l'asse y
     scatterPlotpSvg.select(".yAxis").select(".domain")
