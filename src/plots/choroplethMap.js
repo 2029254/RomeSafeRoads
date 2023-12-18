@@ -299,39 +299,39 @@ function setBarColorChoroplethMap(d) {
     let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
 
     if (accidentsNumber > 0 && accidentsNumber <= 1)
-      return "#fee8c8"
+      return "#d9d9d9"
     else if (accidentsNumber > 1 && accidentsNumber <= 3)
-      return "#fdd49e";
+      return "#bdbdbd";
     else if (accidentsNumber > 3 && accidentsNumber <= 5)
-      return "#fdbb84";
+      return "#969696";
     else if (accidentsNumber > 5 && accidentsNumber <= 10)
-      return "#fc8d59";
+      return "#737373";
     else if (accidentsNumber > 10 && accidentsNumber <= 20)
-      return "#ef6548";
+      return "#525252";
     else if (accidentsNumber > 20 && accidentsNumber <= 30)
-      return "#d7301f";
+      return "#373737";
     else
-      return "#b30000";
+      return "#000000";
   } else
-    return "#fee8c8";
+    return "#f0f0f0";
 }
 
 function setLegendColorsChoroplethMap(accidentsNumber) {
 
   if (accidentsNumber > 0 && accidentsNumber <= 1)
-    return "#fee8c8"
+    return "#d9d9d9"
   else if (accidentsNumber > 1 && accidentsNumber <= 3)
-    return "#fdd49e";
+    return "#bdbdbd";
   else if (accidentsNumber > 3 && accidentsNumber <= 5)
-    return "#fdbb84";
+    return "#969696";
   else if (accidentsNumber > 5 && accidentsNumber <= 10)
-    return "#fc8d59";
+    return "#737373";
   else if (accidentsNumber > 10 && accidentsNumber <= 20)
-    return "#ef6548";
+    return "#525252";
   else if (accidentsNumber > 20 && accidentsNumber <= 30)
-    return "#d7301f";
+    return "#373737";
   else
-    return "#b30000";
+    return "#000000";
 
 }
 
