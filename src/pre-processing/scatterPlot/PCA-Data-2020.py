@@ -2,20 +2,23 @@ import pandas
 
 # paths of csv files about 2020
 csv_2020 = [
-    'dataset/source/accidents-2020/05-Maggio.csv',
-    'dataset/source/accidents-2020/06-Giugno.csv',
+    'dataset/source/accidents-2020/02-Febbraio.csv',
+    'dataset/source/accidents-2020/03-Marzo.csv',
+    'dataset/source/accidents-2020/04-Aprile.csv',
+
     'dataset/source/accidents-2020/07-Luglio.csv',
     'dataset/source/accidents-2020/08-Agosto.csv',
     'dataset/source/accidents-2020/09-Settembre.csv',
     'dataset/source/accidents-2020/10-Ottobre.csv',
     'dataset/source/accidents-2020/11-Novembre.csv',
-    'dataset/source/accidents-2020/12-Dicembre.csv'
+
 ]
 
 csv_2020PartOne = [
-    'dataset/source/accidents-2020/02-Febbraio.csv',
-    'dataset/source/accidents-2020/03-Marzo.csv',
-    'dataset/source/accidents-2020/04-Aprile.csv',
+    'dataset/source/accidents-2020/05-Maggio.csv',
+    'dataset/source/accidents-2020/06-Giugno.csv',
+    'dataset/source/accidents-2020/12-Dicembre.csv',
+
 ]
 
 # Import the first CSV file for the complete dataset

@@ -16,10 +16,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -5;
-    var xMax = 40;
-    var yMin = -8;
-    var yMax = 10;
+    var xMin = -6;
+    var xMax = 10;
+    var yMin = -6;
+    var yMax = 8;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
@@ -149,17 +149,16 @@ function setPointColor(tipoVeicolo) {
     return "#a6cee3";
    */
   console.log(tipoVeicolo)
-  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0')
-    return "#cab2d6"
-  else
-    return "red"
+  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0' || tipoVeicolo === "Non-fatal")
+    return "#c9a18b"
+  else return "#8bc8e8"
 
 }
 
 
 function drawScatterPlotLegend() {
 
-  let keys = ["Car", "Motorcycle", "Truck", "Unknown"];
+  let keys = ["Fatal", "Non-fatal"];
   let size = 17;
 
   scatterPlotpSvg.selectAll("mydots")

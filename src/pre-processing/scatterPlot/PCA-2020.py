@@ -6,7 +6,7 @@ from sklearn import preprocessing
 from sklearn.discriminant_analysis import StandardScaler
 
 dataset = pd.read_csv('dataset/processed/scatterPlot/PCA-Data-2020.csv')
-cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'UtilizzoProtezioni']
+cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'UtilizzoProtezioni']
 
 # define standard scaler
 scaler = StandardScaler()
