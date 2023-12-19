@@ -16,10 +16,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -6;
-    var xMax = 8;
-    var yMin = -6;
-    var yMax = 8;
+    var xMin = -5;
+    var xMax = 40;
+    var yMin = -8;
+    var yMax = 10;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
@@ -42,10 +42,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .attr("cy", function (d) {
         return yScale(d.PC2);
       })
-      .attr("r", 3) // Raggio del cerchio
+      .attr("r", 4) // Raggio del cerchio
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
-      .style("fill", function(d) { return setPointColor(d.TipoVeicolo); })
+      .style("fill", function(d) { return setPointColor(d.Deceduto); })
       .on("mousemove",  function(d) {
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
@@ -54,7 +54,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
           .style("color", "#524a32")
           .style("font-family", "Lora")
           .style("font-size", "10px")
-          //.style("font-weight", "bold")
+          //.style("font-weight", "bold"
           .style("left", (d3.event.pageX + 9 + "px"))
           .style("top", (d3.event.pageY - 9 + "px"));
       })
@@ -138,6 +138,7 @@ function setPointText(tipoVeicolo) {
 }
 
 function setPointColor(tipoVeicolo) {
+  /*
   if (tipoVeicolo === "Autovettura" || tipoVeicolo === "Car")
     return "#cab2d6"
   else if (tipoVeicolo === "Motociclo" || tipoVeicolo === "Motorcycle")
@@ -146,6 +147,13 @@ function setPointColor(tipoVeicolo) {
     return "#fdbf6f";
   else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
     return "#a6cee3";
+   */
+  console.log(tipoVeicolo)
+  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0')
+    return "#cab2d6"
+  else
+    return "red"
+
 }
 
 

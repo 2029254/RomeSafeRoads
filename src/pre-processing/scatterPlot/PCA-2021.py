@@ -6,7 +6,7 @@ from sklearn import preprocessing
 from sklearn.discriminant_analysis import StandardScaler
 
 dataset = pd.read_csv('dataset/processed/scatterPlot/PCA-Data-2021.csv')
-cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'DecedutoDopo', 'UtilizzoProtezioni']
+cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'UtilizzoProtezioni']
 
 # define standard scaler
 scaler = StandardScaler()
@@ -19,6 +19,6 @@ principal_components = pca.components_
 df_components = pd.DataFrame(data=components, columns=['PC1', 'PC2'])
 
 #aggiungo la colonna con l'indicazione di quale TipoVeicolo si tratta. Posso farlo perche la pca mantiene l'ordine delle righe
-df_components['TipoVeicolo'] = dataset['TipoVeicolo']
+df_components['Deceduto'] = dataset['Deceduto']
 
 df_components.to_csv('dataset/processed/scatterPlot/PCA-2021.csv', index=False)

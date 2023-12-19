@@ -2,9 +2,6 @@ import pandas
 
 # paths of csv files about 2020
 csv_2020 = [
-    'dataset/source/accidents-2020/02-Febbraio.csv',
-    'dataset/source/accidents-2020/03-Marzo.csv',
-    'dataset/source/accidents-2020/04-Aprile.csv',
     'dataset/source/accidents-2020/05-Maggio.csv',
     'dataset/source/accidents-2020/06-Giugno.csv',
     'dataset/source/accidents-2020/07-Luglio.csv',
@@ -15,12 +12,26 @@ csv_2020 = [
     'dataset/source/accidents-2020/12-Dicembre.csv'
 ]
 
-# import the first csv file
+csv_2020PartOne = [
+    'dataset/source/accidents-2020/02-Febbraio.csv',
+    'dataset/source/accidents-2020/03-Marzo.csv',
+    'dataset/source/accidents-2020/04-Aprile.csv',
+]
+
+# Import the first CSV file for the complete dataset
 dataset_2020 = pandas.read_csv('dataset/source/accidents-2020/01-Gennaio.csv', sep=';', encoding='latin-1')
 
-# import and concat all following csv files
+# Import and concatenate CSV files for the first part
+dataset_2020PartOne = pandas.concat([pandas.read_csv(file, sep=';', encoding='latin-1') for file in csv_2020PartOne], ignore_index=True)
+
+
+# Concatenate the filtered CSV files for the complete dataset
 for file in csv_2020:
-    dataset_2020 = pandas.concat([dataset_2020, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
+    dataset_2020 = pandas.concat([dataset_2020[(dataset_2020['Deceduto'] == -1) | (dataset_2020['Deceduto'] == '-1')],
+                                  pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
+
+# Concatenate the first part to the complete dataset
+dataset_2020 = pandas.concat([dataset_2020, dataset_2020PartOne], ignore_index=True)
 
 # select the columns of interest
 columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'DecedutoDopo', 'CinturaCascoUtilizzato']
@@ -33,19 +44,20 @@ dataset_rows = dataset_columns
 dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('Asciutto')
 
 # Mappatura dei valori di FondoStradale
+# Mappatura dei valori di FondoStradale
 mappa_qualita_fondo = {
-    'Asciutto': 5,
-    'Una carreggiata a doppio senso': 5,
-    'Bagnato (pioggia)': 4,
+    'Asciutto': 1,
+    'Una carreggiata a doppio senso': 1,
+    'Bagnato (pioggia)': 2,
     'Bagnato (umidità in atto)': 3,
     'Bagnato (brina)': 3,
-    'Viscido da liquidi oleosi': 2,
-    'Sdrucciolevole (fango)': 2,
-    'Sdrucciolevole (pietrisco)': 2,
-    'Sdrucciolevole (terriccio)': 2,
-    'Con neve': 1,
-    'Ghiacciato': 1,
-    '': 5
+    'Viscido da liquidi oleosi': 4,
+    'Sdrucciolevole (fango)': 4,
+    'Sdrucciolevole (pietrisco)': 4,
+    'Sdrucciolevole (terriccio)': 4,
+    'Con neve': 5,
+    'Ghiacciato': 5,
+    '': 0
 }
 
 # Aggiungi la colonna QualitàFondoStradale al DataFrame
@@ -86,39 +98,24 @@ dataset_columns['UtilizzoProtezioni'] = dataset_columns['CinturaCascoUtilizzato'
 
 # Rimuovi la colonna CinturaCascoUtilizzato
 dataset_columns = dataset_columns.drop(['CinturaCascoUtilizzato'], axis=1)
-
-dataset_columns['DecedutoDopo'] = dataset_columns['DecedutoDopo'].fillna('')
-
-# Mappatura dei valori di DecedutoDopo
-mappa_deceduti_dopo = {
-    'DECEDEUTO': 1,
-    'NON DECEDUTO': 0,
-    'DECEDEUTO ENTRO 2 MESI': 1,
-    'DECEDEUTO ENTRO 15 GIORNI': 1,
-    'DECEDEUTO ENTRO LE DODICI ORE': 1,
-    '': 0
-}
-
-# Aggiungi la colonna UtilizzoProtezioni al DataFrame
-dataset_columns['DecedutoDopo'] = dataset_columns['DecedutoDopo'].map(mappa_deceduti_dopo).fillna(0)
-
 dataset_columns['NUM_FERITI'] = dataset_columns['NUM_FERITI'].fillna(0.0)
 dataset_columns['NUM_MORTI'] = dataset_columns['NUM_MORTI'].fillna(0.0)
 dataset_columns['NUM_ILLESI'] = dataset_columns['NUM_ILLESI'].fillna(0.0)
 dataset_columns['NUM_RISERVATA'] = dataset_columns['NUM_RISERVATA'].fillna(0.0)
 
 
-
 dataset_columns['Deceduto'] = dataset_columns['Deceduto'].fillna('')
 
-# Mappatura dei valori di DecedutoDopo
-mappa_deceduti_dopo = {
+# Mappatura dei valori di Deceduto
+mappa_deceduti = {
     'illeso': 0,
-    '': 0
+    '': 0,
+    -1: 1,
+    '-1': 1
 }
 
 # Aggiungi la colonna UtilizzoProtezioni al DataFrame
-dataset_columns['Deceduto'] = dataset_columns['Deceduto'].map(mappa_deceduti_dopo).fillna(0.0)
+dataset_columns['Deceduto'] = dataset_columns['Deceduto'].map(mappa_deceduti).fillna(0.0)
 
 groups = {
     'Autovettura': ['Autovettura privata',
