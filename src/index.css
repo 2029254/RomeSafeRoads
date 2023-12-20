@@ -1,28 +1,28 @@
 @import url(https://fonts.googleapis.com/css?family=Lora);
 
 #title{
-    font-family: Lora;
+    font-family: Lora, serif;
     font-weight: bold;
     color: #524a32;
 }
 
 #period{
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
 }
 
 #sliderValues{
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
 }
 
 #sliderValue{
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
 }
 
 .fontClass{
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
 }
 .border-bottom{
@@ -38,32 +38,32 @@ body {
 #popup {
     position: absolute;
     background-color: white;
-    border: 0.1px solid #d4d0c5;
+    border: 1px solid #d4d0c5;
     border-radius: 9px;
     padding: 5px;
     z-index: 1;
-    font-family: "Lora";
+    font-family: "Lora", serif;
 }
 
 #popupChoropleth {
     position: absolute;
     background-color: white;
-    border: 0.1px solid #d4d0c5;
+    border: 1px solid #d4d0c5;
     border-radius: 9px;
     padding: 5px;
     z-index: 1;
-    font-family: "Lora";
+    font-family: Lora, serif;
     text-align: center;
 }
 
 #popupScatterPlot {
     position: absolute;
     background-color: white;
-    border: 0.1px solid #d4d0c5;
+    border: 1px solid #d4d0c5;
     border-radius: 9px;
     padding: 5px;
     z-index: 1;
-    font-family: "Lora";
+    font-family: Lora, serif;
     text-align: center;
 }
 
@@ -105,83 +105,6 @@ body {
     display: none;
 }
 
-/*.d3-tip {
-    line-height: 1;
-    font-weight: bold;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    border-radius: 2px;
-}*/
-
-/* Creates a small triangle extender for the tooltip */
-/*.d3-tip:after {
-    box-sizing: border-box;
-    display: inline;
-    font-size: 10px;
-    width: 100%;
-    line-height: 1;
-    color: rgba(0, 0, 0, 0.8);
-    content: "\25BC";
-    position: absolute;
-    text-align: center;
-}*/
-
-/* Style northward tooltips differently */
-/*.d3-tip.n:after {
-    margin: -1px 0 0 0;
-    top: 100%;
-    left: 0;
-}*/
-
-
-/*style tooltip scatterplot*/
-/*div.tooltip {
-    position: absolute;
-    text-align: center;
-    padding: .2rem;
-    background: #313639;
-    color: #f9f9f9;
-    border: 0;
-    border-radius: 8px;
-    pointer-events: none;
-    font-size: .9rem;
-}*/
-
-/*.dropDown {
-    position: absolute;
-    top:230px;
-    left: 85px;
-    width: min-content !important;
-    transform: scale(0.8);
-    z-index: 10;
-}
-
-#top10, #top10label{
-    position: absolute;
-    top:290px;
-    transform: scale(0.8);
-    left: 90px;
-    z-index: 10;
-}
-#worst10, #worst10label{
-    position: absolute;
-    top:320px;
-    transform: scale(0.8);
-    left: 90px;
-    z-index: 10;
-}
-
-#top10label{
-    top:284px;
-    left:100px;
-}
-
-#worst10label{
-    top:313px;
-    left:100px;
-}*/
-
 /* cose del parallel da esempio github */
 svg {
     font: 10px sans-serif;
@@ -214,7 +137,7 @@ svg {
 
 @keyframes myfirst {
     0%   { top: -32px;}
-    100% { top: 0px;}
+    100% { top: 0;}
 }
 
 #animThree { position: relative;
@@ -230,7 +153,7 @@ svg {
 
 @keyframes mysecond {
     0%   { bottom: -32px;}
-    100% { bottom: 0px;}
+    100% { bottom: 0;}
 }
 
 .brush .extent {
@@ -293,11 +216,13 @@ button.bucket {
     right: 20px; /* Distanza dalla parte destra */
     left: 20px; /* Distanza dalla parte destra */
 }
+
 #timeSeries {
-    top: 0px; /* Distanza dalla parte superiore */
+    top: 0; /* Distanza dalla parte superiore */
     right: 10px; /* Distanza dalla parte destra */
-    left: 0px; /* Distanza dalla parte destra */
+    left: 0; /* Distanza dalla parte destra */
 }
+
 .slider-container {
     display: flex;
     align-items: center;
@@ -326,7 +251,7 @@ button.bucket {
     min-height: 7px; /*min height del pallino dello slider*/
     min-width: 7px; /*min width del pallino dello slider*/
     background: #a1987d;
-    border: 0.5px solid #a1987d;
+    border: 1px solid #a1987d;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -365,15 +290,9 @@ button.bucket {
     min-height: 12px; /* Imposta l'altezza minima */
 }
 
-/*p {
-    margin-top: 14px;
-    margin-bottom: 1rem;
-}*/
-
-
 button.btn-small {
     font-size: 13px;
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
     /*border: 1px solid #524a32;*/
     width: 135px;
@@ -384,7 +303,7 @@ button.btn-small {
 
 #option1Collapse {
     font-size: 13px;
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
     width: 125px;
     /*border-radius: 5%;*/
@@ -396,7 +315,7 @@ button.btn-small {
 
 #option2Collapse {
     font-size: 13px;
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
     width: 125px;
     /*border-radius: 5%;*/
@@ -407,7 +326,7 @@ button.btn-small {
 
 #choose {
     font-size:16px;
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
     font-weight: bold;
     text-align:center;
@@ -415,14 +334,8 @@ button.btn-small {
 
 #container1, #container2 {
    text-align: -webkit-center;
-   /*border: 1px solid #d4d0c5;*/
    border-radius: 23px;
-   /*box-shadow: 0 2px 4px darkslategray;*/
-   /*transition: border 15.8s ease;*/
-    /*background-color: white;*/
-   /*width: 145px;*/
    max-height: 250px;
-   /*transition: max-height 0.5s ease-out;*/
 }
 
 .selection-rect {
@@ -510,14 +423,14 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
 
 .off, .on {
     color: #524a32;
-    font-family: Lora;
+    font-family: Lora, serif;
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
 }
 
 #zoom {
-    font-family: Lora;
+    font-family: Lora, serif;
     color: #524a32;
     font-weight: bold;
     font-size: 18px;

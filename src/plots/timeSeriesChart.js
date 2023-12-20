@@ -1136,7 +1136,7 @@ function drawZoom(data) {
     .attr("class", "line")
     .attr("clip-path", "url(#clip-path-red)")  // Applica il clip path solo per il rettangolo rosso
     .attr("fill", "none")
-    .attr("stroke", "#ded6bf")
+    .attr("stroke", "#cab2d6")
     .attr("stroke-width", 1.8)
     .attr("d", line)
     .attr("transform", "translate(51, 50)");

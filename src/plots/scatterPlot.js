@@ -149,7 +149,7 @@ function setPointColor(tipoVeicolo) {
     return "#a6cee3";
    */
   console.log(tipoVeicolo)
-  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0' || tipoVeicolo === "Non-fatal")
+  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0' || tipoVeicolo === "Non-fatal accident")
     return "#c9a18b"
   else return "#8bc8e8"
 
@@ -158,16 +158,16 @@ function setPointColor(tipoVeicolo) {
 
 function drawScatterPlotLegend() {
 
-  let keys = ["Fatal", "Non-fatal"];
+  let keys = ["Fatal accident", "Non-fatal accident"];
   let size = 17;
 
   scatterPlotpSvg.selectAll("mydots")
     .data(keys)
     .enter()
     .append("rect")
-    .attr("x", 650)
+    .attr("x", 600)
     .attr("y", function (d, i) {
-      return 30 + i * (size + 5)
+      return 250 + i * (size + 5)
     }) // 30 is where the first dot appears. 25 is the distance between dots
     .attr("width", size)
     .attr("height", size)
@@ -182,9 +182,9 @@ function drawScatterPlotLegend() {
     .data(keys)
     .enter()
     .append("text")
-    .attr("x", 650 + size * 1.2)
+    .attr("x", 600 + size * 1.2)
     .attr("y", function (d, i) {
-      return 30 + i * (size + 5) + (size / 2)
+      return 250 + i * (size + 5) + (size / 2)
     }) // 30 is where the first dot appears. 25 is the distance between dots
     .text(function (d) {
       return d

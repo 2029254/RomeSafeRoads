@@ -1,12 +1,9 @@
 const slider = document.getElementById("yearSlider");
-const sliderValue = document.getElementById("sliderValue");
 const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
 let periodValue = document.getElementById("period");
 
-
-const ticks = document.querySelectorAll(".slider-tick");
 
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
 function updateSliderValue() {
