@@ -46,7 +46,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
       .style("fill", function(d) { return setPointColor(d.Deceduto); })
-      .on("mousemove",  function(d) {
+      .on("mouseover",  function(d) {
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
 
@@ -148,7 +148,6 @@ function setPointColor(tipoVeicolo) {
   else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
     return "#a6cee3";
    */
-  console.log(tipoVeicolo)
   if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0' || tipoVeicolo === "Non-fatal accident")
     return "#c9a18b"
   else return "#8bc8e8"
