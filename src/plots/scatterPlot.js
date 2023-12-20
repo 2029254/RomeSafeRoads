@@ -16,10 +16,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -6;
+    var xMin = -10;
     var xMax = 10;
-    var yMin = -6;
-    var yMax = 8;
+    var yMin = -20;
+    var yMax = 20;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
@@ -42,7 +42,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .attr("cy", function (d) {
         return yScale(d.PC2);
       })
-      .attr("r", 4) // Raggio del cerchio
+      .attr("r", 5) // Raggio del cerchio
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
       .style("fill", function(d) { return setPointColor(d.Deceduto); })

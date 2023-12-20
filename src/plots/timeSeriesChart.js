@@ -100,7 +100,7 @@ function setAxesScale(data) {
   yScaleTimeSeries = d3.scaleLinear();
 
   if (switchValue == "ON") {
-    yScaleTimeSeries.domain([0, 1200])
+    yScaleTimeSeries.domain([0, 1100])
   } else {
     yScaleTimeSeries.domain([0, 1100])
   }
@@ -788,7 +788,7 @@ function drawTimeSeriesChart(csvFileName){
     drawAxes(timeSeriesData);
 
     drawGrid();
-    drawLineWithValue(timeSeriesData, "#ded6bf", "main");
+    drawLineWithValue(timeSeriesData, "#cab2d6", "main");
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
     if (switchValue === "OFF" || switchValue === undefined) drawXHoverLine();
@@ -1044,7 +1044,7 @@ function drawLegend(text, color, value) {
     .attr("width", size)
     .attr("height", size)
     .style("fill", function(d, i) {
-      return i === 0 ? "#ded6bf" : color;
+      return i === 0 ? "#cab2d6" : color;
     })
     .style("stroke", "#524a32")
     .style("stroke-width", 0.1);
