@@ -15,6 +15,7 @@ var choroplethMapSvg = d3.select("#choroplethMap")
 let dataAboutTownHall;
 let path, tooltipChor;
 let centroidTownHalls = new Map();
+let projection;
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -25,7 +26,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     });
 
 // Definisci la proiezione geografica
-  let projection = d3.geoMercator()
+  projection = d3.geoMercator()
     .center([12.4964, 41.9028]) // Coordinata centrale per Roma
     .scale(30000)
     .translate([500 / 2.2, 350 / 1.90]);
@@ -37,21 +38,6 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
   d3.json("dataset/source/choropleth-map/municipi.geojson", function (error, data) {
     if (error) throw error;
     centroidTownHalls.clear();
-    function convertCoordinate(coordinate) {
-      // Divide la stringa in gradi, minuti, e secondi
-      const parts = coordinate.split('.');
-
-      // Converti i gradi e i minuti in formato decimale
-      const degrees = parseFloat(parts[0]);
-      const minutes = parseFloat(parts[1]);
-
-      // Calcola la coordinata in formato decimale
-      const decimalCoordinate = degrees + (minutes / 60);
-
-      console.log(decimalCoordinate)
-
-      return decimalCoordinate;
-    }
 
     // Crea i percorsi geografici
     choroplethMapSvg.selectAll("path")
@@ -243,16 +229,6 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                       .style("left", (d3.event.pageX + 9 + "px"))
                       .style("top", (d3.event.pageY - 9 + "px"));
       });
-
-    // Converti le coordinate in formato decimale
-    let pointCoordinates = [12.4964, 41.9028];
-
-    // Aggiungi un punto rosso alla mappa
-    choroplethMapSvg.append("circle")
-      .attr("cx", projection(pointCoordinates)[0])
-      .attr("cy", projection(pointCoordinates)[1])
-      .attr("r", 5) // Imposta il raggio del cerchio
-      .style("fill", "red"); // Imposta il colore del riempimento
   });
 
   const scale = d3.scaleLinear()

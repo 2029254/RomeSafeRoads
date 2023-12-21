@@ -46,7 +46,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
       .style("fill", function(d) { return setPointColor(d.Deceduto); })
-      .on("mouseover",  function(d) {
+      .on("click",  function(d) {
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
 
@@ -57,6 +57,16 @@ function drawScatterPlot(csvFileNameScatterPlot) {
           //.style("font-weight", "bold"
           .style("left", (d3.event.pageX + 9 + "px"))
           .style("top", (d3.event.pageY - 9 + "px"));
+
+        // Converti le coordinate in formato decimale
+        let pointCoordinates = [d.Longitude, d.Latitude];
+
+        // Aggiungi un punto rosso alla mappa
+        choroplethMapSvg.append("circle")
+          .attr("cx", projection(pointCoordinates)[0])
+          .attr("cy", projection(pointCoordinates)[1])
+          .attr("r", 5) // Imposta il raggio del cerchio
+          .style("fill", setPointColor(d.Deceduto))
       })
       .on("mouseout", function(d) { tooltipScatter.style("opacity", 0); })
       .attr("class", function(d) {
