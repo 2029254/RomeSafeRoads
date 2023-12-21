@@ -11,6 +11,9 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
 
 let tooltipScatter;
 
+let heightScatter = 300;
+let widthScatter = 650;
+
 function drawScatterPlot(csvFileNameScatterPlot) {
 
   d3.csv(csvFileNameScatterPlot , function (data) {
@@ -36,6 +39,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .data(data)
       .enter()
       .append("circle")
+      .attr("class", "dot")
       .attr("cx", function (d) {
         return xScale(d.PC1);
       })
@@ -129,10 +133,69 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.select(".yAxis").selectAll(".tick:first-of-type line, .tick:last-of-type line")
       .style("opacity", 0.5);
 
+    // Crea un elemento di brush per la selezione
+    var brush = d3.brushX()
+      .extent([[0,0], [widthScatter, heightScatter]])
+      .on("start brush end", brushed)
+      .on("end", brushed);
+
+// Aggiungi il brush all'elemento g del tuo grafico
+    scatterPlotpSvg.append("g")
+      .attr("class", "brush")
+      .call(brush);
 
     drawScatterPlotLegend();
 
   });
+
+}
+
+function brushed() {
+    extent = d3.event.selection;
+    selectedDots = []; //qui metto tutti i punti selezionati
+    allDots = []; //qui metto tutti i punti del grafico
+    d3.selectAll('.dot').each(function () {
+      const mydot = d3.select(this);
+
+      console.log(mydot)
+      allDots.push(mydot);
+
+
+      //controllo se il punto si trova all'interno della selezione
+      var isBrushed = extent[0][0] <= mydot.attr('cx') && extent[1][0] >= mydot.attr('cx') && // Check X coordinate
+        extent[0][1] <= mydot.attr('cy') && extent[1][1] >= mydot.attr('cy')  // And Y coordinate
+
+      if(isBrushed && !selectedDots.includes(mydot)){ //se il punto si trova nella selezione lo aggiungo a selectedDots
+        selectedDots.push(mydot);
+        //console.log(mydot);
+      } else { //se il punto non si trova nella selezione lo rimuovo da selectedDots
+        let indexToRemove = selectedDots.indexOf(mydot);
+        if (indexToRemove != -1) selectedDots.splice(indexToRemove);
+
+      }
+    })
+
+    allDots.forEach(dot => {
+      if (selectedDots.includes(dot)){
+        //console.log(dot.attr("city"));
+        //console.log(dot);
+        dot.style('fill', '#9e9ac8'); //tutti i selezionati si colorano
+      } else if(!selectedDots.includes(dot)){
+        dot.style('fill', '#a6cee3'); //tutti gli altri tornano grigi
+      }
+
+    });
+
+    if (selectedDots.length===0){
+      allDots.forEach(dot => {
+        //console.log(dot);
+        if (allCities.includes(dot.attr('city'))){
+          dot.style('fill', '#9e9ac8');
+        } else {
+          dot.style('fill', '#a6cee3');
+        }
+      })
+    }
 
 }
 
