@@ -134,7 +134,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .style("opacity", 0.5);
 
     // Crea un elemento di brush per la selezione
-    var brush = d3.brushX()
+    var brush = d3.brush()
       .extent([[0,0], [widthScatter, heightScatter]])
       .on("start brush end", brushed)
       .on("end", brushed);
