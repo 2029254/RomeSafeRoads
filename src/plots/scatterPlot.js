@@ -13,11 +13,6 @@ let tooltipScatter;
 let dots;
 let heightScatter = 300;
 let widthScatter = 650;
-// Crea un elemento di brush per la selezione
-var brush = d3.brush()
-  .extent([[0,0], [widthScatter, heightScatter]])
-  .on("start brush end", brushed)
-  .on("end", brushed);
 
 function drawScatterPlot(csvFileNameScatterPlot) {
 
@@ -44,11 +39,11 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .data(data)
       .enter()
       .append("circle")
-      .attr("class", "dot")
-      .attr("id", "dot")
+      .attr("id",  function (d) { return "dot-" + d.Longitude + "-" + d.Latitude})
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
       .attr("r", 5) // Raggio del cerchio
+      .attr("col", function(d) { return setPointColor(d.Deceduto); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
       .style("fill", function(d) { return setPointColor(d.Deceduto); })
@@ -63,16 +58,6 @@ function drawScatterPlot(csvFileNameScatterPlot) {
           //.style("font-weight", "bold"
           .style("left", (d3.event.pageX + 9 + "px"))
           .style("top", (d3.event.pageY - 9 + "px"));
-
-        // Converti le coordinate in formato decimale
-        let pointCoordinates = [d.Longitude, d.Latitude];
-
-        // Aggiungi un punto rosso alla mappa
-        choroplethMapSvg.append("circle")
-          .attr("cx", projection(pointCoordinates)[0])
-          .attr("cy", projection(pointCoordinates)[1])
-          .attr("r", 5) // Imposta il raggio del cerchio
-          .style("fill", setPointColor(d.Deceduto))
       })
       .on("mouseout", function(d) { tooltipScatter.style("opacity", 0); })
       .attr("class", function(d) {
@@ -135,6 +120,13 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.select(".yAxis").selectAll(".tick:first-of-type line, .tick:last-of-type line")
       .style("opacity", 0.5);
 
+    // Crea un elemento di brush per la selezione
+    var brush = d3.brush()
+      .extent([[0,0], [widthScatter, heightScatter]])
+      .on("start brush end", function(d) {  return brushed(d)})
+      .on("end",  function(d) { return brushed(d)});
+
+
 // Aggiungi il brush all'elemento g del tuo grafico
     const gBrush = scatterPlotpSvg.append("g")
       .attr("class", "brush")
@@ -146,12 +138,14 @@ function drawScatterPlot(csvFileNameScatterPlot) {
 
 }
 
-function brushed() {
+function brushed(d) {
+  choroplethMapSvg.selectAll("#localization").remove();
+
   extent = d3.event.selection;
   selectedDots = []; //qui metto tutti i punti selezionati
   allDots = []; //qui metto tutti i punti del grafico
 
-  scatterPlotpSvg.selectAll("#dot").each(function () {
+  scatterPlotpSvg.selectAll('[id^="dot"]').each(function () {
 
     const mydot = d3.select(this);
 
@@ -172,33 +166,57 @@ function brushed() {
 
 
 
-  allDots.forEach(dot => {
-    if (selectedDots.includes(dot)){
-      //console.log(dot.attr("city"));
-      //console.log(dot);
-      dot.style('fill', '#9e9ac8'); //tutti i selezionati si colorano
-    } else if(!selectedDots.includes(dot)){
-      dot.style('fill', '#a6cee3'); //tutti gli altri tornano grigi
+  selectedDots.forEach(dot => {
+
+    const dotId = dot.attr('id'); // Assumi che l'id sia un attributo dell'elemento dot
+    const dotColor = dot.attr('col'); // Assumi che l'id sia un attributo dell'elemento dot
+
+
+    let numeri = dotId.match(/(-?\d+\.\d+)/g);
+
+    let latitudine, longitudine;
+    if (numeri) {
+      // Assegno i valori estratti alle variabili
+      latitudine = numeri[0].substr(1,numeri[0].length);
+      longitudine = numeri[1].substr(1,numeri[1].length);
     }
 
-  });
+      let pointCoordinates = [parseFloat(latitudine), parseFloat(longitudine)];
 
-  if (selectedDots.length===0){
-    allDots.forEach(dot => {
-      //console.log(dot);
-      if (allCities.includes(dot.attr('city'))){
-        dot.style('fill', '#9e9ac8');
-      } else {
-        dot.style('fill', '#a6cee3');
-      }
+      console.log(pointCoordinates[0] + " " + pointCoordinates[1])
+
+    // Aggiungi un punto rosso alla mappa
+      choroplethMapSvg.append("circle")
+        .attr("id", "localization")
+        .attr("cx", projection(pointCoordinates)[0])
+        .attr("cy", projection(pointCoordinates)[1])
+        .attr("r", 3) // Imposta il raggio del cerchio
+        .style("stroke", "#f7f3eb")
+        .style("stroke-width", "0.1")
+        .style("fill",dotColor)
+
+    /*
+    d3.json("dataset/source/choropleth-map/municipi.geojson", function (error, data) {
+      if (error) throw error;
+      centroidTownHalls.clear();
+      choroplethMapSvg.selectAll("path").remove();
+
+      // Crea i percorsi geografici
+      choroplethMapSvg.selectAll("path")
+        .data(data.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("class", "area")
+        .style("transition", "0.3s")
+        .style("stroke", "black")
+        .style("stroke-width", "0.3px")
     })
-  }
-
-  //colora di verde la citta migliore della selezione attuale
+     */
+  });
 }
 
 function brushEnd() {
-  console.log("Brush end");
 }
 
 function setPointText(tipoVeicolo) {
