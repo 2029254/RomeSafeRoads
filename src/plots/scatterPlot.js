@@ -10,9 +10,14 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
   .append("g").attr("transform", "translate(100, 30)");
 
 let tooltipScatter;
-
+let dots;
 let heightScatter = 300;
 let widthScatter = 650;
+// Crea un elemento di brush per la selezione
+var brush = d3.brush()
+  .extent([[0,0], [widthScatter, heightScatter]])
+  .on("start brush end", brushed)
+  .on("end", brushed);
 
 function drawScatterPlot(csvFileNameScatterPlot) {
 
@@ -40,12 +45,9 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .enter()
       .append("circle")
       .attr("class", "dot")
-      .attr("cx", function (d) {
-        return xScale(d.PC1);
-      })
-      .attr("cy", function (d) {
-        return yScale(d.PC2);
-      })
+      .attr("id", "dot")
+      .attr("cx", function (d) {return xScale(d.PC1);})
+      .attr("cy", function (d) {return yScale(d.PC2);})
       .attr("r", 5) // Raggio del cerchio
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
@@ -133,14 +135,8 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.select(".yAxis").selectAll(".tick:first-of-type line, .tick:last-of-type line")
       .style("opacity", 0.5);
 
-    // Crea un elemento di brush per la selezione
-    var brush = d3.brush()
-      .extent([[0,0], [widthScatter, heightScatter]])
-      .on("start brush end", brushed)
-      .on("end", brushed);
-
 // Aggiungi il brush all'elemento g del tuo grafico
-    scatterPlotpSvg.append("g")
+    const gBrush = scatterPlotpSvg.append("g")
       .attr("class", "brush")
       .call(brush);
 
@@ -151,52 +147,58 @@ function drawScatterPlot(csvFileNameScatterPlot) {
 }
 
 function brushed() {
-    extent = d3.event.selection;
-    selectedDots = []; //qui metto tutti i punti selezionati
-    allDots = []; //qui metto tutti i punti del grafico
-    d3.selectAll('.dot').each(function () {
-      const mydot = d3.select(this);
+  extent = d3.event.selection;
+  selectedDots = []; //qui metto tutti i punti selezionati
+  allDots = []; //qui metto tutti i punti del grafico
 
-      console.log(mydot)
-      allDots.push(mydot);
+  scatterPlotpSvg.selectAll("#dot").each(function () {
+
+    const mydot = d3.select(this);
+
+    allDots.push(mydot);
+    //controllo se il punto si trova all'interno della selezione
+    var isBrushed = extent[0][0] <= mydot.attr('cx') && extent[1][0] >= mydot.attr('cx') && // Check X coordinate
+      extent[0][1] <= mydot.attr('cy') && extent[1][1] >= mydot.attr('cy')  // And Y coordinate
+
+    if(isBrushed && !selectedDots.includes(mydot)){ //se il punto si trova nella selezione lo aggiungo a selectedDots
+      selectedDots.push(mydot);
+      //console.log(mydot);
+    } else { //se il punto non si trova nella selezione lo rimuovo da selectedDots
+      let indexToRemove = selectedDots.indexOf(mydot);
+      if (indexToRemove !== -1) selectedDots.splice(indexToRemove);
+
+    }
+  })
 
 
-      //controllo se il punto si trova all'interno della selezione
-      var isBrushed = extent[0][0] <= mydot.attr('cx') && extent[1][0] >= mydot.attr('cx') && // Check X coordinate
-        extent[0][1] <= mydot.attr('cy') && extent[1][1] >= mydot.attr('cy')  // And Y coordinate
 
-      if(isBrushed && !selectedDots.includes(mydot)){ //se il punto si trova nella selezione lo aggiungo a selectedDots
-        selectedDots.push(mydot);
-        //console.log(mydot);
-      } else { //se il punto non si trova nella selezione lo rimuovo da selectedDots
-        let indexToRemove = selectedDots.indexOf(mydot);
-        if (indexToRemove != -1) selectedDots.splice(indexToRemove);
-
-      }
-    })
-
-    allDots.forEach(dot => {
-      if (selectedDots.includes(dot)){
-        //console.log(dot.attr("city"));
-        //console.log(dot);
-        dot.style('fill', '#9e9ac8'); //tutti i selezionati si colorano
-      } else if(!selectedDots.includes(dot)){
-        dot.style('fill', '#a6cee3'); //tutti gli altri tornano grigi
-      }
-
-    });
-
-    if (selectedDots.length===0){
-      allDots.forEach(dot => {
-        //console.log(dot);
-        if (allCities.includes(dot.attr('city'))){
-          dot.style('fill', '#9e9ac8');
-        } else {
-          dot.style('fill', '#a6cee3');
-        }
-      })
+  allDots.forEach(dot => {
+    if (selectedDots.includes(dot)){
+      //console.log(dot.attr("city"));
+      //console.log(dot);
+      dot.style('fill', '#9e9ac8'); //tutti i selezionati si colorano
+    } else if(!selectedDots.includes(dot)){
+      dot.style('fill', '#a6cee3'); //tutti gli altri tornano grigi
     }
 
+  });
+
+  if (selectedDots.length===0){
+    allDots.forEach(dot => {
+      //console.log(dot);
+      if (allCities.includes(dot.attr('city'))){
+        dot.style('fill', '#9e9ac8');
+      } else {
+        dot.style('fill', '#a6cee3');
+      }
+    })
+  }
+
+  //colora di verde la citta migliore della selezione attuale
+}
+
+function brushEnd() {
+  console.log("Brush end");
 }
 
 function setPointText(tipoVeicolo) {
