@@ -119,7 +119,7 @@ function updatePlotsBasingOnSelectedYear(){
 
  // let removeAllButtons = document.querySelectorAll(".circular-button");
  // removeAllButtons.forEach(function(button) {button.remove();});
-  //createHTMLButtons();
+ // createHTMLButtons();
 
   choroplethMapSvg.selectAll("*").remove();
   drawChoroplethMap(csvFileNameChoroplethMap);
@@ -129,5 +129,4 @@ function updatePlotsBasingOnSelectedYear(){
 
   scatterPlotpSvg.selectAll("*").remove();
   drawScatterPlot(csvFileNameScatterPlot);
-
 }

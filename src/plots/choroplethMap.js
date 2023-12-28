@@ -242,7 +242,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [1, 3, 5, 10, 20, 30, 45]; // Valori per le celle
+  const legendCells = [1, 3, 6, 9, 12, 15, 18]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -304,13 +304,13 @@ function setBarColorChoroplethMap(d) {
       return "#d9d9d9"
     else if (accidentsNumber > 1 && accidentsNumber <= 3)
       return "#bdbdbd";
-    else if (accidentsNumber > 3 && accidentsNumber <= 5)
+    else if (accidentsNumber > 3 && accidentsNumber <= 6)
       return "#969696";
-    else if (accidentsNumber > 5 && accidentsNumber <= 10)
+    else if (accidentsNumber > 6 && accidentsNumber <= 9)
       return "#737373";
-    else if (accidentsNumber > 10 && accidentsNumber <= 20)
+    else if (accidentsNumber > 9 && accidentsNumber <= 12)
       return "#525252";
-    else if (accidentsNumber > 20 && accidentsNumber <= 30)
+    else if (accidentsNumber > 12 && accidentsNumber <= 15)
       return "#373737";
     else
       return "#000000";
@@ -324,13 +324,13 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
     return "#d9d9d9"
   else if (accidentsNumber > 1 && accidentsNumber <= 3)
     return "#bdbdbd";
-  else if (accidentsNumber > 3 && accidentsNumber <= 5)
+  else if (accidentsNumber > 3 && accidentsNumber <= 6)
     return "#969696";
-  else if (accidentsNumber > 5 && accidentsNumber <= 10)
+  else if (accidentsNumber > 6 && accidentsNumber <= 9)
     return "#737373";
-  else if (accidentsNumber > 10 && accidentsNumber <= 20)
+  else if (accidentsNumber > 9 && accidentsNumber <= 12)
     return "#525252";
-  else if (accidentsNumber > 20 && accidentsNumber <= 30)
+  else if (accidentsNumber > 12 && accidentsNumber <= 15)
     return "#373737";
   else
     return "#000000";

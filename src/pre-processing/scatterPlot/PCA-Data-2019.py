@@ -2,9 +2,6 @@ import pandas
 
 # paths of csv files about 2019
 csv_2019 = [
-    'dataset/source/accidents-2019/02-Febbraio.csv',
-    'dataset/source/accidents-2019/03-Marzo.csv',
-    'dataset/source/accidents-2019/04-Aprile.csv',
     'dataset/source/accidents-2019/05-Maggio.csv',
     'dataset/source/accidents-2019/08-Agosto.csv',
     'dataset/source/accidents-2019/09-Settembre.csv',
@@ -35,7 +32,7 @@ for file in csv_2019:
 dataset_2019 = pandas.concat([dataset_2019, dataset_2019PartOne], ignore_index=True)
 
 # select the columns of interest
-columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'DecedutoDopo', 'CinturaCascoUtilizzato']
+columns = ['Protocollo', 'TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude']
 
 dataset_columns = dataset_2019[columns]
 

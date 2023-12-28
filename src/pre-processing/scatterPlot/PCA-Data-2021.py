@@ -34,7 +34,7 @@ for file in csv_2021:
 dataset_2021 = pandas.concat([dataset_2021, dataset_2021PartOne], ignore_index=True)
 
 # select the columns of interest
-columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato']
+columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude']
 
 dataset_columns = dataset_2021[columns]
 
