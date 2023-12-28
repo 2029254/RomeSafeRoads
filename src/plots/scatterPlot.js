@@ -63,18 +63,31 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .style("fill", function(d) { return setPointColor(d.Deceduto); })
       .attr("pointer-events", "all")
       .on("mouseover",  function(d) {
+        d3.select(this).transition()
+          .duration('100')
+          .style("stroke", "#525252")
+          .style("stroke-width", "0.3")
+          .attr("r", 7);
 
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
 
-      tooltipScatter.html(setPointText(d.TipoVeicolo))
+        tooltipScatter.html(setPointText(d.TipoVeicolo))
           .style("color", "#524a32")
           .style("font-family", "Lora")
           .style("font-size", "10px")
           .style("left", (d3.event.pageX + 9 + "px"))
           .style("top", (d3.event.pageY - 9 + "px"));
       })
-      .on("mouseout", function(d) { tooltipScatter.style("opacity", 0); })
+      .on("mouseout", function(d) {
+        d3.select(this).transition()
+          .style("stroke", "#f7f3eb")
+          .style("stroke-width", "0.1")
+          .duration('200')
+          .attr("r", 5);
+
+         tooltipScatter.style("opacity", 0);
+      })
       .attr("class", function(d) {
         // Determina il quadrante e assegna una classe
         var quadrant = getQuadrant(d.PC1, d.PC2);
