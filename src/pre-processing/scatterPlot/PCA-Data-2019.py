@@ -141,5 +141,8 @@ dataset_columns['TipoVeicolo'] = dataset_columns['TipoVeicolo'].fillna('Autovett
 
 accidents_data_frame = pandas.DataFrame(dataset_columns)
 
+# Riordina il DataFrame in base alla colonna 'Deceduto'
+accidents_data_frame = accidents_data_frame.sort_values(by='Deceduto')
+
 # export results in a new csv
 accidents_data_frame.to_csv('dataset/processed/scatterPlot/PCA-Data-2019.csv', header=True)

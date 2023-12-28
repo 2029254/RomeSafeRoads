@@ -155,6 +155,7 @@ function brushed(d) {
 
     }
   })
+  coords = [12.583, 12.5152, 12.5834, 12.6889, 12.6673, 12.2585, 12.488, 12.5295, 12.5444, 12.6673, 12.4819, 12.2407, 12.6011, 12.5994, 12.4982, 12.5927, 12.5976, 12.3783, 12.3975 ]
 
   selectedDots.forEach(dot => {
 
@@ -174,10 +175,7 @@ function brushed(d) {
       let pointCoordinates = [parseFloat(latitudine), parseFloat(longitudine)];
 
       console.log(pointCoordinates[0] + " " + pointCoordinates[1])
-   // if (
-   //   pointCoordinates[0] < 12.8999 ||
-   //   pointCoordinates[1] < 42.1400
-   // ) {
+    if (!coords.includes(pointCoordinates[0])) {
       // Aggiungi punti alla mappa
       choroplethMapSvg.append("circle")
         .attr("id", "localization")
@@ -187,7 +185,7 @@ function brushed(d) {
         .style("stroke", "#f7f3eb")
         .style("stroke-width", "0.1")
         .style("fill", dotColor)
-   // }
+    }
   });
 }
 
