@@ -129,7 +129,6 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   });
 
 }
-
 function brushed(d) {
   choroplethMapSvg.selectAll("#localization").remove();
 
@@ -148,11 +147,12 @@ function brushed(d) {
 
     if(isBrushed && !selectedDots.includes(mydot)){ //se il punto si trova nella selezione lo aggiungo a selectedDots
       selectedDots.push(mydot);
+      mydot.style("stroke", "#525252")
       //console.log(mydot);
     } else { //se il punto non si trova nella selezione lo rimuovo da selectedDots
       let indexToRemove = selectedDots.indexOf(mydot);
       if (indexToRemove !== -1) selectedDots.splice(indexToRemove);
-
+      mydot.style("stroke", "#f7f3eb")
     }
   })
   coords = [12.583, 12.5152, 12.5834, 12.6889, 12.6673, 12.2585, 12.488, 12.5295, 12.5444, 12.6673, 12.4819, 12.2407, 12.6011, 12.5994, 12.4982, 12.5927, 12.5976, 12.3783, 12.3975 ]
@@ -162,7 +162,7 @@ function brushed(d) {
     const dotId = dot.attr('id'); // Assumi che l'id sia un attributo dell'elemento dot
     const dotColor = dot.attr('col'); // Assumi che l'id sia un attributo dell'elemento dot
 
-
+    dot.style("stroke", "#525252")
     let numeri = dotId.match(/(-?\d+\.\d+)/g);
 
     let latitudine, longitudine;
@@ -182,7 +182,7 @@ function brushed(d) {
         .attr("cx", projection(pointCoordinates)[0])
         .attr("cy", projection(pointCoordinates)[1])
         .attr("r", 3) // Imposta il raggio del cerchio
-        .style("stroke", "#f7f3eb")
+        .style("stroke", "#525252")
         .style("stroke-width", "0.1")
         .style("fill", dotColor)
     }
