@@ -15,11 +15,11 @@ Discover the live version of our project through the [following link](https://20
 * [**PowerPoint Presentation**](https://github.com/2029254) 🔗<br>
 * [**Scientific Paper**](https://github.com/danielarieti) 🔗<br>
 
-## <img src="dataset/img/icons/user-team.svg" width="20" height="15"> Libraries 
+## <img src="dataset/img/icons/bookmark.svg" width="20" height="18"> Libraries 
 
-* **d3.js**, a javascript library for producing dynamic, interactive data visualizations in web browsers.
-* **scikit-learn**, a python library used for dimensionality reduction.
-* **pandas**, a python library used for analyzing, cleaning, exploring, and manipulating data.
+* **d3.js** <img src="dataset/img/icons/arrow.svg" width="20" height="10"> a javascript library for producing dynamic, interactive data visualizations in web browsers.
+* **scikit-learn** <img src="dataset/img/icons/arrow.svg" width="20" height="10"> a python library used for dimensionality reduction.
+* **pandas** <img src="dataset/img/icons/arrow.svg" width="20" height="10"> a python library used for analyzing, cleaning, exploring, and manipulating data.
 
 ## <img src="dataset/img/icons/user-team.svg" width="20" height="15"> Team & Info
 The team is composed of two students currently enrolled at [Engineering in Computer Science](https://corsidilaurea.uniroma1.it/it/corso/2023/30430/home):<br>
