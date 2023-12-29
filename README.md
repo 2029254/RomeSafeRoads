@@ -3,7 +3,7 @@
 ## <img src="dataset/img/icons/glass.svg" width="20" height="20"> Overview
 
 ## <img src="dataset/img/icons/play.svg" width="20" height="19"> Demo 
-The live version of project is available [here](https://2029254.github.io/RomeRoadsInsights/).
+Discover the live version of our project through the following link ([here](https://2029254.github.io/RomeRoadsInsights/)).<br> A direct window will be provided to explore functionalities and features.
 
 ## <img src="dataset/img/icons/folder.svg" width="20" height="18"> Documentation
 * [**PowerPoint Presentation**](https://github.com/2029254) <br>
