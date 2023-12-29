@@ -10,6 +10,6 @@ The live version of project is available [here](https://2029254.github.io/RomeRo
 * [**Scientific Paper**](https://github.com/danielarieti) <br>
 
 ## <img src="dataset/img/icons/user-team.svg" width="20" height="15"> Team 
-The team is composed by two students:
+The team is composed of two students currently enrolled at [Sapienza University of Rome](https://www.uniroma1.it/it/pagina-strutturale/home):
 * [**Mario Cosimo Angelini**](https://github.com/2029254) [2029254] <br>
 * [**Daniela Rieti**](https://github.com/danielarieti) [1762973] <br>
