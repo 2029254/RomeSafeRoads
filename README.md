@@ -11,9 +11,10 @@ The study and analysis of traffic accidents can provide valuable insights into t
 Discover the live version of our project through the [following link](https://2029254.github.io/RomeRoadsInsights/) 🔗.<br> A direct window will be provided to explore functionalities and features.
 
 ## <img src="dataset/img/icons/folder.svg" width="20" height="18"> Documentation
+A PowerPoint presentation and a detailed scientific paper have been realized to provide a complete project documentation:
 
-* [**PowerPoint Presentation**](https://github.com/2029254) 🔗<br>
-* [**Scientific Paper**](https://github.com/danielarieti) 🔗<br>
+* [**PowerPoint Presentation**](https://github.com/2029254) 🔗, to describe project goals, the data structure, and the chosen visualizations. <br>
+* [**Scientific Paper**](https://github.com/danielarieti)🔗, to describe the whole design process, rationale and prototype. <br>
 
 ## <img src="dataset/img/icons/bookmark.svg" width="20" height="18"> Libraries 
 
