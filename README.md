@@ -8,7 +8,7 @@ In a bustling metropolis like Rome, an average of 79 accidents occur daily, resu
 The study and analysis of traffic accidents can provide valuable insights into the underlying causes, consequences, and risk factors associated with these incidents, ultimately aiding the development of effective road safety strategies.
 
 ## <img src="dataset/img/icons/play.svg" width="20" height="19"> Demo 
-Discover the live version of our project through the [following link](https://2029254.github.io/RomeRoadsInsights/) 🔗.<br> A direct window will be provided to explore functionalities and features.
+Discover the live version of our project through the [following link](https://2029254.github.io/RomeSafeRoads/) 🔗.<br> A direct window will be provided to explore functionalities and features.
 
 ## <img src="dataset/img/icons/folder.svg" width="20" height="18"> Documentation
 A PowerPoint presentation and a detailed scientific paper have been realized to provide a complete project documentation:
