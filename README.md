@@ -1,9 +1,9 @@
-# Rome Roads Insights <img src="dataset/img/icons/car-burst.svg" width="50" height="30">
+# Rome Safe Roads <img src="dataset/img/icons/car-burst.svg" width="50" height="30">
 Project for **Visual Analytics** course (2022/23) at [Sapienza University of Rome](https://www.uniroma1.it/it/pagina-strutturale/home).
 
 ## <img src="dataset/img/icons/glass.svg" width="20" height="20"> Overview
 Road accidents are a significant contributor to global mortality and injuries. 
-In a bustling metropolis like Rome, an average of 416 accidents occur daily, resulting in 7.9 fatalities and 561 injuries. 
+In a bustling metropolis like Rome, an average of 79 accidents occur daily, resulting in 0.3 fatalities and 100 injuries.  
 
 The study and analysis of traffic accidents can provide valuable insights into the underlying causes, consequences, and risk factors associated with these incidents, ultimately aiding the development of effective road safety strategies.
 
