@@ -13,8 +13,8 @@ Discover the live version of our project through the [following link](https://20
 ## <img src="dataset/img/icons/folder.svg" width="20" height="18"> Documentation
 A PowerPoint presentation and a detailed scientific paper have been realized to provide a complete project documentation:
 
-* [**PowerPoint Presentation**](https://2029254.github.io/RomeSafeRoads/blob/main/docs/Presentation.pdf) 🔗, to describe project goals, the data structure, and the chosen visualizations. <br>
-* [**Scientific Paper**](https://2029254.github.io/RomeSafeRoads/blob/main/docs/ScientificPaper.pdf)🔗, to describe the whole design process, rationale and prototype. <br>
+* [**PowerPoint Presentation**](docs/Presentation.pdf) 🔗, to describe project goals, the data structure, and the chosen visualizations. <br>
+* [**Scientific Paper**](docs/ScientificPaper.pdf)🔗, to describe the whole design process, rationale and prototype. <br>
 
 ## <img src="dataset/img/icons/bookmark.svg" width="20" height="18"> Libraries 
 
