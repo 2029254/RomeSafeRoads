@@ -7,7 +7,7 @@ let periodValue = document.getElementById("period");
 
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
 function updateSliderValue() {
-  titleValue.textContent = "Rome Road Insights " + slider.value
+  titleValue.textContent = "Rome Safe Roads " + slider.value
   if (slider.value === "2022")
     periodValue.textContent = " (Jan - Aug)";
   else
