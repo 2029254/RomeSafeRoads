@@ -49,6 +49,8 @@ let vGridLines;
 let hGridLines;
 let allPoints;
 let tooltipTime;
+let previousZoomValue = 0;
+let isDrawed = false;
 
 
 
@@ -82,6 +84,9 @@ const dataTest2 = [
   { DataOraIncidente: "2023-11-01", NumeroIncidenti: 10 }
 ];
 
+let zoomState = "normal";
+let currentCsvFileName;
+
 function convertData(data){
   // Converti le date da stringhe a oggetti Date
   data.forEach(d => {
@@ -100,7 +105,7 @@ function setAxesScale(data) {
   yScaleTimeSeries = d3.scaleLinear();
 
   if (switchValue == "ON") {
-    yScaleTimeSeries.domain([0, 1100])
+    yScaleTimeSeries.domain([0, 170])
   } else {
     yScaleTimeSeries.domain([0, 1100])
   }
@@ -317,7 +322,7 @@ function drawLineWithValue(data, color, id) {
   let curve = d3.curveCardinal;
 
   line = d3.line()
-    .curve(curve)
+    //.curve(curve)
     .x(d => xScaleTimeSeries(d.DataOraIncidente))
     .y(d => yScaleTimeSeries(d.NumeroIncidenti));
 
@@ -726,6 +731,7 @@ function addPoints(nature) {
 function drawPoints(data, color) {
   // Filtra i dati in modo da includere solo quelli con NumeroIncidenti diverso da zero
   var filteredData = data.filter(function(d) {
+  console.log(d.DataOraIncidente)
     return d.NumeroIncidenti !== 0;
   });
 
@@ -740,7 +746,7 @@ function drawPoints(data, color) {
     .attr("class", "point")
     .each(function(d) {
       // Aggiungi cerchio più grande solo per il punto massimo
-      if (d === maxIncident && (switchValue==="OFF" || switchValue===undefined)) {
+      if (d === maxIncident && (switchValue==="OFF" || switchValue===undefined || switchValue==="ON")) {
         d3.select(this).append("circle")
           .attr("class", "outer-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
@@ -748,7 +754,8 @@ function drawPoints(data, color) {
           .attr("r", 8)
           .style("stroke", "#f00c0c")
           .style("stroke-width", "1")
-          .style("fill", "none");
+          .style("fill", "none")
+          .attr("clip-path", "url(#circle-clip-path)");
 
         // Aggiungi cerchio più piccolo per tutti i punti
         d3.select(this).append("circle")
@@ -767,7 +774,7 @@ function drawPoints(data, color) {
                .attr("class", "inner-point")
                .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
                .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
-               .attr("r", 2.5)
+               .attr("r", 3.5)
                .style("fill", "#827c68")
                .attr("clip-path", "url(#points-clip-path)")
                .on("mouseover", showIncidentCount)
@@ -804,13 +811,15 @@ function drawTimeSeriesChart(csvFileName){
       if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
       keysLegends = []
       drawLegend("General\naccidents","#ded6bf", 15.5);
-      d3.csv(csvFileName.replace('timeSeriesData2019', 'timeSeriesData2019Daily'), function (data) {
+      currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
+      d3.csv(currentCsvFileName, function (data) {
         timeSeriesDataDaily = data.filter(function (row) {
           return row['DataOraIncidente', 'NumeroIncidenti'];
         });
-        drawZoom(timeSeriesData);
-        addPoints("noNature");
-        drawPoints(timeSeriesData, "#ded6bf");
+      convertData(timeSeriesDataDaily);
+      drawZoom(timeSeriesDataDaily);
+      /*addPoints("noNature");
+      drawPoints(timeSeriesDataDaily, "#ded6bf");*/
       });
     }
 
@@ -855,12 +864,23 @@ function showIncidentCount(d) {
   let marginNumberCircleX;
   let fontSize = incidentCount.toString().length === 4 ? "9px" : "10px";
 
+  tooltipTime = d3.select("#popupTimeSeries");
+
+  tooltipTime.html(incidentCount)
+        .style("opacity", 0.8)
+        .style("color", "#524a32")
+        .style("font-family", "Lora")
+        .style("font-size", "10px")
+        .style("font-weight", "bold")
+        .style("left", (d3.event.pageX - 10 + "px"))
+        .style("top", (d3.event.pageY + 8 + "px"));
+
   if (incidentCount < 10) marginNumberCircleX = 2.5;
   else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5;
   else marginNumberCircleX = 8.5;
 
 
-pointsGroup.append("circle")
+/*pointsGroup.append("circle")
     .attr("id", "num")
     .attr("class", "show")
     .attr("cx", xPosition + marginNumberCircleX)
@@ -883,13 +903,14 @@ pointsGroup.append("text")
     .style("font-size", fontSize)
     .style("fill", "#524a32")
     .style("opacity", "0.8")
-    .style("font-weight", "bold");
+    .style("font-weight", "bold");*/
 }
 
 // Funzione per nascondere il numero di incidenti
 function hideIncidentCount() {
-  pointsGroup.selectAll(".incident-count").remove();
+  //pointsGroup.selectAll(".incident-count").remove();
   d3.selectAll("#num").remove();
+  tooltipTime.style("opacity", 0);
 }
 /*
 function drawLegend(nature, color){
@@ -1080,6 +1101,8 @@ document.addEventListener('DOMContentLoaded', function() {
     focusNatureArray = []
     timeSeriesSvg.selectAll("*").remove();
     drawTimeSeriesChart(csvFileNameTimeSeries);
+    currentCsvFileName = csvFileNameTimeSeries;
+    console.log("PROVSSSS: "+currentCsvFileName)
 
   });
 });
@@ -1116,6 +1139,15 @@ function drawZoom(data) {
   // Inizializza un clip path per i punti
   timeSeriesSvg.append("defs").append("clipPath")
     .attr("id", "points-clip-path")
+    .append("rect")
+    .style("fill", "none")
+    .attr("transform", `translate(-2.5, 0)`)
+    .attr("width", 505)
+    .attr("height", 200);
+
+  // Inizializza un clip path per i punti
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "circle-clip-path")
     .append("rect")
     .style("fill", "none")
     .attr("transform", `translate(-2.5, 0)`)
@@ -1199,7 +1231,6 @@ function drawZoom(data) {
     }
     const allTicks = [...tickValues, ...intermediateTicks];
 
-
     // Imposta i tick sull'asse x in base al livello di zoom
     console.log("ZOOM: "+transform.k)
     if (transform.k > 13 && transform.k < 17 || (transform.k > 20 &&  transform.k < 21)) {}
@@ -1208,6 +1239,35 @@ function drawZoom(data) {
     } else {
       timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(tickValues));
     }
+    if (previousZoomValue > transform.k && transform.k <= 4.5) {
+      isDrawed = false;
+      pointsGroup.selectAll(".point").remove();
+    }
+    else if (previousZoomValue < transform.k && transform.k >= 4.5 && isDrawed === false) {
+        isDrawed = true;
+        addPoints("noNature");
+        drawPoints(timeSeriesDataDaily, "#ded6bf");
+    }
+    previousZoomValue = transform.k;
+   /* if (transform.k === 24 && zoomState === "normal") {
+      zoomState = "maxZoom";
+      currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
+      // Aggiorna il tuo grafico con i nuovi dati da currentCsvFileName
+      d3.csv(currentCsvFileName, function (data) {
+        timeSeriesDataDaily = data.filter(function (row) {
+          return row['DataOraIncidente', 'NumeroIncidenti'];
+        });
+        convertData(timeSeriesDataDaily);
+        drawLineWithValue(timeSeriesDataDaily, "red", "main");
+        addPoints("noNature");
+        drawPoints(timeSeriesDataDaily, "#ded6bf");
+      });
+    }
+    if (transform.k !== 24 && zoomState === "maxZoom") {
+        zoomState = "normal";
+        currentCsvFileName = csvFileNameTimeSeries;
+    }*/
+    //console.log(currentCsvFileName)
 /*
     let valueToReach;
     let valueToReachOne;
@@ -1260,8 +1320,23 @@ function drawZoom(data) {
     hGridLines.attr("y1", d => transform.applyY(yScaleTimeSeries(d))).attr("y2", d => transform.applyY(yScaleTimeSeries(d)));
 
     pointsGroup.selectAll(".point").selectAll(".inner-point")
-      .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
-      .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+       .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+       .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+
+    pointsGroup.selectAll(".point").selectAll(".outer-point")
+       .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+       .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+
+    /*if (zoomState=="normal") {
+        pointsGroup.selectAll(".point").selectAll(".inner-point")
+          .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+          .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+    }
+    else if (zoomState=="maxZoom") {
+        pointsGroup.selectAll(".point").selectAll(".inner-point")
+          .attr("cx", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
+          .attr("cy", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)));
+    }*/
 
     pointsGroup.selectAll(".incident-count")
       .attr("x", d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6)
