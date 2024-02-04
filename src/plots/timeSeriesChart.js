@@ -30,7 +30,7 @@ let widthTimeSeries = 500;
 let heightTimeSeries = 200;
 let parseTime = d3.timeParse("%Y-%m-%d");
 let line, xHoverLine, infoBox;
-let timeSeriesData;
+let timeSeriesData, timeSeriesDataDaily;
 let arrayOfData = [];
 let idPoints;
 let tickValues;
@@ -804,9 +804,14 @@ function drawTimeSeriesChart(csvFileName){
       if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
       keysLegends = []
       drawLegend("General\naccidents","#ded6bf", 15.5);
-      drawZoom(timeSeriesData);
-      addPoints("noNature");
-      drawPoints(timeSeriesData, "#ded6bf");
+      d3.csv(csvFileName.replace('timeSeriesData2019', 'timeSeriesData2019Daily'), function (data) {
+        timeSeriesDataDaily = data.filter(function (row) {
+          return row['DataOraIncidente', 'NumeroIncidenti'];
+        });
+        drawZoom(timeSeriesData);
+        addPoints("noNature");
+        drawPoints(timeSeriesData, "#ded6bf");
+      });
     }
 
 /*
@@ -1089,7 +1094,7 @@ function drawZoom(data) {
     .style("pointer-events", "all")
     .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
     .call(d3.zoom()
-      .scaleExtent([1, 3])  // Limita gli estremi del livello di zoom
+      .scaleExtent([1, 24])  // Limita gli estremi del livello di zoom
       .on("zoom", zoomed));
 
   // Aggiungi un clip path solo per il rettangolo rosso
@@ -1141,7 +1146,6 @@ function drawZoom(data) {
     .attr("d", line)
     .attr("transform", "translate(51, 50)");
 
-// ...
 
   let isZooming = false;
   const xExtent = d3.extent(data, d => d.DataOraIncidente);
@@ -1158,25 +1162,53 @@ function drawZoom(data) {
 
 // Funzione chiamata durante l'evento di zoom
   function zoomed() {
-    currentTransform = d3.event.transform;
-    const { transform } = d3.event;
+    const transform = d3.event.transform;
 
     if (transform.k === 1) {
       transform.x = 0;
       transform.y = 0;
-    } else {
-      isZooming = true;
     }
 
-    const xMin = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
-    const xMax = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
+    var numIntermediateTicks
 
+    // Calcola la distanza tra i tick in base al livello di zoom
     const originalTickDistance = xScaleTimeSeries(tickValues[1]) - xScaleTimeSeries(tickValues[0]);
-    const numIntermediateTicks = Math.floor((tickValues.length - 1) * (transform.k - 1));
+    const zoomFactor = transform.k;
+    if(transform.k > 10 && transform.k < 10.6)
+      numIntermediateTicks = Math.floor(zoomFactor-2);
+    else if (transform.k > 12 && transform.k < 12.6)
+      numIntermediateTicks = Math.floor(zoomFactor) + 2;
+    else if (transform.k > 12.6)
+      numIntermediateTicks = Math.floor(zoomFactor) + 5;
+    else if (transform.k > 14 && transform.k < 16.6)
+      numIntermediateTicks = Math.floor(zoomFactor) + 5 ;
+    else
+      numIntermediateTicks = Math.floor(zoomFactor);
     const newTickDistance = originalTickDistance / (numIntermediateTicks + 1);
 
+    if (selectedYear === "2022") valueToReach = 8; else valueToReach = 12;
+
     const intermediateTicks = [];
-    let intermediateTickValue;
+
+    // Genera i tick giornalieri
+    for (let n = 0; n <= valueToReach; n = n + 1) {
+      for (let i = 1; i <= numIntermediateTicks; i++) {
+        const intermediateTickValue = xScaleTimeSeries.invert(xScaleTimeSeries(tickValues[n]) + i * newTickDistance);
+        intermediateTicks.push(intermediateTickValue);
+      }
+    }
+    const allTicks = [...tickValues, ...intermediateTicks];
+
+
+    // Imposta i tick sull'asse x in base al livello di zoom
+    console.log(transform.k)
+    if (transform.k > 14 && transform.k < 16.6 || (transform.k > 20 &&  transform.k < 21)) {}
+    else if (transform.k > 1.5) {
+      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(allTicks));
+    } else {
+      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(tickValues));
+    }
+/*
     let valueToReach;
     let valueToReachOne;
     if(selectedYear === "2022") valueToReachOne = 5.7; else valueToReachOne = 8.4;
@@ -1191,15 +1223,8 @@ function drawZoom(data) {
           intermediateTicks.push(intermediateTickValue);
         }
       }
-    }
 
-    const allTicks = [...tickValues, ...intermediateTicks];
-
-    if (transform.k > 2.7) {
-      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(allTicks));
-    } else {
-      timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(tickValues));
-    }
+ */
 
     const xMinNew = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
     const xMaxNew = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
@@ -1219,6 +1244,7 @@ function drawZoom(data) {
     timeSeriesSvg.select(".x-axis").call(xAxisZoom.scale(transform.rescaleX(xScaleTimeSeries)));
     timeSeriesSvg.select(".y-axis").call(yAxisTimeSeries.scale(transform.rescaleY(yScaleTimeSeries)));
 
+    // Aggiorna il grafico e gli elementi correlati
     timeSeriesSvg.selectAll(".line")
       .attr("d", line.x(d => transform.applyX(xScaleTimeSeries(d.DataOraIncidente)))
         .y(d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti))));
@@ -1242,14 +1268,10 @@ function drawZoom(data) {
       .attr("y", d => transform.applyY(yScaleTimeSeries(d.NumeroIncidenti)) - 10);
   }
 
-
-
 // Alla fine della tua funzione zoomed, puoi aggiungere il seguente codice per reimpostare il flag dopo lo zoom
   timeSeriesSvg.on("end", function () {
     isZooming = false;
   });
-
-// ...
 
   const xAxisZoom = d3.axisBottom(xScaleTimeSeries)
     .tickValues(tickValues)
