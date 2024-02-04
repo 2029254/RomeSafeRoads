@@ -1201,8 +1201,8 @@ function drawZoom(data) {
 
 
     // Imposta i tick sull'asse x in base al livello di zoom
-    console.log(transform.k)
-    if (transform.k > 14 && transform.k < 16.6 || (transform.k > 20 &&  transform.k < 21)) {}
+    console.log("ZOOM: "+transform.k)
+    if (transform.k > 13 && transform.k < 17 || (transform.k > 20 &&  transform.k < 21)) {}
     else if (transform.k > 1.5) {
       timeSeriesSvg.select(".x-axis").call(xAxisZoom.tickValues(allTicks));
     } else {
