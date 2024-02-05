@@ -1,4 +1,5 @@
 const slider = document.getElementById("yearSlider");
+console.log(slider)
 const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
@@ -6,7 +7,7 @@ let periodValue = document.getElementById("period");
 
 
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
-function updateSliderValue() {
+  function updateSliderValue() {
   titleValue.textContent = "Rome Safe Roads " + slider.value
   if (slider.value === "2022")
     periodValue.textContent = " (Jan - Aug)";
@@ -20,29 +21,6 @@ slider.addEventListener("input", () => {
   updateSliderValue();
   updatePlotsBasingOnSelectedYear()
 });
-
-
-// Gestisce il clic sul pulsante +
-incrementButton.addEventListener("click", () => {
-  const currentValue = parseInt(slider.value);
-  if (currentValue < 2022) {
-    slider.value = (currentValue + 1).toString();
-    updateSliderValue();
-    updatePlotsBasingOnSelectedYear()
-
-  }
-});
-
-decrementButton.addEventListener("click", () => {
-  const currentValue = parseInt(slider.value);
-  if (currentValue > 2019) {
-    slider.value = (currentValue - 1).toString();
-    updateSliderValue();
-    updatePlotsBasingOnSelectedYear()
-  }
-});
-
-
 
 let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;

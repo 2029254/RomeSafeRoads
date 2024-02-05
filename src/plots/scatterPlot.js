@@ -21,7 +21,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   // Crea un elemento di brush per la selezione
   var brush = d3.brush()
     .extent([[0,0], [widthScatter, heightScatter]])
-    .on("start brush end", function(d) {  return brushed(d)})
+    //.on("start brush end", function(d) {  return brushed(d)})
     .on("end",  function(d) { return brushed(d)});
 
 

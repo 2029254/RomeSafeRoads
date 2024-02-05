@@ -24,17 +24,15 @@
             <span class="fs-3" id="title" style="margin-top: -10px; margin-bottom: 10px; font-size: 1.7vw !important;">Rome Safe Roads 2022 </span>
             <span class="" id="period" style="margin-top: -8px; margin-bottom: 10px; margin-left:1vw; font-size: 1.2vw;"> (Jan - Aug)</span>
         </a>
-        <p id="sliderValues" style="margin-top: 2.5px; margin-bottom: 1rem; margin-right: 1vw; font-size: 1vw;">2019 </p>
-        <div class="slider-container" style="margin-top: -14px; color:#e6e1d5;">
-            <button class="button" style="background-color:#a1987d;" id="decrementButton">
-                <p style="display:block; margin-top: 12px; /*margin-left: -2px;*/ /*font-size: 1vw;*/">-</p>
-            </button>
-            <input type="range" class="slider" id="yearSlider" min="2019" max="2022" step="1" value="2022">
-            <button class="button" style="background-color:#a1987d;" id="incrementButton">
-                <p style="margin-top: 12px; /*margin-left: -3.8px;*/ /*font-size: 1vw;*/">+</p>
-            </button>
+        <p id="sliderValues" style="margin-top: -2px; margin-bottom: 1rem; margin-right: 0.5vw; font-size: 1vw;">Select year:</p>
+        <div class="slider-container" style="margin-top: -23px; color:#e6e1d5;">
+            <select id="yearSlider" class="form-select" aria-label="Default select example">
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option selected value="2022">2022</option>
+            </select>
         </div>
-        <p style="margin-top: 2.5px; margin-bottom: 1rem; margin-left: 1vw; font-size: 1vw;" id="sliderValue">2022</p>
     </header>
 </div>
 
