@@ -105,7 +105,7 @@ function setAxesScale(data) {
   yScaleTimeSeries = d3.scaleLinear();
 
   if (switchValue == "ON") {
-    yScaleTimeSeries.domain([0, 170])
+    yScaleTimeSeries.domain([0, 160])
   } else {
     yScaleTimeSeries.domain([0, 1100])
   }

@@ -97,9 +97,19 @@ function drawAxesAndBars(csvFileName){
     // definition of axes domain
     xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
     let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-    if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
-       yScale.domain([0, 24000]);
-    else yScale.domain([0, Math.max.apply(null, MinMax)]);
+    if (buttonWeatherValue === undefined  || buttonWeatherValue === "None"  || buttonWeatherValue === "First") {
+      yScale.domain([0, 24000]);
+    } else {
+      // Calcola il massimo valore della scala
+      const maxScaleValue = Math.max.apply(null, MinMax);
+      var axisStep;
+      if (maxScaleValue <= 1000) axisStep = 100;  // Imposta il passo dell'asse come desiderato
+      else if (maxScaleValue <= 2000) axisStep = 200;  // Imposta il passo dell'asse come desiderato
+      else axisStep = 2000;
+      // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
+      const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
+      yScale.domain([0, roundedMax]);
+    }
 
     // bars creation
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
