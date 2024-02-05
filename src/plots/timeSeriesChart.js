@@ -8,6 +8,8 @@ var timeSeriesSvg = d3.select("#timeSeries")
 
  */
 var margin = {top: 10, right: 30, bottom: 160, left: 0};
+var widthInfoBox = 49;
+var heightInfoBox = 35.5;
 
 let currentTransform = d3.zoomIdentity;
 
@@ -168,7 +170,7 @@ function drawInfoBox(id){
 
   infoBox.append('rect')
     .attr('class', 'info-box-rect')
-    .attr('width', 49)
+    .attr('width', 80)
     .attr('height', 35.5)
     .attr('rx', 8) // Arrotonda gli angoli orizzontali
     .attr('ry', 8) // Arrotonda gli angoli verticali
@@ -466,7 +468,21 @@ function drawLineWithValue(data, color, id) {
       let day = date.getDate();
       let monthAbbreviation = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
       let formattedDate = `${day} ${monthAbbreviation}`;
-      let accidentsText = `${formattedDate}`;
+
+// Calcola la data di dieci giorni prima
+      let tenDaysAgo = new Date(date);
+      tenDaysAgo.setDate(date.getDate() - 10);
+
+      let dayTenDaysAgo = tenDaysAgo.getDate();
+      let monthAbbreviationTenDaysAgo = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(tenDaysAgo);
+      let formattedDateTenDaysAgo = `${dayTenDaysAgo} ${monthAbbreviationTenDaysAgo}`;
+      let accidentsText;
+
+      if (monthAbbreviation === "Jan" && day == "1")
+        accidentsText = `${formattedDate}`;
+      else
+        accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+
 
       infoBoxArray.forEach((infoBox, index) => {
         infoBox.select('text')
@@ -476,7 +492,7 @@ function drawLineWithValue(data, color, id) {
           .style("font-size", "10px")
           .style('font-weight', 'bold')
           .text(accidentsText)
-          .attr('x', 0)
+          .attr('x', 15)
           .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
 
         infoBox.select('text')
@@ -485,7 +501,7 @@ function drawLineWithValue(data, color, id) {
           .style("font-family", "Lora")
           .style("font-size", "10px")
           .style("text-align", "left")
-          .attr('x', 0)
+          .attr('x', 15)
           .attr('dy', '15.2px') // Imposta l'offset verticale per la terza riga
           .text("n1 ");
 
@@ -505,14 +521,13 @@ function drawLineWithValue(data, color, id) {
 
         if(infoBoxNatureArray.length > 0) {
 
-
           infoBox.select('text')
             .append('tspan')
             .style("fill", color)
             .style("font-family", "Lora")
             .style("font-size", "10px")
             .style("text-align", "left")
-            .attr('x', 0)
+            .attr('x', 15)
             .attr('dy', '11.2px') // Imposta l'offset verticale per la terza riga
             .text("n2 ");
 
@@ -862,18 +877,18 @@ function showIncidentCount(d) {
   let xPosition = currentTransform.applyX(xScaleTimeSeries(d.DataOraIncidente)) - 6;
   let yPosition = currentTransform.applyY(yScaleTimeSeries(incidentCount)) - 10;
   let marginNumberCircleX;
-  let fontSize = incidentCount.toString().length === 4 ? "9px" : "10px";
 
   tooltipTime = d3.select("#popupTimeSeries");
 
   tooltipTime.html(incidentCount)
         .style("opacity", 0.8)
+        .style("text-align", "center")
         .style("color", "#524a32")
         .style("font-family", "Lora")
-        .style("font-size", "10px")
+        .style("font-size", 10 + "px")
         .style("font-weight", "bold")
         .style("left", (d3.event.pageX - 10 + "px"))
-        .style("top", (d3.event.pageY + 8 + "px"));
+        .style("top", (d3.event.pageY - 30 + "px"));
 
   if (incidentCount < 10) marginNumberCircleX = 2.5;
   else if (incidentCount >= 10 && incidentCount < 100) marginNumberCircleX = 5.5;

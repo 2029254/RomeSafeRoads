@@ -99,6 +99,15 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.append("g")
       .attr("transform", "translate(0," + (yScale(0)) + ")")
       .call(d3.axisBottom(xScale))
+      /*
+      .append("text")
+      .style("font-family", "Lora")
+      .style("font-size", "11px")
+      .attr("y", -8)  // Imposta il nuovo valore di "y" per il punto di ancoraggio
+      .attr("x", 20) // Imposta il nuovo valore di "x" per il punto di ancoraggio
+      .attr("fill", "black")
+      .text("PC1")
+       */
       .attr("class", "xAxis")
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
@@ -120,11 +129,20 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     scatterPlotpSvg.append("g")
       .attr("transform", "translate(" + (xScale(0)) + ", 0)")
       .call(d3.axisLeft(yScale))
+      /*
+      .append("text")
+      .style("font-family", "Lora")
+      .style("font-size", "11px")
+      .attr("y", 18)  // Imposta il nuovo valore di "y" per il punto di ancoraggio
+      .attr("x", -275) // Imposta il nuovo valore di "x" per il punto di ancoraggio
+      .attr("transform", "rotate(-90)")
+      .attr("fill", "black")
+      .text("PC2")
+       */
       .attr("class", "yAxis")
       .selectAll("text")  // Seleziona tutti gli elementi di testo sull'asse x
       .style("font-family", "Lora")
       .style("font-size", "11px")
-      .style("opacity", 1);
 
     // Imposta l'opacità per l'asse y
     scatterPlotpSvg.select(".yAxis").select(".domain")
