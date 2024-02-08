@@ -750,10 +750,17 @@ function drawGrid(){
   grid = timeSeriesSvg.append("g").attr("class", "grid-group");
 }
 
-function drawGridPedestrianDeaths(){
+function drawGridDaily(allXTicks, allYTicks){
+  // Crea un clip path per la griglia
+  timeSeriesSvg.append("defs").append("clipPath")
+    .attr("id", "grid-clip-path")
+    .append("rect")
+    .attr("width", 500)
+    .attr("height", 200);
+
   // Aggiungi linee tratteggiate verticali
   timeSeriesSvg.selectAll("line.vgrid")
-    .data(xScaleTimeSeries.ticks())
+    .data(allXTicks.slice(1))
     .enter()
     .append("line")
     .attr("class", "vgrid")
@@ -761,14 +768,16 @@ function drawGridPedestrianDeaths(){
     .attr("x2", d => xScaleTimeSeries(d))
     .attr("y1", heightTimeSeries)
     .attr("y2", 0)
-    .attr("transform", `translate(50.5,  50)`)
-    .style("stroke", "gray")
-    .style("stroke-dasharray", "5, 5")
+    .attr("transform", `translate(50.5, 50)`)
+    .style("stroke", "#c7c2b5")
+    .style("stroke-dasharray", "3, 3")
     .style("stroke-width", 0.3)
+    .attr("clip-path", "url(#grid-clip-path)");
+
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
-    .data(yScaleTimeSeries.ticks(5).slice(1))
+    .data(allYTicks.slice(1))
     .enter()
     .append("line")
     .attr("class", "hgrid")
@@ -777,9 +786,18 @@ function drawGridPedestrianDeaths(){
     .attr("y1", d => yScaleTimeSeries(d))
     .attr("y2", d => yScaleTimeSeries(d))
     .attr("transform", `translate(52.5, 50.5)`)
-    .style("stroke", "gray")
-    .style("stroke-dasharray", "5, 5")
-    .style("stroke-width", 0.3);
+    .style("stroke", "#c7c2b5")
+    .style("stroke-dasharray", "3, 3")
+    .style("stroke-width", 0.3)
+    .attr("clip-path", "url(#grid-clip-path)");
+
+
+  // Memorizza le linee della griglia in variabili globali
+  vGridLines = timeSeriesSvg.selectAll("line.vgrid");
+  hGridLines = timeSeriesSvg.selectAll("line.hgrid");
+
+  // Crea un gruppo per la griglia
+  grid = timeSeriesSvg.append("g").attr("class", "grid-group");
 }
 
 function addPoints(nature) {
@@ -1381,8 +1399,25 @@ function drawZoom(data) {
           intermediateTicks.push(intermediateTickValue);
         }
       }
-
  */
+  // Imposta la griglia per ogni tick value quando lo zoom è massimo
+  if (transform.k === 24) {
+    // Rimuovi la vecchia griglia
+    vGridLines.remove();
+    hGridLines.remove();
+
+    // Ottieni tutti i tick values correnti e disegna la griglia
+    const allXTicks = xAxisZoom.scale().ticks();
+    const allYTicks = yAxisTimeSeries.scale().ticks();
+    console.log("Y ticks: "+allYTicks)
+    drawGridDaily(allXTicks, allYTicks)
+  }
+  else {
+   // Rimuovi la vecchia griglia
+    vGridLines.remove();
+    hGridLines.remove();
+    drawGrid()
+  }
 
     const xMinNew = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
     const xMaxNew = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
@@ -1457,6 +1492,7 @@ function drawZoom(data) {
     .attr("class", "y-axis")
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
+
     .call(yAxisTimeSeries.tickFormat(function(d){return d;}))
     .append("text")
     .attr("transform", "rotate(-90)")
