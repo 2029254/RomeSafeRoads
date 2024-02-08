@@ -10,6 +10,8 @@ var timeSeriesSvg = d3.select("#timeSeries")
 var margin = {top: 10, right: 30, bottom: 160, left: 0};
 var widthInfoBox = 49;
 var heightInfoBox = 35.5;
+var incidentiPerIntervallo = [];
+var flagInterval = false;
 
 let currentTransform = d3.zoomIdentity;
 
@@ -109,7 +111,7 @@ function setAxesScale(data) {
   if (switchValue == "ON") {
     yScaleTimeSeries.domain([0, 160])
   } else {
-    yScaleTimeSeries.domain([0, 1100])
+    yScaleTimeSeries.domain([0, 160])
   }
 
   yScaleTimeSeries.range([heightTimeSeries, 0]);
@@ -471,17 +473,53 @@ function drawLineWithValue(data, color, id) {
 
 // Calcola la data di dieci giorni prima
       let tenDaysAgo = new Date(date);
-      tenDaysAgo.setDate(date.getDate() - 10);
+      tenDaysAgo.setDate(date.getDate() - 29);
 
       let dayTenDaysAgo = tenDaysAgo.getDate();
       let monthAbbreviationTenDaysAgo = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(tenDaysAgo);
       let formattedDateTenDaysAgo = `${dayTenDaysAgo} ${monthAbbreviationTenDaysAgo}`;
       let accidentsText;
 
-      if (monthAbbreviation === "Jan" && day == "1")
-        accidentsText = `${formattedDate}`;
-      else
-        accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       if (monthAbbreviation === "Jan" && day == "31") {
+         accidentsCountText = incidentiPerIntervallo[0]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Mar" && day == "2") {
+         accidentsCountText = incidentiPerIntervallo[1]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if( monthAbbreviation === "Apr" && day == "1") {
+         accidentsCountText = incidentiPerIntervallo[2]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if( monthAbbreviation === "May" && day == "1") {
+         accidentsCountText = incidentiPerIntervallo[3]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "May" && day == "31") {
+         accidentsCountText = incidentiPerIntervallo[4]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Jun" && day == "30") {
+         accidentsCountText = incidentiPerIntervallo[5]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Jul" && day == "30") {
+         accidentsCountText = incidentiPerIntervallo[6]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Aug" && day == "29") {
+         accidentsCountText = incidentiPerIntervallo[7]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Sep" && day == "28") {
+         accidentsCountText = incidentiPerIntervallo[8]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Oct" && day == "28") {
+         accidentsCountText = incidentiPerIntervallo[9]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Nov" && day == "27") {
+         accidentsCountText = incidentiPerIntervallo[10]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       }else if(monthAbbreviation === "Dec" && day == "27"){
+         accidentsCountText = incidentiPerIntervallo[11]
+         accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
+       } else {
+         flagInterval = true;
+         accidentsText = `${formattedDate}`;
+       }
 
 
       infoBoxArray.forEach((infoBox, index) => {
@@ -495,29 +533,36 @@ function drawLineWithValue(data, color, id) {
           .attr('x', 15)
           .attr('dy', '-1.5px'); // Imposta l'offset verticale per la seconda riga
 
-        infoBox.select('text')
-          .append('tspan')
-          .style("fill", "#524a32")
-          .style("font-family", "Lora")
-          .style("font-size", "10px")
-          .style("text-align", "left")
-          .attr('x', 15)
-          .attr('dy', '15.2px') // Imposta l'offset verticale per la terza riga
-          .text("n1 ");
+        if(!flagInterval) {
+          timeSeriesSvg.selectAll(".info-box-rect").attr('height', 35.5);
 
-        infoBox.select('text')
-          .append('tspan')
-          .style("fill", "#524a32")
-          .style("font-family", "Lora")
-          .style("font-size", "10px")
-          .text(accidentsCountText);
+          infoBox.select('text')
+            .append('tspan')
+            .style("fill", "#524a32")
+            .style("font-family", "Lora")
+            .style("font-size", "10px")
+            .style("text-align", "left")
+            .attr('x', 15)
+            .attr('dy', '15.2px') // Imposta l'offset verticale per la terza riga
+            .text("n1 ");
+
+          infoBox.select('text')
+            .append('tspan')
+            .style("fill", "#524a32")
+            .style("font-family", "Lora")
+            .style("font-size", "10px")
+            .text(accidentsCountText);
 
 
-        infoBox.select('text')
-          .append('tspan')
-          .html("<br>")
-          .attr('x', 0)
-          .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+          infoBox.select('text')
+            .append('tspan')
+            .html("<br>")
+            .attr('x', 0)
+            .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+        } else {
+          timeSeriesSvg.selectAll(".info-box-rect").attr('height', 20.5);
+
+        }
 
         if(infoBoxNatureArray.length > 0) {
 
@@ -541,6 +586,7 @@ function drawLineWithValue(data, color, id) {
       });
 
     }
+    flagInterval = false;
   }
 }
 
@@ -746,7 +792,6 @@ function addPoints(nature) {
 function drawPoints(data, color) {
   // Filtra i dati in modo da includere solo quelli con NumeroIncidenti diverso da zero
   var filteredData = data.filter(function(d) {
-  console.log(d.DataOraIncidente)
     return d.NumeroIncidenti !== 0;
   });
 
@@ -799,6 +844,49 @@ function drawPoints(data, color) {
 }
 
 function drawTimeSeriesChart(csvFileName){
+  incidentiPerIntervallo = []
+
+  d3.csv(csvFileName, function (data) {
+    timeSeriesDataDaily = data.filter(function (row) {
+      return row['DataOraIncidente', 'NumeroIncidenti'];
+    });
+    convertData(timeSeriesDataDaily);
+
+// Funzione per calcolare la somma degli incidenti per un intervallo di date
+    function calcolaSommaIncidenti(data, inizio, fine) {
+
+      var sommaIncidenti = data.reduce(function (acc, row) {
+        // Estrai la data dall'oggetto row
+        var dataIncidente = new Date(row['DataOraIncidente']);
+
+        // Verifica se la data rientra nell'intervallo specificato
+        if (dataIncidente >= inizio && dataIncidente <= fine)
+          // Se sì, aggiungi il numero di incidenti alla somma
+          return acc + parseInt(row['NumeroIncidenti']);
+        else return acc;
+      }, 0);
+      console.log('Somma incidenti per intervallo:', sommaIncidenti);
+      return sommaIncidenti;
+    }
+
+// Per ciascun intervallo di date, calcola la somma degli incidenti e aggiungi il risultato all'array incidentiPerIntervallo
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-01-01'), new Date(selectedYear + '-01-31')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-02-01'), new Date(selectedYear + '-03-02')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-03-03'), new Date(selectedYear + '-04-01')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-04-02'), new Date(selectedYear + '-05-01')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-05-02'), new Date(selectedYear + '-05-31')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-06-01'), new Date(selectedYear + '-06-30')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-07-01'), new Date(selectedYear + '-07-30')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-07-31'), new Date(selectedYear + '-08-29')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-08-30'), new Date(selectedYear + '-09-28')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-09-29'), new Date(selectedYear + '-10-28')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-10-29'), new Date(selectedYear + '-11-27')));
+    incidentiPerIntervallo.push(calcolaSommaIncidenti(timeSeriesDataDaily, new Date(selectedYear + '-11-28'), new Date(selectedYear + '-12-27')));
+
+// Adesso incidentiPerIntervallo conterrà le somme degli incidenti per ciascun intervallo di date
+    console.log(incidentiPerIntervallo);
+
+  });
 
   d3.csv(csvFileName, function (data) {
     timeSeriesData = data.filter(function (row) {
@@ -827,15 +915,10 @@ function drawTimeSeriesChart(csvFileName){
       keysLegends = []
       drawLegend("General\naccidents","#ded6bf", 15.5);
       currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
-      d3.csv(currentCsvFileName, function (data) {
-        timeSeriesDataDaily = data.filter(function (row) {
-          return row['DataOraIncidente', 'NumeroIncidenti'];
-        });
-      convertData(timeSeriesDataDaily);
       drawZoom(timeSeriesDataDaily);
       /*addPoints("noNature");
       drawPoints(timeSeriesDataDaily, "#ded6bf");*/
-      });
+
     }
 
 /*
@@ -1018,7 +1101,7 @@ function drawUnit(val) {
 
   // Aggiungi la scritta sotto il trattino
   legend.append("text")
-    .text("30 days")
+    .text("31 days")
     .attr("x", 599 - (val/2))
     .attr("y", 83)  // Regola la posizione verticale della scritta
     .style("fill", "#524a32")
