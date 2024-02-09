@@ -1353,8 +1353,8 @@ function drawZoom(data) {
         intermediateTicks.push(intermediateTickValue);
       }
     }
-    const allTicks = [...tickValues, ...intermediateTicks];
-
+    var allTicks = [...tickValues, ...intermediateTicks];
+    console.log("ehiehiehi = " + allTicks)
     // Imposta i tick sull'asse x in base al livello di zoom
     console.log("ZOOM: "+transform.k)
     if (transform.k > 13 && transform.k < 17 || (transform.k > 20 &&  transform.k < 21)) {}
@@ -1415,10 +1415,8 @@ function drawZoom(data) {
     hGridLines.remove();
 
     // Ottieni tutti i tick values correnti e disegna la griglia
-    const allXTicks = xAxisZoom.scale().ticks();
     const allYTicks = yAxisTimeSeries.scale().ticks().filter(tick => Number.isInteger(tick));
-    console.log("Y ticks: "+allYTicks)
-    drawGridDaily(allXTicks, allYTicks)
+    drawGridDaily(allTicks, allYTicks)
     const yAxisFormat = d3.format(".0f");
     yAxisTimeSeries.tickValues(allYTicks)
        .tickFormat(d => Number.isInteger(d) ? yAxisFormat(d) : null);
@@ -1518,7 +1516,6 @@ timeSeriesSvg.selectAll(".y-axis text")
     .attr("class", "y-axis")
     .attr("transform", `translate(50, 50)`)
     .style("font-family", "Lora")
-
     .call(yAxisTimeSeries.tickFormat(function(d){return d;}))
     .append("text")
     .attr("transform", "rotate(-90)")
