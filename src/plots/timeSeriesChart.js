@@ -465,7 +465,6 @@ function drawLineWithValue(data, color, id) {
 
       }
 
-
       let date = new Date(d.DataOraIncidente);
       let day = date.getDate();
       let monthAbbreviation = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);

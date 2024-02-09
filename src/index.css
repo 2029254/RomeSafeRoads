@@ -365,7 +365,6 @@ button.btn-small {
     stroke-width: 0.5;
 }
 
-
 .switch {
   position: relative;
   display: inline-block;
@@ -450,14 +449,13 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
     cursor: pointer;
 }
 
-#zoom {
+#zoom, #brush {
     font-family: Lora, serif;
     color: #524a32;
     font-weight: bold;
     font-size: 18px;
     line-height: 3;
 }
-
 .pop-animation {
     animation: pop 0.5s ease-in-out forwards; /* Modifica la durata e l'effetto desiderato */
 }
