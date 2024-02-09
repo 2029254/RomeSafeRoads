@@ -760,7 +760,7 @@ function drawGridDaily(allXTicks, allYTicks){
 
   // Aggiungi linee tratteggiate verticali
   timeSeriesSvg.selectAll("line.vgrid")
-    .data(allXTicks.slice(1))
+    .data(allXTicks)
     .enter()
     .append("line")
     .attr("class", "vgrid")
@@ -777,7 +777,7 @@ function drawGridDaily(allXTicks, allYTicks){
 
   // Aggiungi linee tratteggiate orizzontali
   timeSeriesSvg.selectAll("line.hgrid")
-    .data(allYTicks.slice(1))
+    .data(allYTicks)
     .enter()
     .append("line")
     .attr("class", "hgrid")
@@ -1312,6 +1312,14 @@ function drawZoom(data) {
   function zoomed() {
     const transform = d3.event.transform;
 
+    // Imposta i limiti di trasformazione per evitare che i valori escano dagli assi
+        transform.x = Math.min(0, Math.max(widthTimeSeries - widthTimeSeries * transform.k, transform.x));
+        transform.y = Math.min(0, Math.max(heightTimeSeries - heightTimeSeries * transform.k, transform.y));
+
+        // Aggiorna l'asse x e y in base alla trasformazione
+        timeSeriesSvg.select(".x-axis").call(xAxisZoom.scale(transform.rescaleX(xScaleTimeSeries)));
+        timeSeriesSvg.select(".y-axis").call(yAxisTimeSeries.scale(transform.rescaleY(yScaleTimeSeries)));
+
     if (transform.k === 1) {
       transform.x = 0;
       transform.y = 0;
@@ -1401,23 +1409,41 @@ function drawZoom(data) {
       }
  */
   // Imposta la griglia per ogni tick value quando lo zoom è massimo
-  if (transform.k === 24) {
+  if (transform.k>=0 && transform.k<= 24) {
     // Rimuovi la vecchia griglia
     vGridLines.remove();
     hGridLines.remove();
 
     // Ottieni tutti i tick values correnti e disegna la griglia
     const allXTicks = xAxisZoom.scale().ticks();
-    const allYTicks = yAxisTimeSeries.scale().ticks();
+    const allYTicks = yAxisTimeSeries.scale().ticks().filter(tick => Number.isInteger(tick));
     console.log("Y ticks: "+allYTicks)
     drawGridDaily(allXTicks, allYTicks)
+    const yAxisFormat = d3.format(".0f");
+    yAxisTimeSeries.tickValues(allYTicks)
+       .tickFormat(d => Number.isInteger(d) ? yAxisFormat(d) : null);
   }
   else {
    // Rimuovi la vecchia griglia
     vGridLines.remove();
     hGridLines.remove();
+    yAxisTimeSeries.tickValues(null).tickFormat(null);
     drawGrid()
   }
+
+timeSeriesSvg.selectAll(".y-axis text")
+      .style("display", function(d) {
+        const yValue = transform.applyY(yScaleTimeSeries(d));
+        return (yValue >= 0 && yValue <= heightTimeSeries) ? "block" : "none";
+      });
+
+    // Rimuovi i valori degli assi che sono al di fuori dei limiti dell'asse X
+    timeSeriesSvg.selectAll(".x-axis text")
+      .style("display", function(d) {
+        const xValue = transform.applyX(xScaleTimeSeries(d));
+        return (xValue >= 0 && xValue <= widthTimeSeries) ? "block" : "none";
+      });
+
 
     const xMinNew = Math.min(0, widthTimeSeries - widthTimeSeries * transform.k);
     const xMaxNew = Math.max(widthTimeSeries - widthTimeSeries * transform.k, 0);
