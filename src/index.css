@@ -378,6 +378,19 @@ button.btn-small {
   height: 0;
 }
 
+.switchBrush {
+  position: relative;
+  display: inline-block;
+  width: 65px;
+  height: 34px;
+}
+
+.switchBrush input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
 .slider-switch {
   position: absolute;
   cursor: pointer;
@@ -403,7 +416,33 @@ button.btn-small {
   transition: .4s;
   border-radius: 50%;
   cursor: pointer;
+}
 
+.slider-switch-brush {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #facdcd; /*provare anche #fca9a9*/
+  box-shadow: 0 2px 4px darkslategray;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider-switch-brush:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #827c68;
+  opacity: 0.8;
+  transition: .4s;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .slider-labels {
@@ -421,11 +460,34 @@ button.btn-small {
   padding: 0 5px;
 }
 
+.slider-labels-brush {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slider-labels-brush span {
+  flex: 1;
+  text-align: center;
+  padding: 0 5px;
+}
+
 .switch input:checked + .slider-switch {
   background-color: #2196F3;
 }
 
 .switch input:checked + .slider-switch:before {
+  transform: translateX(31px);
+}
+
+.switch input:checked + .slider-switch-brush {
+  background-color: #2196F3;
+}
+
+.switch input:checked + .slider-switch-brush:before {
   transform: translateX(31px);
 }
 
@@ -437,7 +499,19 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
   display: none;
 }
 
+input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brushon {
+  display: block;
+}
+
+input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brushoff {
+  display: none;
+}
+
 .slider-switch.checked:before {
+    transform: translateX(31px);
+}
+
+.slider-switch-brush.checked:before {
     transform: translateX(31px);
 }
 
@@ -459,3 +533,4 @@ input[type="checkbox"]:checked + .slider-switch .slider-labels .off {
 .pop-animation {
     animation: pop 0.5s ease-in-out forwards; /* Modifica la durata e l'effetto desiderato */
 }
+

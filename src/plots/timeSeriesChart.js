@@ -1192,10 +1192,18 @@ function drawLegend(text, color, value) {
 
 }
 document.addEventListener('DOMContentLoaded', function() {
+
+  //Primo switch
   const switchInput = document.getElementById('switch');
   const sliderSwitch = document.querySelector('.slider-switch');
   var onLabel = document.getElementById("on");
   var offLabel = document.getElementById("off");
+
+  // Secondo switch
+   const switchBrushInput = document.getElementById('switchBrush');
+   const sliderBrushSwitch = document.querySelector('.slider-switch-brush');
+   var brushOnLabel = document.getElementById("brushon");
+   var brushOffLabel = document.getElementById("brushoff");
 
   switchInput.addEventListener('change', function() {
     switchValue = $(this).is(":checked") ? "ON" : "OFF";
@@ -1220,7 +1228,32 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("PROVSSSS: "+currentCsvFileName)
 
   });
+
+    switchBrushInput.addEventListener('change', function() {
+      switchBrushValue = $(this).is(":checked") ? "ON" : "OFF";
+      console.log("Brush Switch value:", switchBrushValue);
+      if (switchBrushValue === "ON") {
+         sliderBrushSwitch.style.backgroundColor = "#c2e0bc"; //provare anche "#c2e0bc" #b6e0af;
+         brushOnLabel.style.display = "block"; // Mostra l'etichetta ON
+         brushOffLabel.style.display = "none"; // Nascondi l'etichetta OFF
+      }
+      else {
+         sliderBrushSwitch.style.backgroundColor = "#facdcd";
+         brushOnLabel.style.display = "none"; // Mostra l'etichetta ON
+         brushOffLabel.style.display = "block"; // Nascondi l'etichetta OFF
+      }
+      sliderBrushSwitch.classList.toggle('checked');
+      keysLegends = []
+      infoBoxNatureArray = []
+      focusNatureArray = []
+      timeSeriesSvg.selectAll("*").remove();
+      drawTimeSeriesChart(csvFileNameTimeSeries);
+      currentCsvFileName = csvFileNameTimeSeries;
+      console.log("PROVSSSS: "+currentCsvFileName)
+    });
 });
+
+
 
 function drawZoom(data) {
 
