@@ -1191,68 +1191,76 @@ function drawLegend(text, color, value) {
     .style("stroke-width", 0.1);
 
 }
+
 document.addEventListener('DOMContentLoaded', function() {
 
-  //Primo switch
+  // Primo switch
   const switchInput = document.getElementById('switch');
   const sliderSwitch = document.querySelector('.slider-switch');
   var onLabel = document.getElementById("on");
   var offLabel = document.getElementById("off");
 
   // Secondo switch
-   const switchBrushInput = document.getElementById('switchBrush');
-   const sliderBrushSwitch = document.querySelector('.slider-switch-brush');
-   var brushOnLabel = document.getElementById("brushon");
-   var brushOffLabel = document.getElementById("brushoff");
+  const switchBrushInput = document.getElementById('switchBrush');
+  const sliderBrushSwitch = document.querySelector('.slider-switch-brush');
+  var brushOnLabel = document.getElementById("brushon");
+  var brushOffLabel = document.getElementById("brushoff");
 
   switchInput.addEventListener('change', function() {
-    switchValue = $(this).is(":checked") ? "ON" : "OFF";
-    console.log("Switch value:", switchValue);
-    if (switchValue === "ON") {
-       sliderSwitch.style.backgroundColor = "#c2e0bc"; //provare anche "#c2e0bc" #b6e0af;
-       onLabel.style.display = "block"; // Mostra l'etichetta ON
-       offLabel.style.display = "none"; // Nascondi l'etichetta OFF
+    // Imposta il valore dell'input in base allo stato dello switch
+    switchValue = switchInput.value = this.checked ? "ON" : "OFF";
+    switchInput.value = this.checked ? "ON" : "OFF";
+    // Assicurati che solo uno dei due switch sia attivo
+    if (this.checked) {
+      switchBrushInput.checked = false;
+      switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
     }
-    else {
-       sliderSwitch.style.backgroundColor = "#facdcd";
-       onLabel.style.display = "none"; // Mostra l'etichetta ON
-       offLabel.style.display = "block"; // Nascondi l'etichetta OFF
+    updateSwitches();
+  });
+
+  switchBrushInput.addEventListener('change', function() {
+    // Imposta il valore dell'input in base allo stato dello switch
+    switchBrushInput.value = this.checked ? "ON" : "OFF";
+    // Assicurati che solo uno dei due switch sia attivo
+    if (this.checked) {
+      switchInput.checked = false;
+      switchInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
     }
-    sliderSwitch.classList.toggle('checked');
-    keysLegends = []
-    infoBoxNatureArray = []
-    focusNatureArray = []
+    updateSwitches();
+  });
+
+  function updateSwitches() {
+    console.log("ZOOM VALUE: " + switchInput.value);
+    console.log("BRUSH VALUE: " + switchBrushInput.value);
+
+    // Aggiorna l'aspetto degli switch
+    updateSwitchAppearance(switchInput, sliderSwitch, onLabel, offLabel, switchInput.checked);
+    updateSwitchAppearance(switchBrushInput, sliderBrushSwitch, brushOnLabel, brushOffLabel, switchBrushInput.checked);
+
+    // Altro codice per aggiornare l'interfaccia utente in base allo stato degli switch
+    keysLegends = [];
+    infoBoxNatureArray = [];
+    focusNatureArray = [];
     timeSeriesSvg.selectAll("*").remove();
     drawTimeSeriesChart(csvFileNameTimeSeries);
     currentCsvFileName = csvFileNameTimeSeries;
-    console.log("PROVSSSS: "+currentCsvFileName)
+    console.log("PROVSSSS: " + currentCsvFileName);
+  }
 
-  });
+  function updateSwitchAppearance(input, slider, onLabel, offLabel, checked) {
+    if (checked) {
+      slider.style.backgroundColor = "#c2e0bc";
+      onLabel.style.display = "block";
+      offLabel.style.display = "none";
+    } else {
+      slider.style.backgroundColor = "#facdcd";
+      onLabel.style.display = "none";
+      offLabel.style.display = "block";
+    }
+    slider.classList.toggle('checked', checked);
+  }
 
-    switchBrushInput.addEventListener('change', function() {
-      switchBrushValue = $(this).is(":checked") ? "ON" : "OFF";
-      console.log("Brush Switch value:", switchBrushValue);
-      if (switchBrushValue === "ON") {
-         sliderBrushSwitch.style.backgroundColor = "#c2e0bc"; //provare anche "#c2e0bc" #b6e0af;
-         brushOnLabel.style.display = "block"; // Mostra l'etichetta ON
-         brushOffLabel.style.display = "none"; // Nascondi l'etichetta OFF
-      }
-      else {
-         sliderBrushSwitch.style.backgroundColor = "#facdcd";
-         brushOnLabel.style.display = "none"; // Mostra l'etichetta ON
-         brushOffLabel.style.display = "block"; // Nascondi l'etichetta OFF
-      }
-      sliderBrushSwitch.classList.toggle('checked');
-      keysLegends = []
-      infoBoxNatureArray = []
-      focusNatureArray = []
-      timeSeriesSvg.selectAll("*").remove();
-      drawTimeSeriesChart(csvFileNameTimeSeries);
-      currentCsvFileName = csvFileNameTimeSeries;
-      console.log("PROVSSSS: "+currentCsvFileName)
-    });
 });
-
 
 
 function drawZoom(data) {
