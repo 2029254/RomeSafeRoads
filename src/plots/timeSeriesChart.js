@@ -12,7 +12,7 @@ var widthInfoBox = 49;
 var heightInfoBox = 35.5;
 var incidentiPerIntervallo = [];
 var flagInterval = false;
-
+var switchInput = undefined, switchBrushInput = undefined;
 let currentTransform = d3.zoomIdentity;
 
 // append the svg object to the body of the page
@@ -108,7 +108,7 @@ function setAxesScale(data) {
 
   yScaleTimeSeries = d3.scaleLinear();
 
-  if (switchValue == "ON") {
+  if (switchInput.value === "ON") {
     yScaleTimeSeries.domain([0, 160])
   } else {
     yScaleTimeSeries.domain([0, 160])
@@ -380,7 +380,7 @@ function drawLineWithValue(data, color, id) {
       xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
     })
     .on('mousemove', function(event) {
-      if (switchValue === "OFF" || switchValue === undefined)
+      if (switchInput.value === "OFF" || switchInput.value === undefined)
         mousemove.call(this, event); // Usa call per garantire il corretto contesto 'this'
     });
 
@@ -823,7 +823,7 @@ function drawPoints(data, color) {
     .attr("class", "point")
     .each(function(d) {
       // Aggiungi cerchio più grande solo per il punto massimo
-      if (d === maxIncident && (switchValue==="OFF" || switchValue===undefined || switchValue==="ON")) {
+      if (d === maxIncident && (switchInput.value==="OFF" || switchInput.value===undefined || switchInput.value==="ON")) {
         d3.select(this).append("circle")
           .attr("class", "outer-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
@@ -845,7 +845,7 @@ function drawPoints(data, color) {
           .on("mouseout", hideIncidentCount);
 
       }
-      if (switchValue==="ON") {
+      if (switchInput.value==="ON") {
        // Aggiungi cerchio più piccolo per tutti i punti con clip path
              d3.select(this).append("circle")
                .attr("class", "inner-point")
@@ -918,24 +918,23 @@ function drawTimeSeriesChart(csvFileName){
     drawLineWithValue(timeSeriesData, "#cab2d6", "main");
     addPoints("noNature");
     drawPoints(timeSeriesData, "#ded6bf");
-    if (switchValue === "OFF" || switchValue === undefined) drawXHoverLine();
+    if (switchInput.value === "OFF" || switchInput.value === undefined) drawXHoverLine();
     if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
     drawLegend("General\naccidents","#ded6bf", 15.5);
 
-    if (switchValue === "OFF" || switchValue === undefined) {
+    if (switchInput.value === "OFF" || switchInput.value === undefined) {
       drawInfoBox("main");
       infoBoxArray.push(infoBox);
     } else {
       timeSeriesSvg.selectAll("*").remove();
       drawGrid();
-      if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
+      if (selectedYear !== "2022") drawUnit(20); else drawUnit(0);
       keysLegends = []
-      drawLegend("General\naccidents","#ded6bf", 15.5);
+      drawLegend("General\naccidents", "#ded6bf", 15.5);
       currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
       drawZoom(timeSeriesDataDaily);
       /*addPoints("noNature");
       drawPoints(timeSeriesDataDaily, "#ded6bf");*/
-
     }
 
 /*
@@ -1195,20 +1194,23 @@ function drawLegend(text, color, value) {
 document.addEventListener('DOMContentLoaded', function() {
 
   // Primo switch
-  const switchInput = document.getElementById('switch');
+  switchInput = document.getElementById('switch');
+  switchInput.value = this.checked ? "ON" : "OFF";
+  console.log("ZOOM VALUE: " + switchInput.value);
   const sliderSwitch = document.querySelector('.slider-switch');
   var onLabel = document.getElementById("on");
   var offLabel = document.getElementById("off");
 
   // Secondo switch
-  const switchBrushInput = document.getElementById('switchBrush');
+  switchBrushInput = document.getElementById('switchBrush');
+  switchBrushInput.value = this.checked ? "ON" : "OFF";
+  console.log("BRUSH VALUE: " + switchBrushInput.value);
   const sliderBrushSwitch = document.querySelector('.slider-switch-brush');
   var brushOnLabel = document.getElementById("brushon");
   var brushOffLabel = document.getElementById("brushoff");
 
   switchInput.addEventListener('change', function() {
     // Imposta il valore dell'input in base allo stato dello switch
-    switchValue = switchInput.value = this.checked ? "ON" : "OFF";
     switchInput.value = this.checked ? "ON" : "OFF";
     // Assicurati che solo uno dei due switch sia attivo
     if (this.checked) {
@@ -1230,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function updateSwitches() {
+
     console.log("ZOOM VALUE: " + switchInput.value);
     console.log("BRUSH VALUE: " + switchBrushInput.value);
 
