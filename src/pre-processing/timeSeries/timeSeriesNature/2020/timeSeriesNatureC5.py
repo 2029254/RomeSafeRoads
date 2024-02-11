@@ -35,51 +35,16 @@ dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Vei
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
                                                   errors='coerce')
 
-
 # Drop duplicate Protocollo entries
 dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
 
 dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
 
+# Group by date and count incidents for each date
+incident_counts = dataset_rows.groupby(dataset_rows['DataOraIncidente'].dt.date).size().reset_index(name='NumeroIncidenti')
 
-# Creare una lista di dizionari contenenti i dati
-result_data = []
-
-# Aggiungi il conteggio per il 1 gennaio separatamente
-start_date = pd.to_datetime('2020-01-02')
-incidents_on_jan_1 = dataset_rows[
-    (dataset_rows['DataOraIncidente'] < start_date)
-]
-num_incidents_on_jan_1 = len(incidents_on_jan_1)
-
-result_data.append({
-    'DataOraIncidente':  pd.to_datetime('2020-01-01'),
-    'NumeroIncidenti': num_incidents_on_jan_1
-})
-
-# Date range da 1 gennaio 2020 a 31 dicembre 2020, con intervallo di 10 giorni
-date_range = pd.date_range(start='2020-01-01', end='2020-12-31', freq='10D')
-
-# Iterare sugli intervalli di 10 giorni
-for start_date in date_range:
-    end_date = start_date + pd.Timedelta(days=10)  # Calcola la data di fine intervallo
-    incidents_in_interval = dataset_rows[
-        (dataset_rows['DataOraIncidente'] >= start_date) &
-        (dataset_rows['DataOraIncidente'] <= end_date)
-        ]
-    # Calcola il numero di incidenti nell'intervallo
-    num_incidents = len(incidents_in_interval)
-
-    # Aggiungi un dizionario ai dati risultanti
-    result_data.append({
-        'DataOraIncidente': end_date,
-        'NumeroIncidenti': num_incidents
-    })
-
-result_data[-1]['End Date'] = pd.to_datetime('2020-12-31')
-
-# Creare il DataFrame risultante
-result_df = pd.DataFrame(result_data)
+# Sort the DataFrame by date
+incident_counts.sort_values(by='DataOraIncidente', inplace=True)
 
 # Save the processed DataFrame
-result_df.to_csv('dataset/processed/timeSeries/2020/timeSeriesNatureC5.csv', header=True, index=False)
+incident_counts.to_csv('dataset/processed/timeSeries/2020/timeSeriesNatureC5.csv', header=True, index=False)

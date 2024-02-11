@@ -449,7 +449,7 @@ function onclickBar(d) {
                    natureTimeSeries = "Side/head-on\ncollision"
               }
 
-              if (switchValue === "OFF" || switchValue === undefined){
+              if (switchInput.value === "OFF" && switchBrushInput.value === "OFF"){
                 convertData(data);
                 // timeSeriesSvg.selectAll(".info-box").remove();
                 drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
