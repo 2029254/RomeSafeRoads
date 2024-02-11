@@ -12,7 +12,7 @@ var widthInfoBox = 49;
 var heightInfoBox = 35.5;
 var incidentiPerIntervallo = [];
 var flagInterval = false;
-var switchInput = undefined, switchBrushInput = undefined;
+var switchInput, switchBrushInput;
 let currentTransform = d3.zoomIdentity;
 
 // append the svg object to the body of the page
@@ -380,7 +380,7 @@ function drawLineWithValue(data, color, id) {
       xHoverLine.style('display', 'none');  // Nascondi la linea quando il mouse esce dall'area
     })
     .on('mousemove', function(event) {
-      if (switchInput.value === "OFF" || switchInput.value === undefined)
+      if (switchInput.value === "OFF" && switchBrushInput.value === "OFF")
         mousemove.call(this, event); // Usa call per garantire il corretto contesto 'this'
     });
 
@@ -823,7 +823,7 @@ function drawPoints(data, color) {
     .attr("class", "point")
     .each(function(d) {
       // Aggiungi cerchio più grande solo per il punto massimo
-      if (d === maxIncident && (switchInput.value==="OFF" || switchInput.value===undefined || switchInput.value==="ON")) {
+      if (d === maxIncident && (switchInput.value==="OFF" || switchBrushInput.value==="ON" || switchInput.value==="ON")) {
         d3.select(this).append("circle")
           .attr("class", "outer-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
@@ -922,10 +922,7 @@ function drawTimeSeriesChart(csvFileName){
     if(selectedYear!== "2022") drawUnit(20); else drawUnit(0);
     drawLegend("General\naccidents","#ded6bf", 15.5);
 
-    if (switchInput.value === "OFF" || switchInput.value === undefined) {
-      drawInfoBox("main");
-      infoBoxArray.push(infoBox);
-    } else {
+    if (switchInput.value === "ON") {
       timeSeriesSvg.selectAll("*").remove();
       drawGrid();
       if (selectedYear !== "2022") drawUnit(20); else drawUnit(0);
@@ -935,26 +932,42 @@ function drawTimeSeriesChart(csvFileName){
       drawZoom(timeSeriesDataDaily);
       /*addPoints("noNature");
       drawPoints(timeSeriesDataDaily, "#ded6bf");*/
+    } else if (switchBrushInput.value === "ON") {
+      timeSeriesSvg.selectAll("*").remove();
+      if (selectedYear !== "2022") drawUnit(20); else drawUnit(0);
+      keysLegends = []
+      drawLegend("General\naccidents", "#ded6bf", 15.5);
+      currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
+      setAxesScale(timeSeriesData);
+      drawAxes(timeSeriesData);
+      drawGrid();
+      drawLineWithValue(timeSeriesData, "#cab2d6", "main");
+      addPoints("noNature");
+      drawPoints(timeSeriesData, "#ded6bf");
+
+      // Crea un elemento di brush per la selezione
+      var brush = d3.brushX()
+        .extent([[0, 0], [500, 200]])
+        .on("end",  function(d) { return brushedTimeSeries(d)});
+
+      // Aggiungi il brush all'elemento g del tuo grafico
+      timeSeriesSvg.append("g")
+        .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
+        .attr("class", "brush")
+        .call(brush);
+
+
+    } else {
+      drawInfoBox("main");
+      infoBoxArray.push(infoBox);
     }
 
-/*
-
-    // Crea un elemento di brush per la selezione
-    var brush = d3.brushX()
-      .extent([[0, 0], [widthTimeSeries, heightTimeSeries]])
-      .on("end", brushed);
-
-// Aggiungi il brush all'elemento g del tuo grafico
-    timeSeriesSvg.append("g")
-      .attr("class", "brush")
-      .call(brush);
-
- */
 
   });
 }
 
-function brushed() {
+function brushedTimeSeries(d) {
+  console.log("CIAO")
   if (!d3.event.selection) return; // Se la selezione è nulla, esci dalla funzione
 
   // Ottieni la data iniziale e finale selezionate
