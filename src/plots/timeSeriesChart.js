@@ -1238,6 +1238,90 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.checked) {
       switchBrushInput.checked = false;
       switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+      var button = document.getElementById("Cloudy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Sunny");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Rainy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Severe");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+    } else if (switchBrushInput.value === "OFF"){
+      var button = document.getElementById("Cloudy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Sunny");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Rainy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Severe");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
     }
     updateSwitches();
   });
@@ -1249,6 +1333,90 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.checked) {
       switchInput.checked = false;
       switchInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+      var button = document.getElementById("Cloudy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Sunny");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Rainy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Severe");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+    } else if (switchInput.value === "OFF"){
+      var button = document.getElementById("Cloudy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+
+      button = document.getElementById("Sunny");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Rainy");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
+      button = document.getElementById("Severe");
+      d3.select(button)
+        .transition()
+        .duration(1000) // Durata dell'animazione in millisecondi
+        .style("opacity", 1) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
+        .style("pointer-events", "auto") // Impedisce al bottone di essere cliccato durante l'animazione
+        .on("end", function() {
+          button.style.display = "block"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
+        });
+
     }
     updateSwitches();
   });

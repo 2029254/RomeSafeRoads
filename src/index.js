@@ -26,7 +26,7 @@ let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
 let selectedYear;
 let csvFileNameScatterPlot;
-
+let csvFileNameVerticalBarChart;
 function updatePlotsBasingOnSelectedYear(){
   idPoints = 0
   arrayOfData = [];
@@ -36,7 +36,7 @@ function updatePlotsBasingOnSelectedYear(){
   infoBoxNatureArray = [];
   keysLegends = [];
 
-  let csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
+  csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
   let csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
   csvFileNameTimeSeries = "dataset/processed/timeSeries/";
   csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/";

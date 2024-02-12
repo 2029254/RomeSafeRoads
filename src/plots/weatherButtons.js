@@ -16,17 +16,17 @@ const imageClick = "dataset/img/"
 
 // Funzione per creare bottoni HTML
 function createHTMLButtons() {
-  let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "None", "First"];
+  let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "First"];
   const buttonsContainer = document.getElementById("buttons");
 
   buttonData.forEach((buttonText, i) => {
     const button = document.createElement("button");
     const buttonLabel = document.createElement("div"); // Elemento per la scritta
-    if(i!==4) {
+    if(i!==9) {
       button.id = buttonData[i]; // Assegna un ID univoco
       button.className = "circular-button"; // Applica la classe CSS per i bottoni circolari
       button.style.animation = "pop 0.5s ease-in-out";
-      if (i!==0) button.style.marginTop = (buttonRadius * 1.2 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
+      if (i!==0) button.style.marginTop = (buttonRadius * 1.5 + buttonPadding) + "px"; // Aggiungi spazio tra i bottoni
       //button.style.marginLeft = "0px"; // Aggiungi spazio tra i bottoni
       button.style.backgroundSize = "28px"; // Imposta l'immagine per riempire completamente il bottone
       button.style.backgroundRepeat = "no-repeat";
@@ -59,6 +59,7 @@ function createHTMLButtons() {
     }
     if (button.id === "First") button.hidden = true
 
+    console.log(buttonWeatherValue)
     button.addEventListener("click", function () {
       let body = document.getElementById("body");
 
