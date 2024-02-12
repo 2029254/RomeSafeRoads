@@ -19,11 +19,17 @@ for file in csv_2022:
     dataset_2022 = pandas.concat([dataset_2022, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # select the columns of interest
-columns = ['NaturaIncidente', 'Protocollo']
+columns = ['NaturaIncidente', 'Protocollo', 'DataOraIncidente']
+
 dataset_columns = dataset_2022[columns]
 
 # select the rows of interest
 dataset_rows = dataset_columns
+# Convert the 'DataOraIncidente' column to a datetime object
+dataset_rows['DataOraIncidente'] = pandas.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
+                                                  errors='coerce')
+
+dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
 
 # creation of dictionary to group natures
 groups = {

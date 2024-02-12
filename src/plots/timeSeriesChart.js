@@ -962,7 +962,6 @@ function drawTimeSeriesChart(csvFileName){
       infoBoxArray.push(infoBox);
     }
 
-
   });
 }
 
@@ -980,9 +979,16 @@ function brushedTimeSeries(d) {
   // Stampa le date iniziale e finale
   console.log("Data Iniziale:", formattedStartDate);
   console.log("Data Finale:", formattedEndDate);
+
+  updateAllGraphs(formattedStartDate, formattedEndDate);
 }
 
-
+function updateAllGraphs(formattedStartDate, formattedEndDate ) {
+  barChartSvg.selectAll("*").remove();
+  drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
+  drawColorsLegend();
+  keysLegends = [];
+}
 // Funzione per mostrare il numero di incidenti
 function showIncidentCount(d) {
   let incidentCount = d.NumeroIncidenti;

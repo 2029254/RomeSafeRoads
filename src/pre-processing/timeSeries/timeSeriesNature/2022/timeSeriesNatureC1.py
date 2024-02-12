@@ -30,11 +30,6 @@ dataset_rows = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['Inv
 dataset_rows['DataOraIncidente'] = pd.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
                                                   errors='coerce')
 
-# Drop duplicate Protocollo entries
-dataset_rows.drop_duplicates(subset='Protocollo', keep='first', inplace=True)
-
-dataset_rows.dropna(subset=['DataOraIncidente'], inplace=True)
-
 # Group by date and count incidents for each date
 incident_counts = dataset_rows.groupby(dataset_rows['DataOraIncidente'].dt.date).size().reset_index(name='NumeroIncidenti')
 

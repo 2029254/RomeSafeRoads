@@ -223,6 +223,119 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
 }
 
 
+function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate){
+
+  // definition of axes  height and width
+  xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
+  yScale = d3.scaleLinear().range([height, 0]);
+
+// Definire un oggetto mappa per memorizzare la somma degli incidenti per ogni natura
+  var incidentiPerNatura = new Map();
+
+// Funzione per leggere i dati da un file CSV
+  function leggiDati(fileName) {
+    return new Promise((resolve, reject) => {
+      d3.csv(fileName, function(data) {
+        var sommaNumeroIncidenti = 0; // Inizializzare la somma per ogni natura
+        data.forEach(function(row) {
+          // Estrarre la data e il numero di incidenti dalla riga corrente
+          var dataOraIncidente = row['DataOraIncidente'];
+          var numeroIncidenti = parseInt(row['NumeroIncidenti']);
+
+          // Verificare se la data è nel range specificato (formattedStartDate, formattedEndDate)
+          if (dataOraIncidente >= formattedStartDate && dataOraIncidente <= formattedEndDate) {
+            sommaNumeroIncidenti += numeroIncidenti;
+          }
+        });
+
+        resolve(sommaNumeroIncidenti); // Risolvere la promessa con la somma degli incidenti
+      });
+    });
+  }
+
+// Promessa per eseguire tutte le chiamate d3.csv
+  var promises = [];
+  for (var i = 1; i <= 8; i++) {
+    var fileName = 'dataset/processed/timeSeries/' + selectedYear + '/timeSeriesNatureC' + i + '.csv';
+    promises.push(leggiDati(fileName));
+  }
+
+// Attendere il completamento di tutte le chiamate d3.csv
+  Promise.all(promises)
+    .then(results => {
+      // Risultati contiene un array con le somme degli incidenti per ogni natura
+      for (var i = 0; i < results.length; i++) {
+        var naturaIncidente = 'C' + (i + 1);
+        incidentiPerNatura.set(naturaIncidente, results[i]);
+      }
+
+      // Ora la mappa incidentiPerNatura è stata popolata correttamente
+
+      // Convertire la mappa incidentiPerNatura in un array di oggetti
+      const resultArray = Array.from(incidentiPerNatura, ([natura, conteggio]) => ({
+        NaturaIncidente: natura,
+        NumeroIncidenti: conteggio,
+      }));
+
+      console.log(resultArray);
+      // get data group by year
+      dataAboutYearSorted = resultArray.sort(function (a, b) {
+        return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+      });
+
+      // definition of axes domain
+      xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
+      let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
+      yScale.domain([0, Math.max.apply(null, MinMax)]);
+
+      // bars creation
+      g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
+      g.selectAll(".bar")
+        .data(dataAboutYearSorted)
+        .enter().append("rect")
+        .attr("x", function (d) { return xScale(d.NaturaIncidente); })
+        .attr("y", function (d) { return yScale(d.NumeroIncidenti); })
+        .attr("width", xScale.bandwidth())
+        .attr("height", function (d) { return height - yScale(d.NumeroIncidenti) })
+        .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
+        .style("stroke", "black") // Aggiungi un bordo nero
+        .style("stroke-width", 0.3) // Imposta la larghezza del bordo
+        .on("click", function (d) {if(!choropleth)onclickBar(d)})
+        .on("mouseover", handleMouseOver)
+        .on("mouseout", function (d) {handleMouseOut(d)})
+        .on("mousemove", handleMouseOver)
+        .attr("class", "bar")
+        .style("transition", "0.3s");
+
+      // axis x description
+      g.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale))
+        .append("text")
+        .attr("y", 37)
+        .attr("x", width - 278)
+        .attr("text-anchor", "end")
+        .attr("fill", "black")
+        .text("Accidents' nature");
+
+      // axis y description
+      g.append("g")
+        .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0)
+        .attr("x", -105)
+        .attr("dy", "-5.1em")
+        .attr("text-anchor", "end")
+        .attr("fill", "black")
+        .text("Number of accidents");
+    })
+    .catch(error => {
+      console.error("Errore durante il recupero dei dati:", error);
+    });
+
+}
+
 function drawVerticalBarChart(csvFileName) {
 
   drawAxesAndBars(csvFileName);
