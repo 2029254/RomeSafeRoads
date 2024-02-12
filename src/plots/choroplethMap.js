@@ -56,48 +56,16 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
 
-        var button = document.getElementById("Cloudy");
-        d3.select(button)
-          .transition()
-          .duration(1000) // Durata dell'animazione in millisecondi
-          .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
-          .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
-          .on("end", function() {
-            button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
-          });
+        document.getElementById("Cloudy").disabled = true;
+        document.getElementById("Sunny").disabled = true;
+        document.getElementById("Rainy").disabled = true;
+        document.getElementById("Severe").disabled = true;
 
-
-        button = document.getElementById("Sunny");
-        d3.select(button)
-          .transition()
-          .duration(1000) // Durata dell'animazione in millisecondi
-          .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
-          .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
-          .on("end", function() {
-            button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
-          });
-
-
-        button = document.getElementById("Rainy");
-        d3.select(button)
-          .transition()
-          .duration(1000) // Durata dell'animazione in millisecondi
-          .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
-          .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
-          .on("end", function() {
-            button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
-          });
-
-
-        button = document.getElementById("Severe");
-        d3.select(button)
-          .transition()
-          .duration(1000) // Durata dell'animazione in millisecondi
-          .style("opacity", 0) // Riduce l'opacità a 0 per rendere il bottone invisibile gradualmente
-          .style("pointer-events", "none") // Impedisce al bottone di essere cliccato durante l'animazione
-          .on("end", function() {
-            button.style.display = "none"; // Imposta lo stile del bottone su "none" per renderlo invisibile dopo l'animazione
-          });
+        // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
+        document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
+        document.getElementById("Sunny").classList.toggle("disabled", this.checked);
+        document.getElementById("Rainy").classList.toggle("disabled", this.checked);
+        document.getElementById("Severe").classList.toggle("disabled", this.checked);
 
         let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
 

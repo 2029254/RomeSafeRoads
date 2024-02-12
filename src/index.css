@@ -534,3 +534,8 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
     animation: pop 0.5s ease-in-out forwards; /* Modifica la durata e l'effetto desiderato */
 }
 
+.disabled {
+  opacity: 0.4; /* Cambia l'opacità per rendere il pulsante visivamente disabilitato */
+  pointer-events: none; /* Impedisce al pulsante di essere cliccato */
+  /* Aggiungi altri stili CSS per personalizzare l'aspetto dei pulsanti disabilitati */
+}
