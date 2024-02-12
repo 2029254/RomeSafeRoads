@@ -988,6 +988,9 @@ function updateAllGraphs(formattedStartDate, formattedEndDate ) {
   drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
   drawColorsLegend();
   keysLegends = [];
+
+  choroplethMapSvg.selectAll("*").remove();
+  drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
 }
 // Funzione per mostrare il numero di incidenti
 function showIncidentCount(d) {

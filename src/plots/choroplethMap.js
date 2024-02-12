@@ -16,6 +16,7 @@ let dataAboutTownHall;
 let path, tooltipChor;
 let centroidTownHalls = new Map();
 let projection;
+let groupedByTownHall;
 
 function drawChoroplethMap(csvFileNameChoroplethMap) {
 
@@ -277,6 +278,141 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
   });
   }
 
+function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
+
+  // function to get and filter csv data
+  d3.csv('dataset/processed/choroplethMap/choroplethMapDaily' + selectedYear + '.csv', function (data) {
+    var filteredData = data.filter(function (row) {
+      var rowDataOraIncidente = row['DataOraIncidente'];
+      return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+    });
+
+    groupedByTownHall = new Map();
+    filteredData.forEach(item => {
+      let municipio = item.Municipio;
+      if (!groupedByTownHall.has(municipio)) {
+        groupedByTownHall.set(municipio, []);
+      }
+      groupedByTownHall.get(municipio).push(item);
+    });
+
+    let incidentCounts = new Map();
+    groupedByTownHall.forEach((data, municipio) => {
+      const count = data.length;
+      incidentCounts.set(municipio, count);
+    });
+    console.log(incidentCounts)
+
+
+    // Definisci la proiezione geografica
+    projection = d3.geoMercator()
+      .center([12.4964, 41.9028]) // Coordinata centrale per Roma
+      .scale(30000)
+      .translate([500 / 2.2, 350 / 1.90]);
+
+    // Crea un generatore di percorsi geografici
+    path = d3.geoPath().projection(projection);
+
+// Carica i dati GeoJSON dei comuni
+    d3.json("dataset/source/choropleth-map/municipi.geojson", function (error, data) {
+      if (error) throw error;
+      centroidTownHalls.clear();
+
+      // Crea i percorsi geografici
+      choroplethMapSvg.selectAll("path")
+        .data(data.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("class", "area")
+        .style("transition", "0.3s")
+        .style("stroke", "black")
+        .style("stroke-width", "0.3px")
+        .attr("id",function (d) {
+          centroidTownHalls.set(d.properties.nome, path.centroid(d));
+          return d.properties.nome })
+        .style("fill",function (d) {
+          return setBarColorChoroplethMapFromOtherCharts(d)}) // Colore di riempimento
+        .on("mouseover",  function(d) {
+          let townHallAndAccidentsNumber = groupedByTownHall.get(d.properties.nome);
+          if (townHallAndAccidentsNumber !== undefined) {
+            accidentsNumber = townHallAndAccidentsNumber.length; // Se il comune è presente, ottieni il numero di incidenti
+          } else
+            accidentsNumber = 0; // Se il comune non è presente, impostalo su 0
+
+          if (!isActive) {
+            // Rendi meno opache tutte le aree tranne l'area corrente
+            choroplethMapSvg.selectAll(".area")
+              .style("opacity", 0.3);
+            d3.select(this)
+              .style("opacity", 1); // Imposta l'opacità dell'area corrente a 1
+          }
+          //puntatore pointer solo per le aree con numeroincidenti >1
+          if (accidentsNumber > 1) {
+            d3.select(this).style("cursor", "pointer");
+
+          }
+        })
+        .on("mouseout", handleMouseOutChoroplethMap)
+        .on("mousemove",  function(d) {
+          tooltipChor = d3.select("#popupChoropleth");
+          tooltipChor.style("opacity", 0.9);
+
+          tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>" + "deaths: "+ accidentsNumber + "</tspan>")
+            .style("color", "#524a32")
+            .style("font-family", "Lora")
+            .style("font-size", "10px")
+            //.style("font-weight", "bold")
+            .style("left", (d3.event.pageX + 9 + "px"))
+            .style("top", (d3.event.pageY - 9 + "px"));
+        });
+    });
+
+    const scale = d3.scaleLinear()
+      .domain([0, 100]) // Imposta il dominio
+      .range([0, 200]); // Imposta l'intervallo
+
+    choroplethMapSvg
+      .append("svg")
+      .attr("width", 100)
+      .attr("height", 250)
+      .attr("x", 150)
+      .attr("y", 250);
+
+    const legendCells = [1, 3, 6, 9, 12, 15, 18]; // Valori per le celle
+
+    choroplethMapSvg.selectAll("rect")
+      .data(legendCells)
+      .enter()
+      .append("rect")
+      .attr("x",  500) // Posiziona le celle orizzontalmente
+      //.attr("y",  (d, i) => i * 31)
+      .attr("y",  (d,i) => 70 + 31 * i)
+      .attr("width", 8) // Larghezza delle celle
+      .attr("height", 30)
+      .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
+
+    choroplethMapSvg.selectAll("text")
+      .data(legendCells)
+      .enter()
+      .append("text")
+      .attr("x", 518 ) // Posiziona le etichette al centro delle celle
+      .attr("y", (d, i) => i * 30.7 + 104 )
+      .style("font-family", "Lora")
+      .text((d) => `${d}`); // Testo dell'etichetta
+
+    choroplethMapSvg.selectAll("line")
+      .data(legendCells) // Ignora l'ultimo valore
+      .enter()
+      .append("line")
+      .attr("x1", 500)
+      .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
+      .attr("x2", 511)
+      .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
+      .style("stroke", "black")
+      .style("stroke-width", "1px");
+  });
+}
 
 function handleMouseOutChoroplethMap() {
   choroplethMapSvg.select(".bar-label").remove();
@@ -293,6 +429,34 @@ function handleMouseOutChoroplethMap() {
             .style("opacity", 1);
     }
 }
+
+function setBarColorChoroplethMapFromOtherCharts(d) {
+  let townHallAndAccidentsNumber = groupedByTownHall.get(d.properties.nome);
+  if (townHallAndAccidentsNumber !== undefined) {
+    accidentsNumber = townHallAndAccidentsNumber.length; // Se il comune è presente, ottieni il numero di incidenti
+  } else
+    accidentsNumber = 0; // Se il comune non è presente, impostalo su 0
+
+  if (townHallAndAccidentsNumber !== undefined) {
+
+    if (accidentsNumber > 0 && accidentsNumber <= 1)
+      return "#d9d9d9"
+    else if (accidentsNumber > 1 && accidentsNumber <= 3)
+      return "#bdbdbd";
+    else if (accidentsNumber > 3 && accidentsNumber <= 6)
+      return "#969696";
+    else if (accidentsNumber > 6 && accidentsNumber <= 9)
+      return "#737373";
+    else if (accidentsNumber > 9 && accidentsNumber <= 12)
+      return "#525252";
+    else if (accidentsNumber > 12 && accidentsNumber <= 15)
+      return "#373737";
+    else
+      return "#000000";
+  } else
+    return "#f0f0f0";
+}
+
 
 function setBarColorChoroplethMap(d) {
   let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
