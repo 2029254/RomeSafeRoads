@@ -62,10 +62,19 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         document.getElementById("Severe").disabled = true;
 
         // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
-        document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
-        document.getElementById("Sunny").classList.toggle("disabled", this.checked);
-        document.getElementById("Rainy").classList.toggle("disabled", this.checked);
-        document.getElementById("Severe").classList.toggle("disabled", this.checked);
+        document.getElementById("Cloudy").classList.add("disabled");
+        document.getElementById("Sunny").classList.add("disabled");
+        document.getElementById("Rainy").classList.add("disabled");
+        document.getElementById("Severe").classList.add("disabled");
+
+        let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
+        let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
+        buttonWeatherValueNew.style.backgroundColor = "white";
+        labelWeatherValue.style.color = "#f7f3eb";
+        buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
+        buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
+        buttonWeatherValueNew.style.transform = "scale(1)";
+        buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
 
         let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
 

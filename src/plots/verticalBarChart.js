@@ -186,6 +186,7 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
       .enter().append("rect")
       .attr("x", function (d) { return xScale(d.NaturaIncidente); })
       .attr("y", function (d) { return yScale(d.NumeroIncidenti); })
+      .style("font-family", "Lora")
       .attr("width", xScale.bandwidth())
       .attr("height", function (d) { return height - yScale(d.NumeroIncidenti) })
       .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
@@ -202,6 +203,7 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xScale))
+      .style("font-family", "Lora")
       .append("text")
       .attr("y", 37)
       .attr("x", width - 278)
@@ -212,6 +214,7 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
     // axis y description
     g.append("g")
       .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+      .style("font-family", "Lora")
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0)
@@ -220,6 +223,7 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
       .attr("text-anchor", "end")
       .attr("fill", "black")
       .text("Number of accidents");
+
 }
 
 
@@ -269,8 +273,6 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
         incidentiPerNatura.set(naturaIncidente, results[i]);
       }
 
-      // Ora la mappa incidentiPerNatura è stata popolata correttamente
-
       // Convertire la mappa incidentiPerNatura in un array di oggetti
       const resultArray = Array.from(incidentiPerNatura, ([natura, conteggio]) => ({
         NaturaIncidente: natura,
@@ -295,6 +297,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
         .enter().append("rect")
         .attr("x", function (d) { return xScale(d.NaturaIncidente); })
         .attr("y", function (d) { return yScale(d.NumeroIncidenti); })
+        .style("font-family", "Lora")
         .attr("width", xScale.bandwidth())
         .attr("height", function (d) { return height - yScale(d.NumeroIncidenti) })
         .style("fill", function (d) { return setBarColor(d.NumeroIncidenti) })
@@ -311,6 +314,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
       g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale))
+        .style("font-family", "Lora")
         .append("text")
         .attr("y", 37)
         .attr("x", width - 278)
@@ -321,6 +325,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
       // axis y description
       g.append("g")
         .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+        .style("font-family", "Lora")
         .append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0)

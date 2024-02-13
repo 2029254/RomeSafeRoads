@@ -981,6 +981,15 @@ function brushedTimeSeries(d) {
   console.log("Data Finale:", formattedEndDate);
 
   updateAllGraphs(formattedStartDate, formattedEndDate);
+
+  let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
+  let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
+  buttonWeatherValueNew.style.backgroundColor = "white";
+  labelWeatherValue.style.color = "#f7f3eb";
+  buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
+  buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
+  buttonWeatherValueNew.style.transform = "scale(1)";
+  buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
 }
 
 function updateAllGraphs(formattedStartDate, formattedEndDate ) {
@@ -1239,17 +1248,36 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.checked) {
       switchBrushInput.checked = false;
       switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
-        document.getElementById("Cloudy").disabled = true;
-        document.getElementById("Sunny").disabled = true;
-        document.getElementById("Rainy").disabled = true;
-        document.getElementById("Severe").disabled = true;
+      if (buttonWeatherValue !== "First") {
+        let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+        barChartSvg.selectAll("*").remove();
+        drawVerticalBarChart(csvFileNameVerticalBarChart);
+        let button = document.getElementById(buttonWeatherValue);
+        let buttonLabel = document.getElementById("Label" + buttonWeatherValue);
+        buttonLabel.style.color = "#524a32";
+        button.style.backgroundColor = "#e6e1d5";
+        button.style.transform = "scale(1.2)";
+        button.style.backgroundImage = `url(${imageClick + buttonWeatherValue + ".png"})`;
+        button.style.border = "1px solid #524a32";
+      } else {
+        barChartSvg.selectAll("*").remove();
+        drawVerticalBarChart(csvFileNameVerticalBarChart);
+      }
+
+      document.getElementById("Cloudy").disabled = true;
+      document.getElementById("Sunny").disabled = true;
+      document.getElementById("Rainy").disabled = true;
+      document.getElementById("Severe").disabled = true;
+
+      choroplethMapSvg.selectAll("*").remove();
+      drawChoroplethMap(csvFileNameChoroplethMap);
 
     } else if (switchBrushInput.value === "OFF"){
-        // Se lo switch non è attivo, abilita i pulsanti e rimuovi la classe CSS "disabled"
-        document.getElementById("Cloudy").disabled = false;
-        document.getElementById("Sunny").disabled = false;
-        document.getElementById("Rainy").disabled = false;
-        document.getElementById("Severe").disabled = false;
+      // Se lo switch non è attivo, abilita i pulsanti e rimuovi la classe CSS "disabled"
+      document.getElementById("Cloudy").disabled = false;
+      document.getElementById("Sunny").disabled = false;
+      document.getElementById("Rainy").disabled = false;
+      document.getElementById("Severe").disabled = false;
     }
     // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
     document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
@@ -1271,12 +1299,37 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Rainy").disabled = true;
       document.getElementById("Severe").disabled = true;
 
+    } else if (switchBrushInput.value === "OFF"){
+      document.getElementById("Cloudy").disabled = false;
+      document.getElementById("Sunny").disabled = false;
+      document.getElementById("Rainy").disabled = false;
+      document.getElementById("Severe").disabled = false;
+      if (buttonWeatherValue !== "First") {
+        let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+        barChartSvg.selectAll("*").remove();
+        drawVerticalBarChart(csvFileNameVerticalBarChart);
+      } else {
+        barChartSvg.selectAll("*").remove();
+        drawVerticalBarChart(csvFileNameVerticalBarChart);
+      }
+
+      choroplethMapSvg.selectAll("*").remove();
+      drawChoroplethMap(csvFileNameChoroplethMap);
+
+      let button = document.getElementById(buttonWeatherValue);
+      let buttonLabel = document.getElementById("Label" + buttonWeatherValue);
+      buttonLabel.style.color = "#524a32";
+      button.style.backgroundColor = "#e6e1d5";
+      button.style.transform = "scale(1.2)";
+      button.style.backgroundImage = `url(${imageClick + buttonWeatherValue + ".png"})`;
+      button.style.border = "1px solid #524a32";
+
+
     } else if (switchInput.value === "OFF"){
       document.getElementById("Cloudy").disabled = false;
       document.getElementById("Sunny").disabled = false;
       document.getElementById("Rainy").disabled = false;
       document.getElementById("Severe").disabled = false;
-
     }
     // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
     document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
