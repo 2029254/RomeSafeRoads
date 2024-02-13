@@ -13,6 +13,7 @@ var heightInfoBox = 35.5;
 var incidentiPerIntervallo = [];
 var flagInterval = false;
 var switchInput, switchBrushInput;
+var formattedStartDate, formattedEndDate, brushGroup, dateFormatter;
 let currentTransform = d3.zoomIdentity;
 
 // append the svg object to the body of the page
@@ -946,16 +947,55 @@ function drawTimeSeriesChart(csvFileName){
       drawPoints(timeSeriesData, "#ded6bf");
 
       // Crea un elemento di brush per la selezione
-      var brush = d3.brushX()
-        .extent([[0, 0], [500, 200]])
-        .on("end",  function(d) { return brushedTimeSeries(d)});
+    var brush = d3.brushX()
+      .extent([[0, 0], [500, 200]])
+      .on("start", function() {
+        // Rimuovi i testi delle date precedenti quando inizi un nuovo brush
+        d3.selectAll(".brush .start-date, .brush .end-date").remove();
+      })
+      .on("end", function(d) {
+        return brushedTimeSeries(d);
+      });
+
 
       // Aggiungi il brush all'elemento g del tuo grafico
-      timeSeriesSvg.append("g")
+      /*brushGroup =*/ timeSeriesSvg.append("g")
         .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
         .attr("class", "brush")
         .call(brush);
 
+        // Applica uno stroke nero solo agli handle destro e sinistro (verticale) del brush
+        /*brushGroup.selectAll(".handle--e, .handle--w")
+          .style("stroke", "black");*/
+
+
+       // Aggiungi i testi delle date all'elemento g del brush
+       /*timeSeriesSvg.append("g")
+         .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
+         .attr("class", "brush")
+         .call(brush)
+         .append("text")
+         .attr("class", "start-date")
+         .style("fill", "#524a32")
+         .style("font-family", "Lora")
+         .style("font-size", 10 + "px")
+         .style("font-weight", "bold")
+         //.attr("x", 60)
+         .attr("y", -5)
+         .style("text-anchor", "end")
+         .text("");
+
+       timeSeriesSvg.select(".brush")
+         .append("text")
+         .attr("class", "end-date")
+         .style("fill", "#524a32")
+         .style("font-family", "Lora")
+         .style("font-size", 10 + "px")
+         .style("font-weight", "bold")
+         //.attr("x", 440)
+         .attr("y", -5)
+         .style("text-anchor", "start")
+         .text("");*/
 
     } else {
       drawInfoBox("main");
@@ -973,12 +1013,66 @@ function brushedTimeSeries(d) {
   var [x0, x1] = d3.event.selection.map(xScaleTimeSeries.invert);
 
   // Formatta le date nel formato desiderato (ad esempio, "YYYY-MM-DD")
-  var formattedStartDate = d3.timeFormat("%Y-%m-%d")(x0);
-  var formattedEndDate = d3.timeFormat("%Y-%m-%d")(x1);
+  formattedStartDate = d3.timeFormat("%Y-%m-%d")(x0);
+  formattedEndDate = d3.timeFormat("%Y-%m-%d")(x1);
+
+   // Formatta le date nel formato desiderato per essere visualizzate sul brush
+   newStartDate = d3.timeFormat("%d %b")(x0);
+   newEndDate = d3.timeFormat("%d %b")(x1);
+
+
+  // Aggiungi i nuovi testi delle date
+  d3.select(".brush")
+    .append("text")
+    .attr("class", "start-date")
+    .style("fill", "#524a32")
+    .style("text-anchor", "start")
+    .style("font-family", "Lora")
+    .style("font-size", 10 + "px")
+    .style("font-weight", "bold")
+    .attr("y", -5)
+    .attr("x", xScaleTimeSeries(x0) - 10) // Posiziona il testo a sinistra del punto di inizio della selezione
+    .text(newStartDate);
+
+  d3.select(".brush")
+    .append("text")
+    .attr("class", "end-date")
+    .style("fill", "#524a32")
+    .style("text-anchor", "end")
+    .style("font-family", "Lora")
+    .style("font-size", 10 + "px")
+    .style("font-weight", "bold")
+    .attr("y", -5)
+    .attr("x", xScaleTimeSeries(x1) + 10) // Posiziona il testo a destra del punto di fine della selezione
+    .text(newEndDate);
 
   // Stampa le date iniziale e finale
   console.log("Data Iniziale:", formattedStartDate);
   console.log("Data Finale:", formattedEndDate);
+
+    // Calcola la distanza tra i punti di inizio e fine della selezione
+    var selectionDistance = xScaleTimeSeries(x1) - xScaleTimeSeries(x0);
+    console.log("QUANTO MISURA: "+selectionDistance)
+
+    // Imposta un margine destro per il testo della data di inizio se la selezione è troppo piccola
+    /*var marginForStartDate;
+    if (selectionDistance < 20) marginForStartDate=30;
+    else if (selectionDistance>=20 && selectionDistance<38) marginForStartDate=50;
+    else if (selectionDistance>=38 && selectionDistance<50) marginForStartDate=60;
+    else if (selectionDistance>=50 && selectionDistance<73) marginForStartDate=90;
+    else if (selectionDistance>=73 && selectionDistance<85) marginForStartDate=110;
+    else marginForStartDate=0;
+    console.log("MARGINE: "+marginForStartDate)*/
+
+    // Aggiorna il testo della data di inizio
+    d3.select(".brush .start-date")
+      .text(newStartDate)
+      //.attr("x", xScaleTimeSeries(x0) + (marginForStartDate/2)); // Posiziona il testo a sinistra del punto di inizio della selezione
+
+    // Aggiorna il testo della data di fine
+    d3.select(".brush .end-date")
+      .text(newEndDate)
+      //.attr("x", xScaleTimeSeries(x1) - (marginForStartDate/2)); // Posiziona il testo a destra del punto di fine della selezione
 
   updateAllGraphs(formattedStartDate, formattedEndDate);
 
@@ -991,6 +1085,7 @@ function brushedTimeSeries(d) {
   buttonWeatherValueNew.style.transform = "scale(1)";
   buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
 }
+
 
 function updateAllGraphs(formattedStartDate, formattedEndDate ) {
   barChartSvg.selectAll("*").remove();
