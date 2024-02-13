@@ -208,6 +208,23 @@ button.circular-button {
     box-shadow: 0 2px 4px darkslategray;
 }
 
+#reset{
+    width: 60px; /* Diametro */
+    height: 60px; /* Diametro */
+    border-radius: 50%; /* Rende il bordo circolare */
+    line-height: 40px;
+    font-size: 16px;
+    margin-top: -10px;
+    cursor: pointer;
+    align-content: center;
+    transition:all 0.3s;
+    background-color: #f7f3eb;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position-x: 9.2px;
+    background-position-y: 8px;
+}
+
 button.bucket {
     width: 40px; /* Diametro */
     height: 40px; /* Diametro */

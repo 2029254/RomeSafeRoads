@@ -54,7 +54,7 @@
         <div class="col-6" id="anim">
             <div id="verticalBarChart"></div>
             <!-- Contenitore per la linea verticale -->
-            <div class="d-flex flex-column justify-content-center position-absolute" style="top: 10%; right: 5%; height: 170%;">
+            <div class="d-flex flex-column justify-content-center position-absolute" style=" z-index: -1; top: 10%; right: 5%; height: 170%;">
             <!-- Linea verticale -->
                 <div style="width: 1px; height: 100%; background-color:#d4d0c5;"></div>
             </div>
@@ -64,7 +64,8 @@
         </div>
     </div>
     <div class="container" style="max-width:90vw;">
-        <header class="d-flex flex-wrap justify-content-center py-1 border-bottom custom-border" style="border-bottom-color: #d4d0c5 !important; border-width: 1px !important; ">
+        <header class="d-flex flex-wrap justify-content-center py-1 border-bottom custom-border" style="border-bottom-color: #d4d0c5 !important; border-width: 1px !important; position: relative;">
+            <button id="reset" type="button" class="button" style="position: absolute; top: -12px; left: 54.1%; background-image: url('dataset/img/BlackAndWhite/NoneBW.png');"></button>
         </header>
     </div>
     <div class="row">

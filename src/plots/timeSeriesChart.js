@@ -1221,24 +1221,24 @@ function drawLegend(text, color, value) {
     .style("stroke-width", 0.1);
 
 }
-
+var onLabel, offLabel, brushOnLabel, brushOffLabel, sliderSwitch, sliderBrushSwitch;
 document.addEventListener('DOMContentLoaded', function() {
 
   // Primo switch
   switchInput = document.getElementById('switch');
   switchInput.value = this.checked ? "ON" : "OFF";
   console.log("ZOOM VALUE: " + switchInput.value);
-  const sliderSwitch = document.querySelector('.slider-switch');
-  var onLabel = document.getElementById("on");
-  var offLabel = document.getElementById("off");
+  sliderSwitch = document.querySelector('.slider-switch');
+  onLabel = document.getElementById("on");
+  offLabel = document.getElementById("off");
 
   // Secondo switch
   switchBrushInput = document.getElementById('switchBrush');
   switchBrushInput.value = this.checked ? "ON" : "OFF";
   console.log("BRUSH VALUE: " + switchBrushInput.value);
-  const sliderBrushSwitch = document.querySelector('.slider-switch-brush');
-  var brushOnLabel = document.getElementById("brushon");
-  var brushOffLabel = document.getElementById("brushoff");
+  sliderBrushSwitch = document.querySelector('.slider-switch-brush');
+  brushOnLabel = document.getElementById("brushon");
+  brushOffLabel = document.getElementById("brushoff");
   var previousBrushValue = false;
 
   switchInput.addEventListener('change', function() {

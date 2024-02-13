@@ -13,11 +13,11 @@ const imagePaths = [
 ];
 
 const imageClick = "dataset/img/"
-
+let buttonsContainer;
 // Funzione per creare bottoni HTML
 function createHTMLButtons() {
   let buttonData = ["Cloudy", "Sunny", "Rainy", "Severe", "First"];
-  const buttonsContainer = document.getElementById("buttons");
+  buttonsContainer = document.getElementById("buttons");
 
   buttonData.forEach((buttonText, i) => {
     const button = document.createElement("button");

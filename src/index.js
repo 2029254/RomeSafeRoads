@@ -4,8 +4,56 @@ const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
 let periodValue = document.getElementById("period");
+let bucketButton = document.getElementById("reset");
+
+bucketButton.addEventListener("click", function () {
+ // buttonLabel.style.color = "#524a32";
+  bucketButton.style.transform = "scale(1.3)";
+  bucketButton.style.backgroundImage = `url(${imageClick + "None" + ".png"})`;
+  let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
+  let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
+  buttonWeatherValueNew.style.backgroundColor = "white";
+  labelWeatherValue.style.color = "#f7f3eb";
+  buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
+  buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
+  buttonWeatherValueNew.style.transform = "scale(1)";
+  buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
+  buttonWeatherValue="First"
+  switchBrushInput.checked = false;
+  sliderBrushSwitch.style.backgroundColor = '#facdcd'
+  switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+  switchInput.checked = false;
+  sliderSwitch.style.backgroundColor = '#facdcd'
+  switchInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+  brushOnLabel.style.display = "none";
+  brushOffLabel.style.display = "block";
+  onLabel.style.display = "none";
+  offLabel.style.display = "block";
+
+  sliderSwitch.classList.toggle('checked', switchInput.checked);
+  sliderBrushSwitch.classList.toggle('checked', switchBrushInput.checked);
+
+  document.getElementById("Cloudy").disabled = false;
+  document.getElementById("Sunny").disabled = false;
+  document.getElementById("Rainy").disabled = false;
+  document.getElementById("Severe").disabled = false;
+
+// Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
+  document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
+  document.getElementById("Sunny").classList.toggle("disabled", this.checked);
+  document.getElementById("Rainy").classList.toggle("disabled", this.checked);
+  document.getElementById("Severe").classList.toggle("disabled", this.checked);
 
 
+  updatePlotsBasingOnSelectedYear();
+  // Imposta un timer per riportare il bottone "None" allo stato precedente dopo 2 secondi
+  setTimeout(function () {
+    bucketButton.style.transform = "scale(1)";
+    bucketButton.style.transition = "0.5s";
+    bucketButton.style.backgroundImage = `url(${imageClick + "BlackAndWhite/NoneBW.png"})`;
+    // body.style.backgroundColor = "#f6fad9"
+  }, 1000);
+});
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
   function updateSliderValue() {
   titleValue.textContent = "Rome Safe Roads " + slider.value
@@ -21,6 +69,8 @@ slider.addEventListener("input", () => {
   updateSliderValue();
   updatePlotsBasingOnSelectedYear()
 });
+
+
 
 let csvFileNameChoroplethMapNature;
 let csvFileNameTimeSeries;
