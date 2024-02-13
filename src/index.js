@@ -10,7 +10,7 @@ const resetText = document.getElementById('resetText');
 // Aggiungi event listener per l'evento mouseenter per mostrare il testo
 bucketButton.addEventListener('mouseenter', function() {
     resetText.style.display = 'inline';
-    bucketButton.style.transform = "scale(1.1)";
+    bucketButton.style.transform = "scale(1.09)";
 });
 
 // Aggiungi event listener per l'evento mouseleave per nascondere il testo
