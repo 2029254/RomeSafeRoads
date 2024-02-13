@@ -563,8 +563,8 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
     font-size: 10px;
     font-family: Lora, serif;
     color: #524a32;
-    top: 100%;
-    left: 50%;
+    top: 12px;
+    left: 49.8%;
     transform: translate(50%, 70%);
     background-color: #f7f3eb;
     padding: 5px 10px;

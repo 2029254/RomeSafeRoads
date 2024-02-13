@@ -10,16 +10,18 @@ const resetText = document.getElementById('resetText');
 // Aggiungi event listener per l'evento mouseenter per mostrare il testo
 bucketButton.addEventListener('mouseenter', function() {
     resetText.style.display = 'inline';
+    bucketButton.style.transform = "scale(1.1)";
 });
 
 // Aggiungi event listener per l'evento mouseleave per nascondere il testo
 bucketButton.addEventListener('mouseleave', function() {
     resetText.style.display = 'none';
+    bucketButton.style.transform = "scale(1)";
 });
 
 bucketButton.addEventListener("click", function () {
  // buttonLabel.style.color = "#524a32";
-  bucketButton.style.transform = "scale(1.3)";
+  bucketButton.style.transform = "scale(1.2)";
   bucketButton.style.backgroundImage = `url(${imageClick + "None" + ".png"})`;
   let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
   let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
