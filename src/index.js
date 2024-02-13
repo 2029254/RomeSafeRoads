@@ -5,6 +5,17 @@ const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
 let periodValue = document.getElementById("period");
 let bucketButton = document.getElementById("reset");
+const resetText = document.getElementById('resetText');
+
+// Aggiungi event listener per l'evento mouseenter per mostrare il testo
+bucketButton.addEventListener('mouseenter', function() {
+    resetText.style.display = 'inline';
+});
+
+// Aggiungi event listener per l'evento mouseleave per nascondere il testo
+bucketButton.addEventListener('mouseleave', function() {
+    resetText.style.display = 'none';
+});
 
 bucketButton.addEventListener("click", function () {
  // buttonLabel.style.color = "#524a32";
@@ -38,11 +49,11 @@ bucketButton.addEventListener("click", function () {
   document.getElementById("Rainy").disabled = false;
   document.getElementById("Severe").disabled = false;
 
-// Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
-  document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
-  document.getElementById("Sunny").classList.toggle("disabled", this.checked);
-  document.getElementById("Rainy").classList.toggle("disabled", this.checked);
-  document.getElementById("Severe").classList.toggle("disabled", this.checked);
+  // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
+  document.getElementById("Cloudy").classList.remove("disabled");
+  document.getElementById("Sunny").classList.remove("disabled");
+  document.getElementById("Rainy").classList.remove("disabled");
+  document.getElementById("Severe").classList.remove("disabled");
 
 
   updatePlotsBasingOnSelectedYear();

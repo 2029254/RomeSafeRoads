@@ -556,3 +556,26 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
   pointer-events: none; /* Impedisce al pulsante di essere cliccato */
   /* Aggiungi altri stili CSS per personalizzare l'aspetto dei pulsanti disabilitati */
 }
+
+.popup-text {
+    display: none;
+    position: absolute;
+    font-size: 10px;
+    font-family: Lora, serif;
+    color: #524a32;
+    top: 100%;
+    left: 50%;
+    transform: translate(50%, 70%);
+    background-color: #f7f3eb;
+    padding: 5px 10px;
+    /*border: 1px solid #ccc;*/
+    border-radius: 5px;
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);*/
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.button:hover .popup-text {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
