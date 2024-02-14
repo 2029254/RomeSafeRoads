@@ -338,7 +338,7 @@ function drawLineWithValue(data, color, id) {
     .attr("class", "line_" + id)
     .attr("fill", "none")
     .attr("stroke", color)
-    .attr("stroke-width", 1.8)
+    .attr("stroke-width", 1.3)
     .attr("d", line)
     .attr("transform", `translate(51, 50)`);
 
@@ -554,35 +554,36 @@ function drawLineWithValue(data, color, id) {
             .style("font-size", "10px")
             .text(accidentsCountText);
 
-
           infoBox.select('text')
             .append('tspan')
             .html("<br>")
             .attr('x', 0)
             .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
+
+          if(infoBoxNatureArray.length > 0) {
+            timeSeriesSvg.selectAll(".info-box-rect").attr('height', 46.5);
+
+
+            infoBox.select('text')
+              .append('tspan')
+              .style("fill", color)
+              .style("font-family", "Lora")
+              .style("font-size", "10px")
+              .style("text-align", "left")
+              .attr('x', 15)
+              .attr('dy', '11.2px') // Imposta l'offset verticale per la terza riga
+              .text("n2 ");
+
+            infoBox.select('text')
+              .append('tspan')
+              .style("fill", color)
+              .style("font-family", "Lora")
+              .style("font-size", "10px")
+              .text(accidentsCountTextNature);
+          }
         } else {
           timeSeriesSvg.selectAll(".info-box-rect").attr('height', 20.5);
 
-        }
-
-        if(infoBoxNatureArray.length > 0) {
-
-          infoBox.select('text')
-            .append('tspan')
-            .style("fill", color)
-            .style("font-family", "Lora")
-            .style("font-size", "10px")
-            .style("text-align", "left")
-            .attr('x', 15)
-            .attr('dy', '11.2px') // Imposta l'offset verticale per la terza riga
-            .text("n2 ");
-
-          infoBox.select('text')
-            .append('tspan')
-            .style("fill", color)
-            .style("font-family", "Lora")
-            .style("font-size", "10px")
-            .text(accidentsCountTextNature);
         }
       });
 
