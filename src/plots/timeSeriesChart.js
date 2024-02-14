@@ -552,7 +552,7 @@ function drawLineWithValue(data, color, id, timeseries) {
 
           infoBox.select('text')
             .append('tspan')
-            .style("fill", "#524a32")
+            .style("fill", "#cab2d6")
             .style("font-family", "Lora")
             .style("font-size", "10px")
             .style("text-align", "left")
@@ -562,7 +562,7 @@ function drawLineWithValue(data, color, id, timeseries) {
 
           infoBox.select('text')
             .append('tspan')
-            .style("fill", "#524a32")
+            .style("fill", "#cab2d6")
             .style("font-family", "Lora")
             .style("font-size", "10px")
             .text(accidentsCountText);
@@ -839,7 +839,7 @@ function drawPoints(data, color) {
     .attr("class", "point")
     .each(function(d) {
       // Aggiungi cerchio più grande solo per il punto massimo
-      if (d === maxIncident && (switchInput.value==="OFF" || switchBrushInput.value==="ON" || switchInput.value==="ON")) {
+      if (d === maxIncident && (switchInput.value==="OFF" ||  switchBrushInput.value==="ON" || switchInput.value==="ON")) {
         d3.select(this).append("circle")
           .attr("class", "outer-point")
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
@@ -856,22 +856,25 @@ function drawPoints(data, color) {
           .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
           .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
           .attr("r", 1.3)
-          .style("fill", "#827c68")
+          .style("fill", "#827c68");
+      }
+      if (d !== maxIncident && switchBrushInput.value==="OFF" && switchInput.value==="OFF") {
+        d3.select(this).append("circle")
           .on("mouseover", showIncidentCount)
           .on("mouseout", hideIncidentCount);
-
       }
+
       if (switchInput.value==="ON") {
-       // Aggiungi cerchio più piccolo per tutti i punti con clip path
-             d3.select(this).append("circle")
-               .attr("class", "inner-point")
-               .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
-               .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
-               .attr("r", 3.5)
-               .style("fill", "#827c68")
-               .attr("clip-path", "url(#points-clip-path)")
-               .on("mouseover", showIncidentCount)
-               .on("mouseout", hideIncidentCount);
+        // Aggiungi cerchio più piccolo per tutti i punti con clip path
+        d3.select(this).append("circle")
+          .attr("class", "inner-point")
+          .attr("cx", xScaleTimeSeries(d.DataOraIncidente))
+          .attr("cy", yScaleTimeSeries(d.NumeroIncidenti))
+          .attr("r", 3.5)
+          .style("fill", "#827c68")
+          .attr("clip-path", "url(#points-clip-path)")
+          .on("mouseover", showIncidentCount)
+          .on("mouseout", hideIncidentCount);
       }
     });
 }
@@ -1583,7 +1586,7 @@ function drawZoom(data) {
     .attr("clip-path", "url(#clip-path-red)")  // Applica il clip path solo per il rettangolo rosso
     .attr("fill", "none")
     .attr("stroke", "#cab2d6")
-    .attr("stroke-width", 1.8)
+    .attr("stroke-width", 1.3)
     .attr("d", line)
     .attr("transform", "translate(51, 50)");
 
