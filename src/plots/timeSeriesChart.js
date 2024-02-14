@@ -1055,24 +1055,25 @@ function brushedTimeSeries(d) {
     console.log("QUANTO MISURA: "+selectionDistance)
 
     // Imposta un margine destro per il testo della data di inizio se la selezione è troppo piccola
-    /*var marginForStartDate;
-    if (selectionDistance < 20) marginForStartDate=30;
+    var marginForStartDate;
+    if (selectionDistance < 17) marginForStartDate=70;
+    else if (selectionDistance>=17 && selectionDistance<20) marginForStartDate=50;
     else if (selectionDistance>=20 && selectionDistance<38) marginForStartDate=50;
     else if (selectionDistance>=38 && selectionDistance<50) marginForStartDate=60;
-    else if (selectionDistance>=50 && selectionDistance<73) marginForStartDate=90;
-    else if (selectionDistance>=73 && selectionDistance<85) marginForStartDate=110;
+    else if (selectionDistance>=50 && selectionDistance<85) marginForStartDate=80;
+   // else if (selectionDistance>=73 && selectionDistance<85) marginForStartDate=110;
     else marginForStartDate=0;
-    console.log("MARGINE: "+marginForStartDate)*/
+    console.log("MARGINE: "+marginForStartDate)
 
     // Aggiorna il testo della data di inizio
     d3.select(".brush .start-date")
       .text(newStartDate)
-      //.attr("x", xScaleTimeSeries(x0) + (marginForStartDate/2)); // Posiziona il testo a sinistra del punto di inizio della selezione
+      .attr("x", xScaleTimeSeries(x0) - (marginForStartDate/2)); // Posiziona il testo a sinistra del punto di inizio della selezione
 
     // Aggiorna il testo della data di fine
     d3.select(".brush .end-date")
       .text(newEndDate)
-      //.attr("x", xScaleTimeSeries(x1) - (marginForStartDate/2)); // Posiziona il testo a destra del punto di fine della selezione
+      .attr("x", xScaleTimeSeries(x1) + (marginForStartDate/2)); // Posiziona il testo a destra del punto di fine della selezione
 
   updateAllGraphs(formattedStartDate, formattedEndDate);
 
