@@ -567,8 +567,38 @@ function onclickBar(d) {
                    natureTimeSeries = "Side/head-on\ncollision"
               }
 
+              incidentiPerIntervalloTwo = [];
               if (switchInput.value === "OFF" && switchBrushInput.value === "OFF"){
                 convertData(data);
+                function calcolaSommaIncidentiTwo(data, inizio, fine) {
+
+                  var sommaIncidenti = data.reduce(function (acc, row) {
+                    // Estrai la data dall'oggetto row
+                    var dataIncidente = new Date(row['DataOraIncidente']);
+
+                    // Verifica se la data rientra nell'intervallo specificato
+                    if (dataIncidente >= inizio && dataIncidente <= fine)
+                      // Se sì, aggiungi il numero di incidenti alla somma
+                      return acc + parseInt(row['NumeroIncidenti']); else return acc;
+                  }, 0);
+                  console.log('Somma incidenti per intervallo:', sommaIncidenti);
+                  return sommaIncidenti;
+                }
+
+                // Per ciascun intervallo di date, calcola la somma degli incidenti e aggiungi il risultato all'array incidentiPerIntervallo
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-01-01'), new Date(selectedYear + '-01-31')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-02-01'), new Date(selectedYear + '-03-02')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-03-03'), new Date(selectedYear + '-04-01')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-04-02'), new Date(selectedYear + '-05-01')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-05-02'), new Date(selectedYear + '-05-31')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-06-01'), new Date(selectedYear + '-06-30')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-07-01'), new Date(selectedYear + '-07-30')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-07-31'), new Date(selectedYear + '-08-29')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-08-30'), new Date(selectedYear + '-09-28')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-09-29'), new Date(selectedYear + '-10-28')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-10-29'), new Date(selectedYear + '-11-27')));
+                incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-11-28'), new Date(selectedYear + '-12-27')));
+
                 // timeSeriesSvg.selectAll(".info-box").remove();
                 drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
                 console.log(focusArray);

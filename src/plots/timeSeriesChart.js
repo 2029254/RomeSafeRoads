@@ -15,6 +15,7 @@ var flagInterval = false;
 var switchInput, switchBrushInput;
 var formattedStartDate, formattedEndDate, brushGroup, dateFormatter;
 let currentTransform = d3.zoomIdentity;
+var incidentiPerIntervalloTwo = [];
 
 // append the svg object to the body of the page
 var timeSeriesSvg = d3.select("#timeSeries")
@@ -324,7 +325,7 @@ function drawLineWithValue(data, color, id) {
 }
 
 */
-function drawLineWithValue(data, color, id) {
+function drawLineWithValue(data, color, id, timeseries) {
   let curve = d3.curveCardinal;
 
   line = d3.line()
@@ -472,50 +473,62 @@ function drawLineWithValue(data, color, id) {
       let monthAbbreviation = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
       let formattedDate = `${day} ${monthAbbreviation}`;
 
-// Calcola la data di dieci giorni prima
+      // Calcola la data di dieci giorni prima
       let tenDaysAgo = new Date(date);
       tenDaysAgo.setDate(date.getDate() - 29);
 
       let dayTenDaysAgo = tenDaysAgo.getDate();
       let monthAbbreviationTenDaysAgo = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(tenDaysAgo);
       let formattedDateTenDaysAgo = `${dayTenDaysAgo} ${monthAbbreviationTenDaysAgo}`;
-      let accidentsText;
+      let accidentsText, accidentsCountTextTwo;
 
        if (monthAbbreviation === "Jan" && day == "31") {
          accidentsCountText = incidentiPerIntervallo[0]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[0]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Mar" && day == "2") {
          accidentsCountText = incidentiPerIntervallo[1]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[1]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if( monthAbbreviation === "Apr" && day == "1") {
          accidentsCountText = incidentiPerIntervallo[2]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[2]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if( monthAbbreviation === "May" && day == "1") {
          accidentsCountText = incidentiPerIntervallo[3]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[3]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "May" && day == "31") {
          accidentsCountText = incidentiPerIntervallo[4]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[4]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Jun" && day == "30") {
          accidentsCountText = incidentiPerIntervallo[5]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[5]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Jul" && day == "30") {
          accidentsCountText = incidentiPerIntervallo[6]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[6]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Aug" && day == "29") {
          accidentsCountText = incidentiPerIntervallo[7]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[7]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Sep" && day == "28") {
          accidentsCountText = incidentiPerIntervallo[8]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[8]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Oct" && day == "28") {
          accidentsCountText = incidentiPerIntervallo[9]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[9]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Nov" && day == "27") {
          accidentsCountText = incidentiPerIntervallo[10]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[10]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        }else if(monthAbbreviation === "Dec" && day == "27"){
          accidentsCountText = incidentiPerIntervallo[11]
+         accidentsCountTextTwo = incidentiPerIntervalloTwo[11]
          accidentsText = `${formattedDateTenDaysAgo} - ${formattedDate}`;
        } else {
          flagInterval = true;
@@ -561,8 +574,8 @@ function drawLineWithValue(data, color, id) {
             .attr('dy', '10.2px'); // Imposta l'offset verticale per la terza riga
 
           if(infoBoxNatureArray.length > 0) {
-            timeSeriesSvg.selectAll(".info-box-rect").attr('height', 46.5);
 
+            timeSeriesSvg.selectAll(".info-box-rect").attr('height', 46.5);
 
             infoBox.select('text')
               .append('tspan')
@@ -579,7 +592,7 @@ function drawLineWithValue(data, color, id) {
               .style("fill", color)
               .style("font-family", "Lora")
               .style("font-size", "10px")
-              .text(accidentsCountTextNature);
+              .text(accidentsCountTextTwo);
           }
         } else {
           timeSeriesSvg.selectAll(".info-box-rect").attr('height', 20.5);
