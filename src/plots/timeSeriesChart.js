@@ -56,6 +56,7 @@ let allPoints;
 let tooltipTime;
 let previousZoomValue = 0;
 let isDrawed = false;
+var x0, x1;
 
 
 
@@ -952,6 +953,8 @@ function drawTimeSeriesChart(csvFileName){
       .on("start", function() {
         // Rimuovi i testi delle date precedenti quando inizi un nuovo brush
         d3.selectAll(".brush .start-date, .brush .end-date").remove();
+        d3.selectAll(".selection-bar").remove();
+
       })
       .on("end", function(d) {
         return brushedTimeSeries(d);
@@ -959,14 +962,24 @@ function drawTimeSeriesChart(csvFileName){
 
 
       // Aggiungi il brush all'elemento g del tuo grafico
-      /*brushGroup =*/ timeSeriesSvg.append("g")
+      brushGroup = timeSeriesSvg.append("g")
         .attr("transform", "translate(50, 50)")  // Assicurati di traslare il rettangolo in base alla tua disposizione grafica
         .attr("class", "brush")
         .call(brush);
 
         // Applica uno stroke nero solo agli handle destro e sinistro (verticale) del brush
         /*brushGroup.selectAll(".handle--e, .handle--w")
-          .style("stroke", "black");*/
+          //.style("stroke", "#b8ab97")
+          //.style("fill", "#b8ab97")
+          .attr("rx", "4")
+          .attr("ry", "4");*/
+
+        // Seleziona l'area selezionata dal brush
+        brushGroup.select(".selection")
+          .style("stroke", "#d4ccbe")
+          //.style("stroke-width", "5px")
+          .style("fill", "#c4bbad"); // Imposta il colore dell'area selezionata
+
 
 
        // Aggiungi i testi delle date all'elemento g del brush
@@ -1010,7 +1023,7 @@ function brushedTimeSeries(d) {
   if (!d3.event.selection) return; // Se la selezione è nulla, esci dalla funzione
 
   // Ottieni la data iniziale e finale selezionate
-  var [x0, x1] = d3.event.selection.map(xScaleTimeSeries.invert);
+  [x0, x1] = d3.event.selection.map(xScaleTimeSeries.invert);
 
   // Formatta le date nel formato desiderato (ad esempio, "YYYY-MM-DD")
   formattedStartDate = d3.timeFormat("%Y-%m-%d")(x0);
@@ -1045,6 +1058,25 @@ function brushedTimeSeries(d) {
     .attr("y", -5)
     .attr("x", xScaleTimeSeries(x1) + 10) // Posiziona il testo a destra del punto di fine della selezione
     .text(newEndDate);
+
+          // Aggiungi le barre verticali con estremità arrotondate
+        d3.select(".brush")
+             .append("path")
+             .attr("class", "selection-bar")
+             .style("stroke", "#b8ab97")
+             .style("stroke-width", 3)
+             .attr("d", d3.line()([[xScaleTimeSeries(x0), 0], [xScaleTimeSeries(x0), heightTimeSeries]]))
+             .attr("fill", "none")
+             .attr("stroke-linecap", "round");
+
+        d3.select(".brush")
+             .append("path")
+             .attr("class", "selection-bar")
+             .style("stroke", "#b8ab97")
+             .style("stroke-width", 3)
+             .attr("d", d3.line()([[xScaleTimeSeries(x1), 0], [xScaleTimeSeries(x1), heightTimeSeries]]))
+             .attr("fill", "none")
+             .attr("stroke-linecap", "round");
 
   // Stampa le date iniziale e finale
   console.log("Data Iniziale:", formattedStartDate);
