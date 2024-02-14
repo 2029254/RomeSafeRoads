@@ -560,6 +560,12 @@ function drawLineWithValue(data, color, id, timeseries) {
             .attr('dy', '15.2px') // Imposta l'offset verticale per la terza riga
             .text("n1 ");
 
+          // Aggiungi uno spazio dopo "n2"
+          infoBox.select('text')
+            .append('tspan')
+            .style("fill", "white")
+            .text(" C"); // Aggiungi uno spazio vuoto
+
           infoBox.select('text')
             .append('tspan')
             .style("fill", "#cab2d6")
@@ -586,6 +592,12 @@ function drawLineWithValue(data, color, id, timeseries) {
               .attr('x', 15)
               .attr('dy', '11.2px') // Imposta l'offset verticale per la terza riga
               .text("n2 ");
+
+            // Aggiungi uno spazio dopo "n2"
+            infoBox.select('text')
+              .append('tspan')
+              .style("fill", "white")
+              .text(" C"); // Aggiungi uno spazio vuoto
 
             infoBox.select('text')
               .append('tspan')
