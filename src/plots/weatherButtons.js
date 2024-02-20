@@ -61,6 +61,11 @@ function createHTMLButtons() {
 
     console.log(buttonWeatherValue)
     button.addEventListener("click", function () {
+      // Aggiungi il loader al DOM
+      let loader = document.getElementById("loader");
+      loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+      barChartSvg.style("opacity", 0.3);
+
       let body = document.getElementById("body");
 
       if (buttonWeatherValue !== this.id) {
@@ -100,9 +105,14 @@ function createHTMLButtons() {
         let year = document.getElementById("yearSlider").value;
 
         buttonFlag = true;
-        let csvFileNameVerticalBarChart = "dataset/processed/weather/" + year + "/general-accidents/generalAccidents" + buttonWeatherValue + year + ".csv";
-        barChartSvg.selectAll("*").remove();
-        drawVerticalBarChart(csvFileNameVerticalBarChart);
+
+        setTimeout(function () {
+          loader.style.display = "none";
+          let csvFileNameVerticalBarChart = "dataset/processed/weather/" + year + "/general-accidents/generalAccidents" + buttonWeatherValue + year + ".csv";
+          barChartSvg.selectAll("*").remove();
+          drawVerticalBarChart(csvFileNameVerticalBarChart);
+          barChartSvg.style("opacity", 1);
+        }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
       }
     });
 

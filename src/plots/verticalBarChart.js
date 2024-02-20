@@ -420,7 +420,15 @@ let timer; // Variabile per il timer
 let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
     console.log(d)
-    if (buttonWeatherValue==="First") {
+  // Aggiungi il loader al DOM
+  let loader = document.getElementById("loaderC");
+  loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  let loaderS = document.getElementById("loaderS");
+  loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  choroplethMapSvg.style("opacity", 0.3);
+  timeSeriesSvg.style("opacity", 0.3);
+
+  if (buttonWeatherValue==="First") {
         // Rimuovi le linee correlate alle barre cliccate in precedenza
         clickedBars.forEach(function (bar) {
             d3.select("#line_" + bar.NaturaIncidente).remove();
@@ -431,16 +439,16 @@ function onclickBar(d) {
         clickedNature = d.NaturaIncidente.toString();
       if (!isActive) { // Se il timer non è attivo
         isActive = true;
-        timer = setTimeout(function () {
+       // timer = setTimeout(function () {
           isActive = false; // Resetta lo stato del timer
           resetTownHall();
-        }, 3000);
+       // }, 3000);
       } else if (timer){ // Se il timer è già attivo
         clearTimeout(timer); // Interrompi il timer corrente
-        timer = setTimeout(function () {
+       // timer = setTimeout(function () {
           isActive = false; // Resetta lo stato del timer
           resetTownHall();
-        }, 3000);
+        //}, 3000);
        // isActive = false; // Resetta lo stato del timer
       }
       resetTownHall();
@@ -523,11 +531,15 @@ function onclickBar(d) {
           const count = data.length;
           incidentCounts.set(municipio, count);
         });
+        setTimeout(function () {
+          loader.style.display = "none";
+          for (const [key, value] of incidentCounts) {
+            showNumberOfAccidents(key, value);
+          }
+          fillOtherTownHalls(incidentCounts);
+          choroplethMapSvg.style("opacity", 1);
+        }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
 
-        for (const [key, value] of incidentCounts) {
-          showNumberOfAccidents(key, value);
-        }
-        fillOtherTownHalls(incidentCounts);
       });
 
       let natureAccidents = "dataset/processed/timeSeries/" + selectedYear + "/" + "timeSeriesNature" + d.NaturaIncidente.toString() + ".csv";
@@ -600,17 +612,23 @@ function onclickBar(d) {
                 incidentiPerIntervalloTwo.push(calcolaSommaIncidentiTwo(data, new Date(selectedYear + '-11-28'), new Date(selectedYear + '-12-27')));
 
                 // timeSeriesSvg.selectAll(".info-box").remove();
-                drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
-                console.log(focusArray);
-                addPoints(d.NaturaIncidente.toString());
-                drawPoints(data, setBarColor(d.NumeroIncidenti));
-                infoBoxNatureArray.push(infoBox);
-                vBarChart = true;
-                timeSeriesSvg.selectAll(".mydotss").remove();
-                legend.selectAll(".txt").remove();
-                keysLegends = []
-                keysLegends.push("")
-                drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
+                setTimeout(function () {
+                  loaderS.style.display = "none";
+                  drawLineWithValue(data, setBarColor(d.NumeroIncidenti), d.NaturaIncidente);
+                  console.log(focusArray);
+                  addPoints(d.NaturaIncidente.toString());
+                  drawPoints(data, setBarColor(d.NumeroIncidenti));
+                  infoBoxNatureArray.push(infoBox);
+                  vBarChart = true;
+                  timeSeriesSvg.selectAll(".mydotss").remove();
+                  legend.selectAll(".txt").remove();
+                  keysLegends = []
+                  keysLegends.push("")
+                  drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
+                  timeSeriesSvg.style("opacity", 1);
+                }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+
+
               }
             });
 
