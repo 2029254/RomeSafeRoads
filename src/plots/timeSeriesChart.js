@@ -984,6 +984,11 @@ function drawTimeSeriesChart(csvFileName){
         d3.selectAll(".brush .start-date, .brush .end-date").remove();
         d3.selectAll(".selection-bar").remove();
 
+        loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+        choroplethMapSvg.style("opacity", 0.3);
+        loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+        barChartSvg.style("opacity", 0.3);
+
       })
       .on("end", function(d) {
         return brushedTimeSeries(d);
@@ -1049,7 +1054,14 @@ function drawTimeSeriesChart(csvFileName){
 
 function brushedTimeSeries(d) {
   console.log("CIAO")
-  if (!d3.event.selection) return; // Se la selezione è nulla, esci dalla funzione
+  if (!d3.event.selection) {
+    setTimeout(function () {
+      loaderC.style.display = "none";
+      choroplethMapSvg.style("opacity", 1);
+      loader.style.display = "none";
+      barChartSvg.style("opacity", 1);
+    }, 800);
+    return;} // Se la selezione è nulla, esci dalla funzione
 
   // Ottieni la data iniziale e finale selezionate
   [x0, x1] = d3.event.selection.map(xScaleTimeSeries.invert);
@@ -1146,6 +1158,14 @@ function brushedTimeSeries(d) {
   buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
   buttonWeatherValueNew.style.transform = "scale(1)";
   buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
+
+  setTimeout(function () {
+    loaderC.style.display = "none";
+    choroplethMapSvg.style("opacity", 1);
+    loader.style.display = "none";
+    barChartSvg.style("opacity", 1);
+  }, 800);
+
 }
 
 
@@ -1406,9 +1426,9 @@ document.addEventListener('DOMContentLoaded', function() {
       switchBrushInput.checked = false;
       switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
       if (buttonWeatherValue !== "First") {
-        let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
-        barChartSvg.selectAll("*").remove();
-        drawVerticalBarChart(csvFileNameVerticalBarChart);
+       // let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+       // barChartSvg.selectAll("*").remove();
+       // drawVerticalBarChart(csvFileNameVerticalBarChart);
         let button = document.getElementById(buttonWeatherValue);
         let buttonLabel = document.getElementById("Label" + buttonWeatherValue);
         buttonLabel.style.color = "#524a32";
@@ -1417,17 +1437,14 @@ document.addEventListener('DOMContentLoaded', function() {
         button.style.backgroundImage = `url(${imageClick + buttonWeatherValue + ".png"})`;
         button.style.border = "1px solid #524a32";
       } else {
-        barChartSvg.selectAll("*").remove();
-        drawVerticalBarChart(csvFileNameVerticalBarChart);
+     //   barChartSvg.selectAll("*").remove();
+     //   drawVerticalBarChart(csvFileNameVerticalBarChart);
       }
 
       document.getElementById("Cloudy").disabled = true;
       document.getElementById("Sunny").disabled = true;
       document.getElementById("Rainy").disabled = true;
       document.getElementById("Severe").disabled = true;
-
-      choroplethMapSvg.selectAll("*").remove();
-      drawChoroplethMap(csvFileNameChoroplethMap);
 
     } else if (switchBrushInput.value === "OFF"){
       // Se lo switch non è attivo, abilita i pulsanti e rimuovi la classe CSS "disabled"

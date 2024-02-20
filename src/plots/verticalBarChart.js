@@ -288,7 +288,14 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
       // definition of axes domain
       xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
       let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-      yScale.domain([0, Math.max.apply(null, MinMax)]);
+      const maxScaleValue = Math.max.apply(null, MinMax);
+      var axisStep;
+      if (maxScaleValue <= 1000) axisStep = 100;  // Imposta il passo dell'asse come desiderato
+      else if (maxScaleValue <= 2000) axisStep = 200;  // Imposta il passo dell'asse come desiderato
+      else axisStep = 2000;
+      // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
+      const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
+      yScale.domain([0, roundedMax]);
 
       // bars creation
       g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
@@ -421,14 +428,15 @@ let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
     console.log(d)
   // Aggiungi il loader al DOM
-  let loader = document.getElementById("loaderC");
-  loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
-  let loaderS = document.getElementById("loaderS");
-  loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
-  choroplethMapSvg.style("opacity", 0.3);
-  timeSeriesSvg.style("opacity", 0.3);
+
 
   if (buttonWeatherValue==="First") {
+    let loader = document.getElementById("loaderC");
+    loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    let loaderS = document.getElementById("loaderS");
+    loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    choroplethMapSvg.style("opacity", 0.3);
+    timeSeriesSvg.style("opacity", 0.3);
         // Rimuovi le linee correlate alle barre cliccate in precedenza
         clickedBars.forEach(function (bar) {
             d3.select("#line_" + bar.NaturaIncidente).remove();

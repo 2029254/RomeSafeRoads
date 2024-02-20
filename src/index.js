@@ -6,6 +6,10 @@ let titleValue = document.getElementById("title");
 let periodValue = document.getElementById("period");
 let bucketButton = document.getElementById("reset");
 const resetText = document.getElementById('resetText');
+let loader = document.getElementById("loader");
+let loaderC = document.getElementById("loaderC");
+let loaderS = document.getElementById("loaderS");
+let loaderP = document.getElementById("loaderP");
 
 // Aggiungi event listener per l'evento mouseenter per mostrare il testo
 bucketButton.addEventListener('mouseenter', function() {
@@ -20,7 +24,18 @@ bucketButton.addEventListener('mouseleave', function() {
 });
 
 bucketButton.addEventListener("click", function () {
- // buttonLabel.style.color = "#524a32";
+
+  loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+
+  barChartSvg.style("opacity", 0.3);
+  choroplethMapSvg.style("opacity", 0.3);
+  timeSeriesSvg.style("opacity", 0.3);
+  scatterPlotpSvg.style("opacity", 0.3);
+
+  // buttonLabel.style.color = "#524a32";
   bucketButton.style.transform = "scale(1.2)";
   bucketButton.style.backgroundImage = `url(${imageClick + "None" + ".png"})`;
   let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
@@ -171,4 +186,17 @@ function updatePlotsBasingOnSelectedYear(){
 
   scatterPlotpSvg.selectAll("*").remove();
   drawScatterPlot(csvFileNameScatterPlot);
+
+  setTimeout(function () {
+    loader.style.display = "none";
+    loaderC.style.display = "none";
+    loaderS.style.display = "none";
+    loaderP.style.display = "none";
+
+    barChartSvg.style("opacity", 1);
+    choroplethMapSvg.style("opacity", 1);
+    timeSeriesSvg.style("opacity", 1);
+    scatterPlotpSvg.style("opacity", 1);
+  }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+
 }

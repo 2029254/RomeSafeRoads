@@ -607,7 +607,7 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
     position: absolute;
     display: none;
     top: 50%;
-    left: 40%;
+    left: 45%;
     transform: translate(-50%, -50%);
     /* Stile del loader */
     width: 40px;
@@ -630,6 +630,28 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
     display: none;
     top: 45%;
     left: 40%;
+    transform: translate(-50%, -50%);
+    /* Stile del loader */
+    width: 40px;
+    height: 40px;
+    border: 10px solid #ccc1ad;
+    border-top: 10px solid #857154;
+    border-radius: 50%;
+    /* Animazione del loader */
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    /* Sfondo semi-trasparente */
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Assicura che il loader sia sopra gli altri elementi */
+    z-index: 9999;
+}
+
+#loaderP {
+    /* Posiziona il loader sopra gli altri elementi */
+    position: absolute;
+    display: none;
+    top: 45%;
+    left: 50%;
     transform: translate(-50%, -50%);
     /* Stile del loader */
     width: 40px;

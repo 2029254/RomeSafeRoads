@@ -55,6 +55,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         return d.properties.nome })
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
+        let loader = document.getElementById("loader");
+        loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+        barChartSvg.style("opacity", 0.3);
 
         document.getElementById("Cloudy").disabled = true;
         document.getElementById("Sunny").disabled = true;
@@ -187,13 +190,17 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                   }));
 
                   console.log(resultVerticalChart);
-                  barChartSvg.selectAll("*").remove();
-                  drawAxesAndBarsFromChoroplethMap(resultVerticalChart, true);
-                  drawColorsLegend();
-                  keysLegends = [];
 
-                  timeSeriesSvg.selectAll("*").remove();
-                  drawTimeSeriesChart(csvFileNameTimeSeries);
+                  setTimeout(function () {
+                    barChartSvg.selectAll("*").remove();
+                    drawAxesAndBarsFromChoroplethMap(resultVerticalChart, true);
+                    drawColorsLegend();
+                   // keysLegends = [];
+                   // timeSeriesSvg.selectAll("*").remove();
+                   // drawTimeSeriesChart(csvFileNameTimeSeries);
+                    loader.style.display = "none";
+                    barChartSvg.style("opacity", 1);
+                  }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
 
                   })
                 }

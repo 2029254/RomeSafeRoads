@@ -22,6 +22,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   var brush = d3.brush()
     .extent([[0,0], [widthScatter, heightScatter]])
     //.on("start brush end", function(d) {  return brushed(d)})
+    .on("start",  function(d) {
+      loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+      choroplethMapSvg.style("opacity", 0.3);
+    })
     .on("end",  function(d) { return brushed(d)});
 
 
@@ -161,6 +165,13 @@ function drawScatterPlot(csvFileNameScatterPlot) {
 
 }
 function brushed(d) {
+  if (!d3.event.selection) {
+    setTimeout(function () {
+      loaderC.style.display = "none";
+      choroplethMapSvg.style("opacity", 1);
+    }, 800);
+    return;} // Se la selezione è nulla, esci dalla funzione
+
   choroplethMapSvg.selectAll("#localization").remove();
 
   extent = d3.event.selection;
@@ -218,6 +229,10 @@ function brushed(d) {
         .style("fill", dotColor)
     }
   });
+  setTimeout(function () {
+    loaderC.style.display = "none";
+    choroplethMapSvg.style("opacity", 1);
+  }, 800);
 }
 
 function setPointText(tipoVeicolo) {
