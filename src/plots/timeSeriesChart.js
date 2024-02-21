@@ -1428,6 +1428,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var previousWeatherValue = false;
 
   switchInput.addEventListener('change', function() {
+    let loaderS = document.getElementById("loaderS");
+    loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    timeSeriesSvg.style("opacity", 0.3);
     // Imposta il valore dell'input in base allo stato dello switch
     switchInput.value = this.checked ? "ON" : "OFF";
     // Assicurati che solo uno dei due switch sia attivo
@@ -1468,9 +1471,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("Rainy").classList.toggle("disabled", this.checked);
     document.getElementById("Severe").classList.toggle("disabled", this.checked);*/
     updateSwitches();
+    setTimeout(function () {
+      loaderS.style.display = "none";
+      timeSeriesSvg.style("opacity", 1);
+    }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
   });
 
   switchBrushInput.addEventListener('change', function() {
+    let loaderS = document.getElementById("loaderS");
+    loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    timeSeriesSvg.style("opacity", 0.3);
+    let loader = document.getElementById("loader");
+    loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    barChartSvg.style("opacity", 0.3);
     // Imposta il valore dell'input in base allo stato dello switch
     switchBrushInput.value = this.checked ? "ON" : "OFF";
     // Assicurati che solo uno dei due switch sia attivo
@@ -1511,7 +1524,6 @@ document.addEventListener('DOMContentLoaded', function() {
       button.style.backgroundImage = `url(${imageClick + buttonWeatherValue + ".png"})`;
       button.style.border = "1px solid #524a32";
 
-
     } else if (switchInput.value === "OFF"){
       document.getElementById("Cloudy").disabled = false;
       document.getElementById("Sunny").disabled = false;
@@ -1524,6 +1536,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("Rainy").classList.toggle("disabled", this.checked);
     document.getElementById("Severe").classList.toggle("disabled", this.checked);
     updateSwitches();
+    setTimeout(function () {
+      loaderS.style.display = "none";
+      timeSeriesSvg.style("opacity", 1);
+      loader.style.display = "none";
+      barChartSvg.style("opacity", 1);
+    }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
   });
 
 
@@ -1531,6 +1549,10 @@ document.addEventListener('DOMContentLoaded', function() {
       flagWeatherCondition = true;
       // Imposta il valore dell'input in base allo stato dello switch
       switchWeatherInput.value = this.checked ? "OFF" : "ON";
+      // Aggiungi il loader al DOM
+      let loader = document.getElementById("loader");
+      loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+      barChartSvg.style("opacity", 0.3);
       // Assicurati che solo uno dei due switch sia attivo
       if (!this.checked) {
         if (switchBrushInput.value === "ON") {
@@ -1586,7 +1608,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("Sunny").classList.toggle("disabled", this.checked);
     document.getElementById("Rainy").classList.toggle("disabled", this.checked);
     document.getElementById("Severe").classList.toggle("disabled", this.checked);
-      updateSwitches();
+    updateSwitches();
+      setTimeout(function () {
+        loader.style.display = "none";
+        barChartSvg.style("opacity", 1);
+      }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
     });
 
   function updateSwitches() {
