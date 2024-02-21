@@ -100,6 +100,14 @@ bucketButton.addEventListener("click", function () {
 
 // Aggiorna il valore del Range Slider quando si cambia il valore del Range Slider manualmente
 slider.addEventListener("input", () => {
+  loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+  barChartSvg.style("opacity", 0.3);
+  choroplethMapSvg.style("opacity", 0.3);
+  timeSeriesSvg.style("opacity", 0.3);
+  scatterPlotpSvg.style("opacity", 0.3);
   updateSliderValue();
   updatePlotsBasingOnSelectedYear()
 });

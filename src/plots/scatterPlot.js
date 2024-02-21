@@ -11,8 +11,8 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
 
 let tooltipScatter;
 let dots;
-let heightScatter = 300;
-let widthScatter = 650;
+let heightScatter = 310;
+let widthScatter = 660;
 let brushIsActive = false;
 let selectedDots;
 
@@ -37,8 +37,8 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -10;
-    var xMax = 10;
+    var xMin = -12;
+    var xMax = 12;
     var yMin = -20;
     var yMax = 20;
 
@@ -160,7 +160,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .style("opacity", 0.5);
 
     drawScatterPlotLegend();
-
+    setTimeout(function () {
+      scatterPlotpSvg.style("opacity", 1);
+      loaderP.style.display = "none";
+    }, 1500); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
   });
 
 }
@@ -169,7 +172,8 @@ function brushed(d) {
     setTimeout(function () {
       loaderC.style.display = "none";
       choroplethMapSvg.style("opacity", 1);
-    }, 800);
+      choroplethMapSvg.selectAll("circle").remove();
+      }, 800);
     return;} // Se la selezione è nulla, esci dalla funzione
 
   choroplethMapSvg.selectAll("#localization").remove();

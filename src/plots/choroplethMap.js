@@ -55,6 +55,12 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
         return d.properties.nome })
       .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
       .on("click", function (d) {
+        switchWeatherInput.value = 'ON'
+        switchWeatherInput.checked = true;
+        sliderWeatherSwitch.style.backgroundColor = '#facdcd'
+        sliderWeatherSwitch.classList.toggle('checked', switchWeatherInput.checked);
+        weatherOnLabel.style.display = "none";
+        weatherOffLabel.style.display = "block";
         let loader = document.getElementById("loader");
         loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         barChartSvg.style("opacity", 0.3);
@@ -270,7 +276,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [1, 3, 6, 9, 12, 15, 18]; // Valori per le celle
+  const legendCells = [1, 2, 4, 6, 8, 10]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -278,7 +284,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .append("rect")
     .attr("x",  500) // Posiziona le celle orizzontalmente
     //.attr("y",  (d, i) => i * 31)
-    .attr("y",  (d,i) => 70 + 31 * i)
+    .attr("y",  (d,i) => 90 + 31 * i)
     .attr("width", 8) // Larghezza delle celle
     .attr("height", 30)
     .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
@@ -288,7 +294,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .enter()
     .append("text")
     .attr("x", 518 ) // Posiziona le etichette al centro delle celle
-    .attr("y", (d, i) => i * 30.7 + 104 )
+    .attr("y", (d, i) => i * 30.7 + 124 )
     .style("font-family", "Lora")
     .text((d) => `${d}`); // Testo dell'etichetta
 
@@ -297,9 +303,9 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .enter()
     .append("line")
     .attr("x1", 500)
-    .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
+    .attr("y1", (d,i) => 120.5 + 31 * i) // Inizio della lineetta
     .attr("x2", 511)
-    .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
+    .attr("y2", (d,i) => 120.5 + 31 * i) // Fine della lineetta
     .style("stroke", "black")
     .style("stroke-width", "1px");
   });
@@ -406,7 +412,7 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .attr("x", 150)
       .attr("y", 250);
 
-    const legendCells = [1, 3, 6, 9, 12, 15, 18]; // Valori per le celle
+    const legendCells = [1, 2, 4, 6, 8, 10]; // Valori per le celle
 
     choroplethMapSvg.selectAll("rect")
       .data(legendCells)
@@ -414,7 +420,7 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .append("rect")
       .attr("x",  500) // Posiziona le celle orizzontalmente
       //.attr("y",  (d, i) => i * 31)
-      .attr("y",  (d,i) => 70 + 31 * i)
+      .attr("y",  (d,i) => 90 + 31 * i)
       .attr("width", 8) // Larghezza delle celle
       .attr("height", 30)
       .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
@@ -424,7 +430,7 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .enter()
       .append("text")
       .attr("x", 518 ) // Posiziona le etichette al centro delle celle
-      .attr("y", (d, i) => i * 30.7 + 104 )
+      .attr("y", (d, i) => i * 30.7 + 124 )
       .style("font-family", "Lora")
       .text((d) => `${d}`); // Testo dell'etichetta
 
@@ -433,9 +439,9 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .enter()
       .append("line")
       .attr("x1", 500)
-      .attr("y1", (d,i) => 100.5 + 31 * i) // Inizio della lineetta
+      .attr("y1", (d,i) => 120.5 + 31 * i) // Inizio della lineetta
       .attr("x2", 511)
-      .attr("y2", (d,i) => 100.5 + 31 * i) // Fine della lineetta
+      .attr("y2", (d,i) => 120.5 + 31 * i) // Fine della lineetta
       .style("stroke", "black")
       .style("stroke-width", "1px");
   });
@@ -468,15 +474,15 @@ function setBarColorChoroplethMapFromOtherCharts(d) {
 
     if (accidentsNumber > 0 && accidentsNumber <= 1)
       return "#d9d9d9"
-    else if (accidentsNumber > 1 && accidentsNumber <= 3)
+    else if (accidentsNumber > 1 && accidentsNumber <= 2)
       return "#bdbdbd";
-    else if (accidentsNumber > 3 && accidentsNumber <= 6)
+    else if (accidentsNumber > 2 && accidentsNumber <= 4)
       return "#969696";
-    else if (accidentsNumber > 6 && accidentsNumber <= 9)
+    else if (accidentsNumber > 4 && accidentsNumber <= 6)
       return "#737373";
-    else if (accidentsNumber > 9 && accidentsNumber <= 12)
+    else if (accidentsNumber > 6 && accidentsNumber <= 8)
       return "#525252";
-    else if (accidentsNumber > 12 && accidentsNumber <= 15)
+    else if (accidentsNumber > 8 && accidentsNumber <= 10)
       return "#373737";
     else
       return "#000000";
@@ -493,15 +499,15 @@ function setBarColorChoroplethMap(d) {
 
     if (accidentsNumber > 0 && accidentsNumber <= 1)
       return "#d9d9d9"
-    else if (accidentsNumber > 1 && accidentsNumber <= 3)
+    else if (accidentsNumber > 1 && accidentsNumber <= 2)
       return "#bdbdbd";
-    else if (accidentsNumber > 3 && accidentsNumber <= 6)
+    else if (accidentsNumber > 2 && accidentsNumber <= 4)
       return "#969696";
-    else if (accidentsNumber > 6 && accidentsNumber <= 9)
+    else if (accidentsNumber > 4 && accidentsNumber <= 6)
       return "#737373";
-    else if (accidentsNumber > 9 && accidentsNumber <= 12)
+    else if (accidentsNumber > 6 && accidentsNumber <= 8)
       return "#525252";
-    else if (accidentsNumber > 12 && accidentsNumber <= 15)
+    else if (accidentsNumber > 8 && accidentsNumber <= 10)
       return "#373737";
     else
       return "#000000";
@@ -513,15 +519,15 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
 
   if (accidentsNumber > 0 && accidentsNumber <= 1)
     return "#d9d9d9"
-  else if (accidentsNumber > 1 && accidentsNumber <= 3)
+  else if (accidentsNumber > 1 && accidentsNumber <= 2)
     return "#bdbdbd";
-  else if (accidentsNumber > 3 && accidentsNumber <= 6)
+  else if (accidentsNumber > 2 && accidentsNumber <= 4)
     return "#969696";
-  else if (accidentsNumber > 6 && accidentsNumber <= 9)
+  else if (accidentsNumber > 4 && accidentsNumber <= 6)
     return "#737373";
-  else if (accidentsNumber > 9 && accidentsNumber <= 12)
+  else if (accidentsNumber > 6 && accidentsNumber <= 8)
     return "#525252";
-  else if (accidentsNumber > 12 && accidentsNumber <= 15)
+  else if (accidentsNumber > 8 && accidentsNumber <= 10)
     return "#373737";
   else
     return "#000000";

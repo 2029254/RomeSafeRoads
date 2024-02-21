@@ -177,7 +177,16 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
     let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
     if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
       yScale.domain([0, 20]);
-    else yScale.domain([0, Math.max.apply(null, MinMax)]);
+    else {
+      const maxScaleValue = Math.max.apply(null, MinMax);
+      var axisStep;
+      if (maxScaleValue <= 1000) axisStep = 20;  // Imposta il passo dell'asse come desiderato
+      else if (maxScaleValue <= 2000) axisStep = 200;  // Imposta il passo dell'asse come desiderato
+      else axisStep = 2000;
+      // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
+      const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
+      yScale.domain([0, roundedMax]);
+    }
 
     // bars creation
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
@@ -429,7 +438,6 @@ function onclickBar(d) {
     console.log(d)
   // Aggiungi il loader al DOM
 
-
   if (buttonWeatherValue==="First") {
     let loader = document.getElementById("loaderC");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
@@ -437,6 +445,9 @@ function onclickBar(d) {
     loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
     choroplethMapSvg.style("opacity", 0.3);
     timeSeriesSvg.style("opacity", 0.3);
+    let loaderP = document.getElementById("loaderP");
+    loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    scatterPlotpSvg.style("opacity", 0.3);
         // Rimuovi le linee correlate alle barre cliccate in precedenza
         clickedBars.forEach(function (bar) {
             d3.select("#line_" + bar.NaturaIncidente).remove();
@@ -546,7 +557,7 @@ function onclickBar(d) {
           }
           fillOtherTownHalls(incidentCounts);
           choroplethMapSvg.style("opacity", 1);
-        }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+        }, 1500); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
 
       });
 
@@ -634,18 +645,17 @@ function onclickBar(d) {
                   keysLegends.push("")
                   drawLegend(natureTimeSeries, setBarColor(d.NumeroIncidenti), value)
                   timeSeriesSvg.style("opacity", 1);
-                }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
-
-
+                }, 1500); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
               }
             });
-
 
         /*}
         else {
           timeSeriesSvg.selectAll("*").remove();
           drawTimeSeriesChart(csvFileNameTimeSeries);
         }*/
+      scatterPlotpSvg.selectAll("*").remove();
+      drawScatterPlot("dataset/processed/scatterPlot/"+selectedYear+"/scatterPlotNature"+clickedNature+".csv");
     }
 }
 
