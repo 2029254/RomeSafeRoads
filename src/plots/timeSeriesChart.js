@@ -12,7 +12,7 @@ var widthInfoBox = 49;
 var heightInfoBox = 35.5;
 var incidentiPerIntervallo = [];
 var flagInterval = false;
-var switchInput, switchBrushInput;
+var switchInput, switchBrushInput, switchWeatherInput;
 var formattedStartDate, formattedEndDate, brushGroup, dateFormatter;
 let currentTransform = d3.zoomIdentity;
 var incidentiPerIntervalloTwo = [];
@@ -1378,7 +1378,6 @@ function drawLegend(text, color, value) {
         .attr("text-anchor", "left")
     .attr("dy", i === 0 ? 0 : "1.1em");
     }
-
   }
 
   // Aggiungi nuovi rettangoli in base all'array keysLegends
@@ -1398,7 +1397,8 @@ function drawLegend(text, color, value) {
     .style("stroke-width", 0.1);
 
 }
-var onLabel, offLabel, brushOnLabel, brushOffLabel, sliderSwitch, sliderBrushSwitch;
+var onLabel, offLabel, brushOnLabel, brushOffLabel, sliderSwitch, sliderBrushSwitch, sliderBrushSwitch, weatherOffLabel, weatherOnLabel;
+var flagWeatherCondition = false;
 document.addEventListener('DOMContentLoaded', function() {
 
   // Primo switch
@@ -1418,6 +1418,15 @@ document.addEventListener('DOMContentLoaded', function() {
   brushOffLabel = document.getElementById("brushoff");
   var previousBrushValue = false;
 
+    // Terzo switch
+    switchWeatherInput = document.getElementById('switchWeather');
+    switchWeatherInput.value = this.checked ? "OFF" : "ON";
+    console.log("WEATHER VALUE: " + switchWeatherInput.value);
+    sliderWeatherSwitch = document.querySelector('.slider-switch-weather');
+    weatherOnLabel = document.getElementById("weatheron");
+    weatherOffLabel = document.getElementById("weatheroff");
+    var previousWeatherValue = false;
+
   switchInput.addEventListener('change', function() {
     // Imposta il valore dell'input in base allo stato dello switch
     switchInput.value = this.checked ? "ON" : "OFF";
@@ -1425,7 +1434,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.checked) {
       switchBrushInput.checked = false;
       switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
-      if (buttonWeatherValue !== "First") {
+      /*if (buttonWeatherValue !== "First") {
        // let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
        // barChartSvg.selectAll("*").remove();
        // drawVerticalBarChart(csvFileNameVerticalBarChart);
@@ -1439,12 +1448,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
      //   barChartSvg.selectAll("*").remove();
      //   drawVerticalBarChart(csvFileNameVerticalBarChart);
-      }
+      }*/
 
-      document.getElementById("Cloudy").disabled = true;
+      /*document.getElementById("Cloudy").disabled = true;
       document.getElementById("Sunny").disabled = true;
       document.getElementById("Rainy").disabled = true;
-      document.getElementById("Severe").disabled = true;
+      document.getElementById("Severe").disabled = true;*/
 
     } else if (switchBrushInput.value === "OFF"){
       // Se lo switch non è attivo, abilita i pulsanti e rimuovi la classe CSS "disabled"
@@ -1454,10 +1463,10 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Severe").disabled = false;
     }
     // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
-    document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
+   /* document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
     document.getElementById("Sunny").classList.toggle("disabled", this.checked);
     document.getElementById("Rainy").classList.toggle("disabled", this.checked);
-    document.getElementById("Severe").classList.toggle("disabled", this.checked);
+    document.getElementById("Severe").classList.toggle("disabled", this.checked);*/
     updateSwitches();
   });
 
@@ -1468,6 +1477,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.checked) {
       switchInput.checked = false;
       switchInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+      switchWeatherInput.checked = true;
+      switchWeatherInput.value = "OFF";
       document.getElementById("Cloudy").disabled = true;
       document.getElementById("Sunny").disabled = true;
       document.getElementById("Rainy").disabled = true;
@@ -1478,6 +1489,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Sunny").disabled = false;
       document.getElementById("Rainy").disabled = false;
       document.getElementById("Severe").disabled = false;
+      switchWeatherInput.checked = false;
+      switchWeatherInput.value = "ON";
       if (buttonWeatherValue !== "First") {
         let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
         barChartSvg.selectAll("*").remove();
@@ -1513,6 +1526,69 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSwitches();
   });
 
+
+    switchWeatherInput.addEventListener('change', function() {
+      flagWeatherCondition = true;
+      // Imposta il valore dell'input in base allo stato dello switch
+      switchWeatherInput.value = this.checked ? "OFF" : "ON";
+      // Assicurati che solo uno dei due switch sia attivo
+      if (!this.checked) {
+        if (switchBrushInput.value === "ON") {
+           timeSeriesSvg.selectAll("*").remove();
+           drawTimeSeriesChart(csvFileNameTimeSeries);
+        }
+        switchBrushInput.checked = false;
+        switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
+        document.getElementById("Cloudy").disabled = false;
+        document.getElementById("Sunny").disabled = false;
+        document.getElementById("Rainy").disabled = false;
+        document.getElementById("Severe").disabled = false;
+        if (buttonWeatherValue !== "First") {
+          let csvFileNameVerticalBarChartWeather = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+          barChartSvg.selectAll("*").remove();
+          drawVerticalBarChart(csvFileNameVerticalBarChartWeather);
+        } else {
+          barChartSvg.selectAll("*").remove();
+          drawVerticalBarChart(csvFileNameVerticalBarChart);
+        }
+        let buttonWeather = document.getElementById(buttonWeatherValue);
+        let buttonWeatherLabel = document.getElementById("Label" + buttonWeatherValue);
+        buttonWeatherLabel.style.color = "#524a32";
+        buttonWeather.style.backgroundColor = "#e6e1d5";
+        buttonWeather.style.transform = "scale(1.2)";
+        buttonWeather.style.backgroundImage = `url(${imageClick + buttonWeatherValue + ".png"})`;
+        buttonWeather.style.border = "1px solid #524a32";
+
+      } else if (switchWeatherInput.value === "OFF"){
+          barChartSvg.selectAll("*").remove();
+          drawVerticalBarChart(csvFileNameVerticalBarChart);
+          //drawVerticalBarChart(csvFileNameVerticalBarChart);
+          document.getElementById("Cloudy").disabled = true;
+          document.getElementById("Sunny").disabled = true;
+          document.getElementById("Rainy").disabled = true;
+          document.getElementById("Severe").disabled = true;
+
+        //choroplethMapSvg.selectAll("*").remove();
+        //drawChoroplethMap(csvFileNameChoroplethMap);
+
+
+      let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
+      let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
+      buttonWeatherValueNew.style.backgroundColor = "white";
+      labelWeatherValue.style.color = "#f7f3eb";
+      buttonWeatherValueNew.style.border = "1px solid #d4d0c5";
+      buttonWeatherValueNew.style.boxShadow = "0 2px 4px darkslategray";
+      buttonWeatherValueNew.style.transform = "scale(1)";
+      buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
+      }
+    // Aggiungi o rimuovi la classe CSS "disabled" per dare un effetto visivo ai pulsanti disabilitati
+    document.getElementById("Cloudy").classList.toggle("disabled", this.checked);
+    document.getElementById("Sunny").classList.toggle("disabled", this.checked);
+    document.getElementById("Rainy").classList.toggle("disabled", this.checked);
+    document.getElementById("Severe").classList.toggle("disabled", this.checked);
+      updateSwitches();
+    });
+
   function updateSwitches() {
 
     console.log("ZOOM VALUE: " + switchInput.value);
@@ -1521,15 +1597,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Aggiorna l'aspetto degli switch
     updateSwitchAppearance(switchInput, sliderSwitch, onLabel, offLabel, switchInput.checked);
     updateSwitchAppearance(switchBrushInput, sliderBrushSwitch, brushOnLabel, brushOffLabel, switchBrushInput.checked);
+    updateWeatherAppearance(switchWeatherInput, sliderWeatherSwitch, weatherOnLabel, weatherOffLabel, switchWeatherInput.checked);
 
-    // Altro codice per aggiornare l'interfaccia utente in base allo stato degli switch
-    keysLegends = [];
-    infoBoxNatureArray = [];
-    focusNatureArray = [];
-    timeSeriesSvg.selectAll("*").remove();
-    drawTimeSeriesChart(csvFileNameTimeSeries);
-    currentCsvFileName = csvFileNameTimeSeries;
-    console.log("PROVSSSS: " + currentCsvFileName);
+
+    if (!flagWeatherCondition) {
+        // Altro codice per aggiornare l'interfaccia utente in base allo stato degli switch
+        keysLegends = [];
+        infoBoxNatureArray = [];
+        focusNatureArray = [];
+        timeSeriesSvg.selectAll("*").remove();
+        drawTimeSeriesChart(csvFileNameTimeSeries);
+        currentCsvFileName = csvFileNameTimeSeries;
+        console.log("PROVSSSS: " + currentCsvFileName);
+   }
+   flagWeatherCondition = false;
   }
 
   function updateSwitchAppearance(input, slider, onLabel, offLabel, checked) {
@@ -1544,6 +1625,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     slider.classList.toggle('checked', checked);
   }
+
+    function updateWeatherAppearance(input, slider, onLabel, offLabel, checked) {
+      if (checked) {
+        slider.style.backgroundColor = "#facdcd";
+        onLabel.style.display = "none";
+        offLabel.style.display = "block";
+      } else {
+         slider.style.backgroundColor = "#c2e0bc";
+         onLabel.style.display = "block";
+         offLabel.style.display = "none";
+      }
+      slider.classList.toggle('checked', checked);
+    }
 
 });
 

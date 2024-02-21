@@ -49,17 +49,23 @@ bucketButton.addEventListener("click", function () {
   buttonWeatherValue="First"
   switchBrushInput.checked = false;
   sliderBrushSwitch.style.backgroundColor = '#facdcd'
+  switchWeatherInput.checked = false;
+  sliderWeatherSwitch.style.backgroundColor = '#c2e0bc'
+  switchWeatherInput.value = "ON";
   switchBrushInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
   switchInput.checked = false;
   sliderSwitch.style.backgroundColor = '#facdcd'
   switchInput.value = "OFF"; // Aggiorna manualmente il valore dell'input
   brushOnLabel.style.display = "none";
   brushOffLabel.style.display = "block";
+  weatherOnLabel.style.display = "block";
+  weatherOffLabel.style.display = "none";
   onLabel.style.display = "none";
   offLabel.style.display = "block";
 
   sliderSwitch.classList.toggle('checked', switchInput.checked);
   sliderBrushSwitch.classList.toggle('checked', switchBrushInput.checked);
+  sliderWeatherSwitch.classList.toggle('checked', switchWeatherInput.checked);
 
   document.getElementById("Cloudy").disabled = false;
   document.getElementById("Sunny").disabled = false;

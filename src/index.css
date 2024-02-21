@@ -201,7 +201,7 @@ button.circular-button {
     border: 1px solid #d4d0c5; /* Imposta il bordo a 0.5px di spessore e colore nero */
     line-height: 40px;
     font-size: 16px;
-    margin-top: 35px;
+    margin-top: 5px; /* era 35 */
     cursor: pointer;
     align-content: center;
     transition:all 0.3s;
@@ -408,6 +408,19 @@ button.btn-small {
   height: 0;
 }
 
+.switchWeather {
+  position: relative;
+  display: inline-block;
+  width: 65px;
+  height: 34px;
+}
+
+.switchWeather input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
 .slider-switch {
   position: absolute;
   cursor: pointer;
@@ -462,6 +475,34 @@ button.btn-small {
   cursor: pointer;
 }
 
+.slider-switch-weather {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #c2e0bc; /*provare anche #fca9a9*/
+  box-shadow: 0 2px 4px darkslategray;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider-switch-weather:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  right: 4px;
+  bottom: 4px;
+  background-color: #827c68;
+  opacity: 0.8;
+  transition: .4s;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
 .slider-labels {
   position: absolute;
   top: 50%;
@@ -492,6 +533,21 @@ button.btn-small {
   padding: 0 5px;
 }
 
+.slider-labels-weather {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.slider-labels-weather span {
+  flex: 1;
+  text-align: center;
+  padding: 0 5px;
+}
+
 .switch input:checked + .slider-switch {
   background-color: #2196F3;
 }
@@ -506,6 +562,14 @@ button.btn-small {
 
 .switch input:checked + .slider-switch-brush:before {
   transform: translateX(31px);
+}
+
+.switch input:checked + .slider-switch-weather {
+  background-color: #2196F3;
+}
+
+.switch input:checked + .slider-switch-weather:before {
+  transform: translateX(-31px);
 }
 
 input[type="checkbox"]:checked + .slider-switch .slider-labels .on {
@@ -524,12 +588,25 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
   display: none;
 }
 
+input[type="checkbox"]:checked + .slider-switch-weather .slider-labels-brush .weatheron {
+  display: none;
+}
+
+input[type="checkbox"]:checked + .slider-switch-weather .slider-labels-brush .weatheroff {
+  display: block;
+}
+
+
 .slider-switch.checked:before {
     transform: translateX(31px);
 }
 
 .slider-switch-brush.checked:before {
     transform: translateX(31px);
+}
+
+.slider-switch-weather.checked:before {
+    transform: translateX(-31px);
 }
 
 .off, .on {
@@ -540,7 +617,7 @@ input[type="checkbox"]:checked + .slider-switch-brush .slider-labels-brush .brus
     cursor: pointer;
 }
 
-#zoom, #brush {
+#zoom, #brush , #weather{
     font-family: Lora, serif;
     color: #524a32;
     font-weight: bold;
