@@ -53,7 +53,16 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
       .attr("id",function (d) {
         centroidTownHalls.set(d.properties.nome, path.centroid(d));
         return d.properties.nome })
-      .style("fill",function (d) { return setBarColorChoroplethMap(d)}) // Colore di riempimento
+      .style("fill", function(d) {
+        // Verifica se csvFileNameChoroplethMap contiene la parola "general"
+        if (csvFileNameChoroplethMap.includes("general")) {
+          // Se sì, chiama la funzione setBarColorChoroplethMap
+          return setBarColorChoroplethMapGeneral(d);
+        } else {
+          // Altrimenti, chiama un'altra funzione
+          return setBarColorChoroplethMap(d);
+        }
+      }) // Colore di riempimento
       .on("click", function (d) {
         switchWeatherInput.value = 'ON'
         switchWeatherInput.checked = true;
@@ -255,7 +264,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
               tooltipChor = d3.select("#popupChoropleth");
                       tooltipChor.style("opacity", 0.9);
 
-                      tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>" + "deaths: "+ accidentsNumber + "</tspan>")
+                      tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>" + "accidents: "+ accidentsNumber + "</tspan>")
                       .style("color", "#524a32")
                       .style("font-family", "Lora")
                       .style("font-size", "10px")
@@ -276,7 +285,11 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("x", 150)
     .attr("y", 250);
 
-  const legendCells = [1, 2, 4, 6, 8, 10]; // Valori per le celle
+    var legendCells = [];
+    if (csvFileNameChoroplethMap.includes("general"))
+      legendCells = [1500, 3000, 4500, 6000, 7500, 9000]; // Valori per le celle
+    else
+      legendCells = [1, 2, 4, 6, 8, 10]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -287,7 +300,13 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("y",  (d,i) => 90 + 31 * i)
     .attr("width", 8) // Larghezza delle celle
     .attr("height", 30)
-    .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
+    .style("fill", function (d,i) {
+      if(csvFileNameChoroplethMap.includes("general"))
+      return setLegendColorsChoroplethMapGeneral(legendCells[i])
+      else
+      return setLegendColorsChoroplethMap(legendCells[i])
+
+    }); // Colora le celle in base al valore
 
   choroplethMapSvg.selectAll("text")
     .data(legendCells)
@@ -391,7 +410,7 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
           tooltipChor = d3.select("#popupChoropleth");
           tooltipChor.style("opacity", 0.9);
 
-          tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>" + "deaths: "+ accidentsNumber + "</tspan>")
+          tooltipChor.html(d.properties.nome + "<br>" + "<tspan style='font-weight: bold;'>accidents:" + ": "+ accidentsNumber + "</tspan>")
             .style("color", "#524a32")
             .style("font-family", "Lora")
             .style("font-size", "10px")
@@ -490,6 +509,29 @@ function setBarColorChoroplethMapFromOtherCharts(d) {
     return "#f0f0f0";
 }
 
+function setBarColorChoroplethMapGeneral(d) {
+  let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
+
+  if (townHallAndAccidentsNumber !== undefined) {
+    let accidentsNumber = townHallAndAccidentsNumber.NumeroIncidenti
+
+    if (accidentsNumber > 0 && accidentsNumber <= 1500)
+      return "#d9d9d9"
+    else if (accidentsNumber > 1500 && accidentsNumber <= 3000)
+      return "#bdbdbd";
+    else if (accidentsNumber > 3000 && accidentsNumber <= 4500)
+      return "#969696";
+    else if (accidentsNumber > 4500 && accidentsNumber <= 6000)
+      return "#737373";
+    else if (accidentsNumber > 6000 && accidentsNumber <= 8500)
+      return "#525252";
+    else if (accidentsNumber > 8500 && accidentsNumber <= 10000)
+      return "#373737";
+    else
+      return "#000000";
+  } else
+    return "#f0f0f0";
+}
 
 function setBarColorChoroplethMap(d) {
   let townHallAndAccidentsNumber = dataAboutTownHall.find((element) => element.Municipio === d.properties.nome);
@@ -515,6 +557,24 @@ function setBarColorChoroplethMap(d) {
     return "#f0f0f0";
 }
 
+function setLegendColorsChoroplethMapGeneral(accidentsNumber) {
+
+  if (accidentsNumber > 0 && accidentsNumber <= 1500)
+    return "#d9d9d9"
+  else if (accidentsNumber > 1500 && accidentsNumber <= 3000)
+    return "#bdbdbd";
+  else if (accidentsNumber > 3000 && accidentsNumber <= 4500)
+    return "#969696";
+  else if (accidentsNumber > 4500 && accidentsNumber <= 6000)
+    return "#737373";
+  else if (accidentsNumber > 6000 && accidentsNumber <= 7500)
+    return "#525252";
+  else if (accidentsNumber > 7500 && accidentsNumber <= 9000)
+    return "#373737";
+  else
+    return "#000000";
+
+}
 function setLegendColorsChoroplethMap(accidentsNumber) {
 
   if (accidentsNumber > 0 && accidentsNumber <= 1)

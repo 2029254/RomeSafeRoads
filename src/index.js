@@ -1,5 +1,4 @@
 const slider = document.getElementById("yearSlider");
-console.log(slider)
 const decrementButton = document.getElementById("decrementButton");
 const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
@@ -10,6 +9,33 @@ let loader = document.getElementById("loader");
 let loaderC = document.getElementById("loaderC");
 let loaderS = document.getElementById("loaderS");
 let loaderP = document.getElementById("loaderP");
+var selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+// Seleziona tutti gli input radio all'interno di #radiobuttons
+var radioButtons = document.querySelectorAll('#radiobuttons input[type="radio"]');
+
+// Aggiungi un listener onchange a ciascun radio button
+radioButtons.forEach(function(radioButton) {
+  radioButton.onchange = function() {
+    // Verifica se il radio button è stato selezionato
+    if (this.checked && radioButton.id === "General")
+      csvFileNameChoroplethMap = "dataset/processed/choroplethMap/general/" + "choroplethMap"+ selectedYear +".csv";
+    else
+      csvFileNameChoroplethMap = "dataset/processed/choroplethMap/" + "choroplethMap"+ selectedYear +".csv";
+
+    loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    choroplethMapSvg.style("opacity", 0.3);
+    setTimeout(function () {
+      loaderC.style.display = "none"; // Assicurati che il loader sia inizialmente visibile
+      choroplethMapSvg.style("opacity", 1);
+      // body.style.backgroundColor = "#f6fad9"
+    }, 1200);
+
+
+    nnaturee.style.display = 'none';
+    choroplethMapSvg.selectAll("*").remove();
+    drawChoroplethMap(csvFileNameChoroplethMap);
+  };
+});
 
 // Aggiungi event listener per l'evento mouseenter per mostrare il testo
 bucketButton.addEventListener('mouseenter', function() {
@@ -24,6 +50,7 @@ bucketButton.addEventListener('mouseleave', function() {
 });
 
 bucketButton.addEventListener("click", function () {
+  nnaturee.style.display = 'none';
 
   loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
   loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
@@ -108,6 +135,7 @@ slider.addEventListener("input", () => {
   choroplethMapSvg.style("opacity", 0.3);
   timeSeriesSvg.style("opacity", 0.3);
   scatterPlotpSvg.style("opacity", 0.3);
+
   updateSliderValue();
   updatePlotsBasingOnSelectedYear()
 });
@@ -121,6 +149,8 @@ let csvFileNameScatterPlot;
 let csvFileNameVerticalBarChart;
 let csvFileNameChoroplethMap;
 function updatePlotsBasingOnSelectedYear(){
+  selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
   idPoints = 0
   arrayOfData = [];
   focusArray = [];
@@ -130,7 +160,12 @@ function updatePlotsBasingOnSelectedYear(){
   keysLegends = [];
 
   csvFileNameVerticalBarChart = "dataset/processed/verticalBarChart/";
-  csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
+
+    if (selectedRadioButton.id === "General")
+        csvFileNameChoroplethMap = "dataset/processed/choroplethMap/general/";
+      else
+        csvFileNameChoroplethMap = "dataset/processed/choroplethMap/";
+
   csvFileNameTimeSeries = "dataset/processed/timeSeries/";
   csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/";
   csvFileNameScatterPlot = "dataset/processed/scatterPlot/";

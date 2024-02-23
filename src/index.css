@@ -750,7 +750,46 @@ input[type="checkbox"]:checked + .slider-switch-weather .slider-labels-brush .we
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-#radiobuttons {
+#radiobuttons{
     font-family: Lora, serif;
-    z-index: 999999999999999999999; /* Assicura che i pulsanti radio siano sopra gli altri elementi */
+    color: #524a32;
+}
+/* completely hiding radio button */
+input[type="radio"] {
+    display: none;
+}
+
+/* simulate radiobutton appearance using pseudoselector */
+input[type="radio"] + label:before {
+    color: #524a32;
+    content: "";
+    /* create custom radiobutton appearance */
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    padding: 3px;
+    margin-right: 5px;
+    /* background-color only for content */
+    background-clip: content-box;
+    border: 1px solid #bbbbbb;
+    background-color: #e7e6e7;
+    border-radius: 50%;
+}
+
+/* appearance of checked radiobutton */
+input[type="radio"]:checked + label:before {
+    background-color: #857154;
+}
+
+/* resetting default box-sizing */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+/* optional styles for centering radiobuttons */
+.sound-signal label {
+    display: inline-flex;
+    align-items: center;
 }
