@@ -81,7 +81,14 @@
             </div>
         </div>
         <div class="col-5" id="animTwo">
-            <div id="choroplethMap"></div>
+            <div id="radiobuttons" style="width:100px; transform: translateX(-35px) translateY(25px) scale(0.7);">
+                <p>Accidents:</p>
+                <input type="radio" id="html" name="fav_language" value="General" checked="checked">
+                <label for="html">General</label><br>
+                <input type="radio" id="css" name="fav_language" value="Fatal">
+                <label for="css">Fatal</label><br>
+            </div>
+            <div id="choroplethMap" style="height: 0px; width: 0px;"></div>
             <div id="loaderC"></div>
         </div>
     </div>

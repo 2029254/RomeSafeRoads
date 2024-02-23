@@ -439,6 +439,15 @@ function onclickBar(d) {
   // Aggiungi il loader al DOM
 
   if (buttonWeatherValue==="First") {
+
+    choroplethMapSvg
+      .append("text")
+      .attr("id", "textfatal")
+      .attr("x", 400 ) // Posiziona le etichette al centro delle celle
+      .attr("y", 100 )
+      .style("font-family", "Lora")
+      .text("Fatal accidents of [" + d.NaturaIncidente.toString() + "]"); // Testo dell'etichetta
+
     let loader = document.getElementById("loaderC");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
     let loaderS = document.getElementById("loaderS");
