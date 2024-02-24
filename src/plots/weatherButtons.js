@@ -9,7 +9,6 @@ const imagePaths = [
   "dataset/img/BlackAndWhite/SunnyBW.png",
   "dataset/img/BlackAndWhite/RainyBW.png",
   "dataset/img/BlackAndWhite/SevereBW.png",
-  "dataset/img/BlackAndWhite/NoneBW.png"
 ];
 
 const imageClick = "dataset/img/"
@@ -79,23 +78,7 @@ function createHTMLButtons() {
         buttonWeatherValueNew.style.backgroundImage = `url(${imageClick + "BlackAndWhite/" + buttonWeatherValue + "BW.png"})`;
       }
 
-      // Imposta l'animazione per il bottone "None"
-      if (this.id === "None") {
-        buttonLabel.style.color = "#524a32";
-        button.style.transform = "scale(1.2)";
-        button.style.backgroundImage = `url(${imageClick + this.id + ".png"})`;
-        buttonWeatherValue = this.id;
-        let year = document.getElementById("yearSlider").value;
-        updatePlotsBasingOnSelectedYear();
-        // Imposta un timer per riportare il bottone "None" allo stato precedente dopo 2 secondi
-        setTimeout(function () {
-          button.style.transform = "scale(1)";
-          button.style.transition = "0.5s";
-          button.style.backgroundImage = `url(${imageClick + "BlackAndWhite/NoneBW.png"})`;
-          buttonWeatherValue="First"
-          // body.style.backgroundColor = "#f6fad9"
-        }, 1000);
-      } else {
+
         buttonLabel.style.color = "#524a32";
         button.style.backgroundColor = "#e6e1d5";
         button.style.transform = "scale(1.2)";
@@ -113,7 +96,7 @@ function createHTMLButtons() {
           drawVerticalBarChart(csvFileNameVerticalBarChart);
           barChartSvg.style("opacity", 1);
         }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
-      }
+
     });
 
 

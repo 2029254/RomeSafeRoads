@@ -4,7 +4,6 @@ const incrementButton = document.getElementById("incrementButton");
 let titleValue = document.getElementById("title");
 let periodValue = document.getElementById("period");
 let bucketButton = document.getElementById("reset");
-const resetText = document.getElementById('resetText');
 let loader = document.getElementById("loader");
 let loaderC = document.getElementById("loaderC");
 let loaderS = document.getElementById("loaderS");
@@ -12,7 +11,7 @@ let loaderP = document.getElementById("loaderP");
 var selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
 // Seleziona tutti gli input radio all'interno di #radiobuttons
 var radioButtons = document.querySelectorAll('#radiobuttons input[type="radio"]');
-
+var bucketB = false;
 // Aggiungi un listener onchange a ciascun radio button
 radioButtons.forEach(function(radioButton) {
   radioButton.onchange = function() {
@@ -38,18 +37,17 @@ radioButtons.forEach(function(radioButton) {
 });
 
 // Aggiungi event listener per l'evento mouseenter per mostrare il testo
-bucketButton.addEventListener('mouseenter', function() {
-    resetText.style.display = 'inline';
+bucketButton.addEventListener('mouseover', function() {
     bucketButton.style.transform = "scale(1.09)";
 });
 
 // Aggiungi event listener per l'evento mouseleave per nascondere il testo
 bucketButton.addEventListener('mouseleave', function() {
-    resetText.style.display = 'none';
-    bucketButton.style.transform = "scale(1)";
+    if(!bucketB)bucketButton.style.transform = "scale(1)";
 });
 
 bucketButton.addEventListener("click", function () {
+  bucketB = true
   nnaturee.style.display = 'none';
 
   loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
@@ -63,8 +61,8 @@ bucketButton.addEventListener("click", function () {
   scatterPlotpSvg.style("opacity", 0.3);
 
   // buttonLabel.style.color = "#524a32";
-  bucketButton.style.transform = "scale(1.2)";
-  bucketButton.style.backgroundImage = `url(${imageClick + "None" + ".png"})`;
+  bucketButton.style.transform = "scale(1.2) rotate(360deg)";
+  bucketButton.style.transition = "1.5s"
   let buttonWeatherValueNew = document.getElementById(buttonWeatherValue);
   let labelWeatherValue = document.getElementById("Label" + buttonWeatherValue);
   buttonWeatherValueNew.style.backgroundColor = "white";
@@ -109,11 +107,9 @@ bucketButton.addEventListener("click", function () {
   updatePlotsBasingOnSelectedYear();
   // Imposta un timer per riportare il bottone "None" allo stato precedente dopo 2 secondi
   setTimeout(function () {
-    bucketButton.style.transform = "scale(1)";
-    bucketButton.style.transition = "0.5s";
-    bucketButton.style.backgroundImage = `url(${imageClick + "BlackAndWhite/NoneBW.png"})`;
-    // body.style.backgroundColor = "#f6fad9"
-  }, 1000);
+    bucketButton.style.transform = "scale(1.09) rotate(0deg)"; // Ruota di 0 gradi (senza rotazione)
+    bucketB = false;
+  }, 1500);
 });
 // Aggiorna il valore del Range Slider quando si spostano i bottoni + e -
   function updateSliderValue() {

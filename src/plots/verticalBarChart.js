@@ -169,7 +169,7 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
 
     // get data group by year
     dataAboutYearSorted = data.sort(function (a, b) {
-      return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+      return d3.descending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
     });
 
     // definition of axes domain
@@ -291,7 +291,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
       console.log(resultArray);
       // get data group by year
       dataAboutYearSorted = resultArray.sort(function (a, b) {
-        return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+        return d3.descending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
       });
 
       // definition of axes domain
@@ -442,6 +442,15 @@ function onclickBar(d) {
     let nnaturee = document.getElementById("nnaturee");
     nnaturee.style.display = 'block';
     nnaturee.textContent = "Nature: [" + d.NaturaIncidente.toString() + "]"
+
+    scatterPlotpSvg
+      .append("text")
+      .attr("id", "textfatal")
+      .attr("x", 600 ) // Posiziona le etichette al centro delle celle
+      .attr("y", 260 )
+      .style("font-family", "Lora")
+      .style("z-index", 999999999999999999999999999)
+      .text("Accidents of [" + d.NaturaIncidente.toString() + "]"); // Testo dell'etichetta
 
     let loader = document.getElementById("loaderC");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile

@@ -209,8 +209,8 @@ button.circular-button {
 }
 
 #reset{
-    width: 60px; /* Diametro */
-    height: 60px; /* Diametro */
+    width: 40px; /* Diametro */
+    height: 40px; /* Diametro */
     border-radius: 50%; /* Rende il bordo circolare */
     line-height: 40px;
     font-size: 16px;
@@ -218,17 +218,17 @@ button.circular-button {
     cursor: pointer;
     align-content: center;
     transition:all 0.3s;
-    background-color: #f7f3eb;
-    background-size: 40px;
+    background-color: #ebe5da;
+    background-size: 25px;
     background-repeat: no-repeat;
     background-position-x: 9.2px;
     background-position-y: 8px;
 }
 
 button.bucket {
-    width: 40px; /* Diametro */
-    height: 40px; /* Diametro */
-    border-radius: 50%; /* Rende il bordo circolare */
+    width: 20px; /* Diametro */
+    height: 20px; /* Diametro */
+    border-radius: 30%; /* Rende il bordo circolare */
     border: 1px solid #f7f3eb; /* Imposta il bordo a 0.5px di spessore e colore nero */
     line-height: 40px;
     font-size: 16px;

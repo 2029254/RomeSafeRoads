@@ -279,6 +279,7 @@ function drawScatterPlotLegend() {
     .append("rect")
     .attr("x", 600)
     .attr("y", function (d, i) {
+      console.log(250 + i * (size + 5))
       return 250 + i * (size + 5)
     }) // 30 is where the first dot appears. 25 is the distance between dots
     .attr("width", size)
