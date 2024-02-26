@@ -81,7 +81,7 @@ function drawAxesAndBars(csvFileName){
 
   // definition of axes  height and width
   xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
-  yScale = d3.scaleLinear().range([height, 0]);
+  yScale = d3.scaleLog().range([height, 0]); // Utilizza scaleLog per l'asse y
 
   // function to get and filter csv data
   d3.csv(csvFileName, function (data) {
@@ -91,27 +91,15 @@ function drawAxesAndBars(csvFileName){
 
     // get data group by year
     dataAboutYearSorted = dataAboutYear.sort(function (a, b) {
-      return d3.ascending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
+      return d3.descending(parseFloat(a['NumeroIncidenti']), parseFloat(b['NumeroIncidenti']));
     });
 
-    // definition of axes domain
-    xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
-    let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-    if (buttonWeatherValue === undefined  || buttonWeatherValue === "None"  || buttonWeatherValue === "First") {
-      yScale.domain([0, 24000]);
-    } else {
-      // Calcola il massimo valore della scala
-      const maxScaleValue = Math.max.apply(null, MinMax);
-      var axisStep;
-      if (maxScaleValue <= 1000) axisStep = 100;  // Imposta il passo dell'asse come desiderato
-      else if (maxScaleValue <= 2000) axisStep = 200;  // Imposta il passo dell'asse come desiderato
-      else axisStep = 2000;
-      // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
-      const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
-      yScale.domain([0, roundedMax]);
-    }
+    // Domain delle scale per gli assi x e y
+    xScale.domain(dataAboutYearSorted.map(function(d) {return d.NaturaIncidente;}));
 
-    // bars creation
+    yScale.domain([0.5, 30000]); // Assicurati che il dominio dell'asse y inizi da 1 per evitare problemi con la scala logaritmica
+
+    // Creazione delle barre
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
     g.selectAll(".bar")
       .data(dataAboutYearSorted)
@@ -130,12 +118,12 @@ function drawAxesAndBars(csvFileName){
         })
       .on("click", function (d) {onclickBar(d)})
       .on("mouseover", handleMouseOver)
-      .on("mouseout", function (d) {handleMouseOut(d)})
+      .on("mouseout", function(d) {handleMouseOut(d)})
       .on("mousemove", handleMouseOver)
       .attr("class", "bar")
       .style("transition", "0.3s");
 
-    // axis x description
+    // Descrizione dell'asse x
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(xScale))
@@ -146,26 +134,45 @@ function drawAxesAndBars(csvFileName){
       .attr("fill", "black")
       .text("Accidents' nature");
 
-    // axis y description
+// Descrizione dell'asse y
     g.append("g")
-      .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
+      .call(d3.axisLeft(yScale)
+        .tickFormat(function(d, i, ticks) {
+          if(i==0)
+            return ("0.5")
+         if (i == 6 || i == 5 || i == 14 || i == 15 || i == 23 || i == 24 || i == 33 || i == 32 || i == 42 || i == 41 || i == 43)
+            return Math.round(d);
+          else return "";
+
+        }))
       .style("font-family", "Lora")
       .append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0)
+      .attr("y", -10)
       .attr("x", -107)
       .attr("dy", "-5.1em")
       .attr("fill", "black")
       .text("Accidents' number");
 
+    g.append("g")
+      .style("font-family", "Lora")
+      .style("font-size", 8)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -10)
+      .attr("x", -187)
+      .attr("dy", "-5.1em")
+      .attr("fill", "black")
+      .text("(logarithmic scale)");
   });
 }
+
 
 function drawAxesAndBarsFromChoroplethMap(data, choropleth){
 
   // definition of axes  height and width
   xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
-  yScale = d3.scaleLinear().range([height, 0]);
+  yScale = d3.scaleLog().range([height, 0]);
 
     // get data group by year
     dataAboutYearSorted = data.sort(function (a, b) {
@@ -173,20 +180,10 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
     });
 
     // definition of axes domain
-    xScale.domain(dataAboutYearSorted.map(function (d) { return d.NaturaIncidente; }));
-    let MinMax = dataAboutYearSorted.map(function (d) { return d.NumeroIncidenti; })
-    if(buttonWeatherValue === undefined || buttonWeatherValue === "None" || buttonWeatherValue === "First")
-      yScale.domain([0, 20]);
-    else {
-      const maxScaleValue = Math.max.apply(null, MinMax);
-      var axisStep;
-      if (maxScaleValue <= 1000) axisStep = 20;  // Imposta il passo dell'asse come desiderato
-      else if (maxScaleValue <= 2000) axisStep = 200;  // Imposta il passo dell'asse come desiderato
-      else axisStep = 2000;
-      // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
-      const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
-      yScale.domain([0, roundedMax]);
-    }
+  // Domain delle scale per gli assi x e y
+  xScale.domain(dataAboutYearSorted.map(function(d) {return d.NaturaIncidente;}));
+
+  yScale.domain([0.5, 30000]); // Assicurati che il dominio dell'asse y inizi da 1 per evitare problemi con la scala logaritmica
 
     // bars creation
     g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
@@ -220,18 +217,36 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
       .attr("fill", "black")
       .text("Accidents' nature");
 
-    // axis y description
-    g.append("g")
-      .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
-      .style("font-family", "Lora")
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0)
-      .attr("x", -105)
-      .attr("dy", "-5.1em")
-      .attr("text-anchor", "end")
-      .attr("fill", "black")
-      .text("Number of accidents");
+// Descrizione dell'asse y
+  g.append("g")
+    .call(d3.axisLeft(yScale)
+      .tickFormat(function (d, i, ticks) {
+        if(i==0)
+          return ("0.5")
+        if (i==6 || i == 5 || i == 14 || i == 15 || i == 23 || i == 24 || i == 33 || i == 32 || i == 42 || i == 41 || i == 43)
+          return Math.round(d);
+        else return "";
+      }))
+    .style("font-family", "Lora")
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -10)
+    .attr("x", -107)
+    .attr("dy", "-5.1em")
+    .attr("text-anchor", "end")
+    .attr("fill", "black")
+    .text("Accidents' number");
+
+  g.append("g")
+    .style("font-family", "Lora")
+    .style("font-size", 8)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -10)
+    .attr("x", -187)
+    .attr("dy", "-5.1em")
+    .attr("fill", "black")
+    .text("(logarithmic scale)");
 
 }
 
