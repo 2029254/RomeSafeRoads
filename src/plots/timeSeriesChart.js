@@ -925,6 +925,8 @@ function drawTimeSeriesChart(csvFileName){
         choroplethMapSvg.style("opacity", 0.3);
         loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         barChartSvg.style("opacity", 0.3);
+        loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+        scatterPlotpSvg.style("opacity", 0.3);
 
       })
       .on("end", function(d) {
@@ -997,6 +999,8 @@ function brushedTimeSeries(d) {
       choroplethMapSvg.style("opacity", 1);
       loader.style.display = "none";
       barChartSvg.style("opacity", 1);
+      loaderP.style.display = "none";
+      scatterPlotpSvg.style("opacity", 1);
     }, 800);
     return;} // Se la selezione è nulla, esci dalla funzione
 
@@ -1101,6 +1105,8 @@ function brushedTimeSeries(d) {
     choroplethMapSvg.style("opacity", 1);
     loader.style.display = "none";
     barChartSvg.style("opacity", 1);
+    loaderP.style.display = "none";
+    scatterPlotpSvg.style("opacity", 1);
   }, 800);
 
 }
