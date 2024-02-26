@@ -29,10 +29,16 @@ radioButtons.forEach(function(radioButton) {
       // body.style.backgroundColor = "#f6fad9"
     }, 1200);
 
-
     nnaturee.style.display = 'none';
-    choroplethMapSvg.selectAll("*").remove();
-    drawChoroplethMap(csvFileNameChoroplethMap);
+
+    if(switchBrushInput.value === "ON"){
+      choroplethMapSvg.selectAll("*").remove();
+      drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+    } else {
+      choroplethMapSvg.selectAll("*").remove();
+      drawChoroplethMap(csvFileNameChoroplethMap);
+
+    }
   };
 });
 
