@@ -1114,6 +1114,9 @@ function updateAllGraphs(formattedStartDate, formattedEndDate ) {
 
   choroplethMapSvg.selectAll("*").remove();
   drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+
+  scatterPlotpSvg.selectAll("*").remove();
+  drawScatterFromTimeSeries(formattedStartDate, formattedEndDate);
 }
 // Funzione per mostrare il numero di incidenti
 function showIncidentCount(d) {

@@ -428,38 +428,46 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .attr("x", 150)
       .attr("y", 250);
 
-    const legendCells = [1, 2, 4, 6, 8, 10]; // Valori per le celle
+        var legendCells = [];
+          legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
 
-    choroplethMapSvg.selectAll("rect")
-      .data(legendCells)
-      .enter()
-      .append("rect")
-      .attr("x",  500) // Posiziona le celle orizzontalmente
-      //.attr("y",  (d, i) => i * 31)
-      .attr("y",  (d,i) => 90 + 31 * i)
-      .attr("width", 8) // Larghezza delle celle
-      .attr("height", 30)
-      .style("fill", function (d,i) { return setLegendColorsChoroplethMap(legendCells[i])}); // Colora le celle in base al valore
+      choroplethMapSvg.selectAll("rect")
+        .data(legendCells)
+        .enter()
+        .append("rect")
+        .attr("x",  500) // Posiziona le celle orizzontalmente
+        //.attr("y",  (d, i) => i * 31)
+        .attr("y",  (d,i) => 48 + 31 * i)
+        .attr("width", 8) // Larghezza delle celle
+        .attr("height", 30)
+        .style("fill", function (d,i) {
+          if(csvFileNameChoroplethMap.includes("general"))
+          return setLegendColorsChoroplethMapGeneral(legendCells[i])
+          else
+          return setLegendColorsChoroplethMap(legendCells[i])
 
-    choroplethMapSvg.selectAll("text")
-      .data(legendCells)
-      .enter()
-      .append("text")
-      .attr("x", 518 ) // Posiziona le etichette al centro delle celle
-      .attr("y", (d, i) => i * 30.7 + 124 )
-      .style("font-family", "Lora")
-      .text((d) => `${d}`); // Testo dell'etichetta
+        }); // Colora le celle in base al valore
 
-    choroplethMapSvg.selectAll("line")
-      .data(legendCells) // Ignora l'ultimo valore
-      .enter()
-      .append("line")
-      .attr("x1", 500)
-      .attr("y1", (d,i) => 120.5 + 31 * i) // Inizio della lineetta
-      .attr("x2", 511)
-      .attr("y2", (d,i) => 120.5 + 31 * i) // Fine della lineetta
-      .style("stroke", "black")
-      .style("stroke-width", "1px");
+
+  choroplethMapSvg.selectAll("text")
+    .data(legendCells)
+    .enter()
+    .append("text")
+    .attr("x", 518 ) // Posiziona le etichette al centro delle celle
+    .attr("y", (d, i) => i * 30.7 + 82 )
+    .style("font-family", "Lora")
+    .text((d) => `${d}`); // Testo dell'etichetta
+
+  choroplethMapSvg.selectAll("line")
+    .data(legendCells) // Ignora l'ultimo valore
+    .enter()
+    .append("line")
+    .attr("x1", 500)
+    .attr("y1", (d,i) => 78.5 + 31 * i) // Inizio della lineetta
+    .attr("x2", 511)
+    .attr("y2", (d,i) => 78.5 + 31 * i) // Fine della lineetta
+    .style("stroke", "black")
+    .style("stroke-width", "1px");
   });
 }
 
@@ -489,21 +497,27 @@ function setBarColorChoroplethMapFromOtherCharts(d) {
   if (townHallAndAccidentsNumber !== undefined) {
 
     if (accidentsNumber > 0 && accidentsNumber <= 1)
-      return "#d9d9d9"
+      return "#f7fbff"
     else if (accidentsNumber > 1 && accidentsNumber <= 2)
-      return "#bdbdbd";
+      return "#deebf7";
     else if (accidentsNumber > 2 && accidentsNumber <= 4)
-      return "#969696";
-    else if (accidentsNumber > 4 && accidentsNumber <= 6)
-      return "#737373";
-    else if (accidentsNumber > 6 && accidentsNumber <= 8)
-      return "#525252";
-    else if (accidentsNumber > 8 && accidentsNumber <= 10)
-      return "#373737";
+      return "#c6dbef";
+    else if (accidentsNumber > 4 && accidentsNumber <= 8)
+      return "#9ecae1";
+    else if (accidentsNumber > 8 && accidentsNumber <=  16)
+      return "#6baed6";
+    else if (accidentsNumber > 16 && accidentsNumber <= 2000)
+      return "#4292c6";
+    else if (accidentsNumber > 2000 && accidentsNumber <= 3500)
+      return "#2171b5";
+    else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
+      return "#08519c";
+    else if (accidentsNumber > 5000 && accidentsNumber <= 6500)
+      return "#08306b";
     else
-      return "#000000";
+      return "#08306b";
   } else
-    return "#f0f0f0";
+    return "#ffffff";
 }
 
 function setBarColorChoroplethMapGeneral(d) {
@@ -567,50 +581,49 @@ function setBarColorChoroplethMap(d) {
 }
 
 function setLegendColorsChoroplethMapGeneral(accidentsNumber) {
-  if (accidentsNumber > 0 && accidentsNumber <= 1)
-    return "#f7fbff"
-  else if (accidentsNumber > 1 && accidentsNumber <= 2)
-    return "#deebf7";
-  else if (accidentsNumber > 2 && accidentsNumber <= 4)
-    return "#c6dbef";
-  else if (accidentsNumber > 4 && accidentsNumber <= 8)
-    return "#9ecae1";
-  else if (accidentsNumber > 8 && accidentsNumber <=  1000)
-    return "#6baed6";
-  else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
-    return "#4292c6";
-  else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
-    return "#2171b5";
-  else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
-    return "#08519c";
-  else if (accidentsNumber > 5000 && accidentsNumber <= 6500)
-    return "#08306b";
-  else
-    return "#08306b";
-
+    if (accidentsNumber > 0 && accidentsNumber <= 1)
+      return "#f7fbff"
+    else if (accidentsNumber > 1 && accidentsNumber <= 2)
+      return "#deebf7";
+    else if (accidentsNumber > 2 && accidentsNumber <= 4)
+      return "#c6dbef";
+    else if (accidentsNumber > 4 && accidentsNumber <= 8)
+      return "#9ecae1";
+    else if (accidentsNumber > 8 && accidentsNumber <=  16)
+      return "#6baed6";
+    else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
+      return "#4292c6";
+    else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
+      return "#2171b5";
+    else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
+      return "#08519c";
+    else if (accidentsNumber > 5000 && accidentsNumber <= 6500)
+      return "#08306b";
+    else
+      return "#08306b";
 }
 function setLegendColorsChoroplethMap(accidentsNumber) {
 
-  if (accidentsNumber > 0 && accidentsNumber <= 1)
-    return "#f7fbff"
-  else if (accidentsNumber > 1 && accidentsNumber <= 2)
-    return "#deebf7";
-  else if (accidentsNumber > 2 && accidentsNumber <= 4)
-    return "#c6dbef";
-  else if (accidentsNumber > 4 && accidentsNumber <= 8)
-    return "#9ecae1";
-  else if (accidentsNumber > 8 && accidentsNumber <=  1000)
-    return "#6baed6";
-  else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
-    return "#4292c6";
-  else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
-    return "#2171b5";
-  else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
-    return "#08519c";
-  else if (accidentsNumber > 5000 && accidentsNumber <= 6500)
-    return "#08306b";
-  else
-    return "#08306b";
+    if (accidentsNumber > 0 && accidentsNumber <= 1)
+      return "#f7fbff"
+    else if (accidentsNumber > 1 && accidentsNumber <= 2)
+      return "#deebf7";
+    else if (accidentsNumber > 2 && accidentsNumber <= 4)
+      return "#c6dbef";
+    else if (accidentsNumber > 4 && accidentsNumber <= 8)
+      return "#9ecae1";
+    else if (accidentsNumber > 8 && accidentsNumber <=  16)
+      return "#6baed6";
+    else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
+      return "#4292c6";
+    else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
+      return "#2171b5";
+    else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
+      return "#08519c";
+    else if (accidentsNumber > 5000 && accidentsNumber <= 6500)
+      return "#08306b";
+    else
+      return "#08306b";
 
 }
 
