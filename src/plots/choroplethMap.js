@@ -329,14 +329,14 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
 
 function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
    selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
-
+   let csvFileNameChoroplethMapTwo
     if (selectedRadioButton.id === "General")
-        csvFileNameChoroplethMap = "dataset/processed/choroplethMap/" + "choroplethMapDailyGeneral" + selectedYear + ".csv";
+      csvFileNameChoroplethMapTwo = "dataset/processed/choroplethMap/" + "choroplethMapDailyGeneral" + selectedYear + ".csv";
       else
-        csvFileNameChoroplethMap = "dataset/processed/choroplethMap/" + "choroplethMapDaily" + selectedYear + ".csv";
+      csvFileNameChoroplethMapTwo = "dataset/processed/choroplethMap/" + "choroplethMapDaily" + selectedYear + ".csv";
 
   // function to get and filter csv data
-  d3.csv(csvFileNameChoroplethMap, function (data) {
+  d3.csv(csvFileNameChoroplethMapTwo, function (data) {
     var filteredData = data.filter(function (row) {
       var rowDataOraIncidente = row['DataOraIncidente'];
       return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
