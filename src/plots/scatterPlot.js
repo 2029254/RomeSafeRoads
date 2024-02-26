@@ -37,10 +37,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -12;
-    var xMax = 12;
+    var xMin = -9;
+    var xMax = 9;
     var yMin = -20;
-    var yMax = 20;
+    var yMax = 25;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()

@@ -2,6 +2,9 @@ import pandas
 
 # paths of csv files about 2021
 csv_2021 = [
+    'dataset/source/accidents-2021/02-Febbraio.csv',
+    'dataset/source/accidents-2021/03-Marzo.csv',
+    'dataset/source/accidents-2021/04-Aprile.csv',
     'dataset/source/accidents-2021/05-Maggio.csv',
     'dataset/source/accidents-2021/06-Giugno.csv',
     'dataset/source/accidents-2021/07-Luglio.csv',
@@ -12,34 +15,24 @@ csv_2021 = [
     'dataset/source/accidents-2021/12-Dicembre.csv'
 ]
 
-csv_2021PartOne = [
-    'dataset/source/accidents-2021/02-Febbraio.csv',
-    'dataset/source/accidents-2021/03-Marzo.csv',
-    'dataset/source/accidents-2021/04-Aprile.csv',
-]
-
 # Import the first CSV file for the complete dataset
 dataset_2021 = pandas.read_csv('dataset/source/accidents-2021/01-Gennaio.csv', sep=';', encoding='latin-1')
 
-# Import and concatenate CSV files for the first part
-dataset_2021PartOne = pandas.concat([pandas.read_csv(file, sep=';', encoding='latin-1') for file in csv_2021PartOne], ignore_index=True)
-
-
 # Concatenate the filtered CSV files for the complete dataset
 for file in csv_2021:
-    dataset_2021 = pandas.concat([dataset_2021[(dataset_2021['Deceduto'] == -1) | (dataset_2021['Deceduto'] == '-1')],
-                                  pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
-
-# Concatenate the first part to the complete dataset
-dataset_2021 = pandas.concat([dataset_2021, dataset_2021PartOne], ignore_index=True)
+    dataset_2021 = pandas.concat([dataset_2021, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # select the columns of interest
-columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude']
+columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude', 'DataOraIncidente']
 
 dataset_columns = dataset_2021[columns]
 
 # select the rows of interest
 dataset_rows = dataset_columns
+
+# Convert the 'DataOraIncidente' column to a datetime object
+dataset_rows['DataOraIncidente'] = pandas.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
+                                                      errors='coerce')
 
 dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('Asciutto')
 

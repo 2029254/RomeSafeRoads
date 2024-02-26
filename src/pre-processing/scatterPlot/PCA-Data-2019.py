@@ -2,16 +2,16 @@ import pandas
 
 # paths of csv files about 2019
 csv_2019 = [
+    'dataset/source/accidents-2019/02-Febbraio.csv',
+    'dataset/source/accidents-2019/03-Marzo.csv',
+    'dataset/source/accidents-2019/04-Aprile.csv',
     'dataset/source/accidents-2019/05-Maggio.csv',
+    'dataset/source/accidents-2019/06-Giugno.csv',
+    'dataset/source/accidents-2019/07-Luglio.csv',
     'dataset/source/accidents-2019/08-Agosto.csv',
     'dataset/source/accidents-2019/09-Settembre.csv',
     'dataset/source/accidents-2019/10-Ottobre.csv',
     'dataset/source/accidents-2019/11-Novembre.csv',
-]
-
-csv_2019PartOne = [
-    'dataset/source/accidents-2019/06-Giugno.csv',
-    'dataset/source/accidents-2019/07-Luglio.csv',
     'dataset/source/accidents-2019/12-Dicembre.csv'
 ]
 
@@ -32,12 +32,17 @@ for file in csv_2019:
 dataset_2019 = pandas.concat([dataset_2019, dataset_2019PartOne], ignore_index=True)
 
 # select the columns of interest
-columns = ['Protocollo', 'TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude']
+# select the columns of interest
+columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude', 'DataOraIncidente']
 
 dataset_columns = dataset_2019[columns]
 
 # select the rows of interest
 dataset_rows = dataset_columns
+
+# Convert the 'DataOraIncidente' column to a datetime object
+dataset_rows['DataOraIncidente'] = pandas.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
+                                                      errors='coerce')
 
 dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('Asciutto')
 

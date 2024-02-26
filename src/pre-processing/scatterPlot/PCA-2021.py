@@ -19,5 +19,6 @@ df_components['Deceduto'] = dataset['Deceduto']
 df_components['TipoVeicolo'] = dataset['TipoVeicolo']
 df_components['Latitude'] = dataset['Latitude']
 df_components['Longitude'] = dataset['Longitude']
+df_components['DataOraIncidente'] = dataset['DataOraIncidente']
 
 df_components.to_csv('dataset/processed/scatterPlot/PCA-2021.csv', index=False)

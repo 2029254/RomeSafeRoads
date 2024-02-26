@@ -5,44 +5,35 @@ csv_2020 = [
     'dataset/source/accidents-2020/02-Febbraio.csv',
     'dataset/source/accidents-2020/03-Marzo.csv',
     'dataset/source/accidents-2020/04-Aprile.csv',
-
+    'dataset/source/accidents-2020/05-Maggio.csv',
+    'dataset/source/accidents-2020/06-Giugno.csv',
     'dataset/source/accidents-2020/07-Luglio.csv',
     'dataset/source/accidents-2020/08-Agosto.csv',
     'dataset/source/accidents-2020/09-Settembre.csv',
     'dataset/source/accidents-2020/10-Ottobre.csv',
     'dataset/source/accidents-2020/11-Novembre.csv',
-
-]
-
-csv_2020PartOne = [
-    'dataset/source/accidents-2020/05-Maggio.csv',
-    'dataset/source/accidents-2020/06-Giugno.csv',
-    'dataset/source/accidents-2020/12-Dicembre.csv',
+    'dataset/source/accidents-2020/12-Dicembre.csv'
 
 ]
 
 # Import the first CSV file for the complete dataset
 dataset_2020 = pandas.read_csv('dataset/source/accidents-2020/01-Gennaio.csv', sep=';', encoding='latin-1')
 
-# Import and concatenate CSV files for the first part
-dataset_2020PartOne = pandas.concat([pandas.read_csv(file, sep=';', encoding='latin-1') for file in csv_2020PartOne], ignore_index=True)
-
-
 # Concatenate the filtered CSV files for the complete dataset
 for file in csv_2020:
-    dataset_2020 = pandas.concat([dataset_2020[(dataset_2020['Deceduto'] == -1) | (dataset_2020['Deceduto'] == '-1')],
-                                  pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
-
-# Concatenate the first part to the complete dataset
-dataset_2020 = pandas.concat([dataset_2020, dataset_2020PartOne], ignore_index=True)
+    dataset_2020 = pandas.concat([dataset_2020, pandas.read_csv(file, sep=';', encoding='latin-1')], ignore_index=True)
 
 # select the columns of interest
-columns = ['Protocollo', 'TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude']
+columns = ['TipoVeicolo', 'FondoStradale', 'Traffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'Deceduto', 'CinturaCascoUtilizzato','Latitude', 'Longitude', 'DataOraIncidente']
 
 dataset_columns = dataset_2020[columns]
 
 # select the rows of interest
 dataset_rows = dataset_columns
+
+# Convert the 'DataOraIncidente' column to a datetime object
+dataset_rows['DataOraIncidente'] = pandas.to_datetime(dataset_rows['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
+                                                      errors='coerce')
 
 dataset_columns['FondoStradale'] = dataset_columns['FondoStradale'].fillna('Asciutto')
 
