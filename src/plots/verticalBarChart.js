@@ -123,6 +123,22 @@ function drawAxesAndBars(csvFileName){
       .attr("class", "bar")
       .style("transition", "0.3s");
 
+    g.selectAll(".bar-value")
+      .data(dataAboutYearSorted)
+      .enter()
+      .append("text")
+      .attr("class", "bar-value")
+      .attr("x", function(d) { return xScale(d.NaturaIncidente) + xScale.bandwidth() / 2; }) // Posiziona il testo al centro della barra
+      .attr("y", function(d) { return yScale(d.NumeroIncidenti) - 5; }) // Posiziona il testo sopra la barra, con un offset di 5px
+      //.attr("y", function(d) { return yScale(d.NumeroIncidenti) + 15; })
+      //.attr("y", 290)
+      .attr("text-anchor", "middle") // Ancoraggio al centro del testo
+      .text(function(d) { return setAccidentsNumberAndNatureAndYear(d); }) // Imposta il testo con il numero di incidenti
+      .style("font-size", "9px") // Imposta la dimensione del carattere del testo
+      .style("font-family", "Lora")
+      .style("fill", "#524a32"); // Imposta il colore del testo
+
+
     // Descrizione dell'asse x
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -205,6 +221,22 @@ function drawAxesAndBarsFromChoroplethMap(data, choropleth){
       .attr("class", "bar")
       .style("transition", "0.3s");
 
+    g.selectAll(".bar-value")
+      .data(dataAboutYearSorted)
+      .enter()
+      .append("text")
+      .attr("class", "bar-value")
+      .attr("x", function(d) { return xScale(d.NaturaIncidente) + xScale.bandwidth() / 2; }) // Posiziona il testo al centro della barra
+      .attr("y", function(d) { return yScale(d.NumeroIncidenti) - 5; }) // Posiziona il testo sopra la barra, con un offset di 5px
+      //.attr("y", function(d) { return yScale(d.NumeroIncidenti) + 15; })
+      //.attr("y", 290)
+      .attr("text-anchor", "middle") // Ancoraggio al centro del testo
+      .text(function(d) { return setAccidentsNumberAndNatureAndYear(d); }) // Imposta il testo con il numero di incidenti
+      .style("font-size", "9px") // Imposta la dimensione del carattere del testo
+      .style("font-family", "Lora")
+      .style("fill", "#524a32"); // Imposta il colore del testo
+
+
     // axis x description
     g.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -255,7 +287,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
 
   // definition of axes  height and width
   xScale = d3.scaleBand().range([0, 600 - 230]).padding(0.160);
-  yScale = d3.scaleLinear().range([height, 0]);
+  yScale = d3.scaleLog().range([height, 0]); // Utilizza scaleLog per l'asse y
 
 // Definire un oggetto mappa per memorizzare la somma degli incidenti per ogni natura
   var incidentiPerNatura = new Map();
@@ -319,7 +351,7 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
       else axisStep = 2000;
       // Arrotonda il massimo valore della scala al prossimo multiplo del passo dell'asse
       const roundedMax = Math.ceil(maxScaleValue / axisStep) * axisStep;
-      yScale.domain([0, roundedMax]);
+      yScale.domain([0.5, 30000]);
 
       // bars creation
       g = barChartSvg.append("g").attr("transform", "translate(" + 90 + "," + 20 + ")");
@@ -341,6 +373,21 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
         .attr("class", "bar")
         .style("transition", "0.3s");
 
+        g.selectAll(".bar-value")
+          .data(dataAboutYearSorted)
+          .enter()
+          .append("text")
+          .attr("class", "bar-value")
+          .attr("x", function(d) { return xScale(d.NaturaIncidente) + xScale.bandwidth() / 2; }) // Posiziona il testo al centro della barra
+          .attr("y", function(d) { return yScale(d.NumeroIncidenti) - 5; }) // Posiziona il testo sopra la barra, con un offset di 5px
+          //.attr("y", function(d) { return yScale(d.NumeroIncidenti) + 15; })
+          //.attr("y", 290)
+          .attr("text-anchor", "middle") // Ancoraggio al centro del testo
+          .text(function(d) { return setAccidentsNumberAndNatureAndYear(d); }) // Imposta il testo con il numero di incidenti
+          .style("font-size", "9px") // Imposta la dimensione del carattere del testo
+          .style("font-family", "Lora")
+          .style("fill", "#524a32"); // Imposta il colore del testo
+
       // axis x description
       g.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -353,18 +400,25 @@ function drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate
         .attr("fill", "black")
         .text("Accidents' nature");
 
-      // axis y description
-      g.append("g")
-        .call(d3.axisLeft(yScale).tickFormat(function(d){return d;}).ticks(12))
-        .style("font-family", "Lora")
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0)
-        .attr("x", -105)
-        .attr("dy", "-5.1em")
-        .attr("text-anchor", "end")
-        .attr("fill", "black")
-        .text("Number of accidents");
+// Descrizione dell'asse y
+    g.append("g")
+      .call(d3.axisLeft(yScale)
+        .tickFormat(function(d, i, ticks) {
+          if(i==0)
+            return ("0.5")
+         if (i == 6 || i == 5 || i == 14 || i == 15 || i == 23 || i == 24 || i == 33 || i == 32 || i == 42 || i == 41 || i == 43)
+            return Math.round(d);
+          else return "";
+
+        }))
+      .style("font-family", "Lora")
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -10)
+      .attr("x", -107)
+      .attr("dy", "-5.1em")
+      .attr("fill", "black")
+      .text("Accidents' number");
     })
     .catch(error => {
       console.error("Errore durante il recupero dei dati:", error);
