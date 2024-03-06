@@ -12,7 +12,3 @@ jobs:
     steps:
     - name: Setta l'access token di Mapbox come variabile d'ambiente
       run: echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> $GITHUB_ENV
-
-    - name: Esegui lo script JavaScript
-      run: |
-        node script.js
