@@ -754,6 +754,12 @@ input[type="checkbox"]:checked + .slider-switch-weather .slider-labels-brush .we
     font-family: Lora, serif;
     color: #524a32;
 }
+
+#radiobuttonsTwo{
+    font-family: Lora, serif;
+    color: #524a32;
+}
+
 /* completely hiding radio button */
 input[type="radio"] {
     display: none;
@@ -792,4 +798,16 @@ input[type="radio"]:checked + label:before {
 .sound-signal label {
     display: inline-flex;
     align-items: center;
+}
+
+#map {
+    height: 350px;
+    width: 400px; /*400 600*/
+    position: absolute;
+    bottom: 0px; /* Imposta la distanza desiderata dal bordo superiore della pagina */
+    left:80px; /*80 -30*/
+    visibility: hidden;
+    /*border: 2px solid #856e55;*/
+    /*border-radius: 70px;*/
+    /*background-color: transparent !important;*/
 }

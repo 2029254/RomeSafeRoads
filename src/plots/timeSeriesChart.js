@@ -1118,8 +1118,18 @@ function updateAllGraphs(formattedStartDate, formattedEndDate ) {
   drawColorsLegend();
   keysLegends = [];
 
-  choroplethMapSvg.selectAll("*").remove();
-  drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+
+      selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+      console.log("VEDIAMO SE LO VEDO: "+selectedRadioButtonTwo.id)
+      if (selectedRadioButtonTwo.id === "MapOne") {
+          choroplethMapSvg.selectAll("*").remove();
+           drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+      } else {
+          choroplethMapSvg.selectAll("*").remove();
+           d3.selectAll("#map").style("visibility", "visible");
+            //console.log(csvFileNameChoroplethMap);
+           drawMapWithStreet(csvFileNameChoroplethMap)
+      }
 
   scatterPlotpSvg.selectAll("*").remove();
   drawScatterFromTimeSeries(formattedStartDate, formattedEndDate);

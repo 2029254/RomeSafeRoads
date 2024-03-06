@@ -11,12 +11,18 @@ let loaderP = document.getElementById("loaderP");
 var selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
 // Seleziona tutti gli input radio all'interno di #radiobuttons
 var radioButtons = document.querySelectorAll('#radiobuttons input[type="radio"]');
+
+var selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+var radioButtonsTwo = document.querySelectorAll('#radiobuttonsTwo input[type="radio"]');
+
 var bucketB = false;
 // Aggiungi un listener onchange a ciascun radio button
 radioButtons.forEach(function(radioButton) {
   radioButton.onchange = function() {
+  //console.log("RADIOBUTTON: "+radioButton.id);
+  //console.log(this.checked + " SONO CHECKED " + radioButton.id)
     // Verifica se il radio button è stato selezionato
-    if (this.checked && radioButton.id === "General")
+    if (radioButton.id === "General")
       csvFileNameChoroplethMap = "dataset/processed/choroplethMap/general/" + "choroplethMap"+ selectedYear +".csv";
     else
       csvFileNameChoroplethMap = "dataset/processed/choroplethMap/" + "choroplethMap"+ selectedYear +".csv";
@@ -30,14 +36,90 @@ radioButtons.forEach(function(radioButton) {
     }, 1200);
 
     nnaturee.style.display = 'none';
+    selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+    console.log("RADIO BUTTON DUE: "+selectedRadioButtonTwo.id)
+    if (selectedRadioButtonTwo.id === "MapOne") {
+        if(switchBrushInput.value === "ON"){
+          choroplethMapSvg.selectAll("*").remove();
+          //removeMapWithStreet();
+          drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+        } else {
+          choroplethMapSvg.selectAll("*").remove();
+          //removeMapWithStreet();
+          drawChoroplethMap(csvFileNameChoroplethMap);
+        }
+    }
+    else if (selectedRadioButtonTwo.id === "MapTwo") {
+        if(switchBrushInput.value === "ON"){
+          choroplethMapSvg.selectAll("*").remove();
+          drawMapWithStreet(csvFileNameChoroplethMap);
+        } else {
+            d3.selectAll("#map").style("visibility", "visible");
+            console.log(csvFileNameChoroplethMap);
+            drawMapWithStreet(csvFileNameChoroplethMap)
+        }
+    }
+  };
+});
 
-    if(switchBrushInput.value === "ON"){
-      choroplethMapSvg.selectAll("*").remove();
-      drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
-    } else {
-      choroplethMapSvg.selectAll("*").remove();
-      drawChoroplethMap(csvFileNameChoroplethMap);
+// Aggiungi un listener onchange a ciascun radio button
+radioButtonsTwo.forEach(function(radioButton) {
+  radioButton.onchange = function() {
+    // Verifica se il radio button è stato selezionato
+    selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+    if (selectedRadioButton.id === "General")
+      csvFileNameChoroplethMap = "dataset/processed/choroplethMap/general/" + "choroplethMap"+ selectedYear +".csv";
+    else
+      csvFileNameChoroplethMap = "dataset/processed/choroplethMap/" + "choroplethMap"+ selectedYear +".csv";
 
+
+    loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+    choroplethMapSvg.style("opacity", 0.3);
+    //d3.selectAll("#map").style("visibility", "hidden");
+    setTimeout(function () {
+      loaderC.style.display = "none"; // Assicurati che il loader sia inizialmente visibile
+      choroplethMapSvg.style("opacity", 1);
+      // body.style.backgroundColor = "#f6fad9"
+      //d3.selectAll("#map").style("visibility", "visible");
+    }, 1200);
+
+    nnaturee.style.display = 'none';
+
+        // Verifica se il radio button è stato selezionato
+        /*if (radioButton.id === "MapOne") {
+              choroplethMapSvg.selectAll("*").remove();
+              d3.selectAll("#map").style("visibility", "hidden");
+              drawChoroplethMap(csvFileNameChoroplethMap);
+        }
+        else {
+            choroplethMapSvg.selectAll("*").remove();
+            d3.selectAll("#map").style("visibility", "visible");
+            drawMapWithStreet(csvFileNameChoroplethMap)
+        }*/
+
+    if (radioButton.id === "MapOne") {
+        if(switchBrushInput.value === "ON"){
+          choroplethMapSvg.selectAll("*").remove();
+          d3.selectAll("#map").style("visibility", "hidden");
+          drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+        } else {
+          choroplethMapSvg.selectAll("*").remove();
+          d3.selectAll("#map").style("visibility", "hidden");
+          drawChoroplethMap(csvFileNameChoroplethMap);
+        }
+    }
+    else {
+        if(switchBrushInput.value === "ON"){
+          choroplethMapSvg.selectAll("*").remove();
+          d3.selectAll("#map").style("visibility", "visible");
+          drawMapWithStreet(csvFileNameChoroplethMap)
+          //drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
+        } else {
+            choroplethMapSvg.selectAll("*").remove();
+            //removeMapWithStreet();
+            d3.selectAll("#map").style("visibility", "visible");
+            drawMapWithStreet(csvFileNameChoroplethMap)
+        }
     }
   };
 });
