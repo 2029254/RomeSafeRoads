@@ -773,9 +773,7 @@ function addMissingDatesWithZeroes(data) {
 let map; // Definisci una variabile globale per la mappa
 
 function drawMapWithStreet(csvFileNameChoroplethMap) {
-    const mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
-    mapboxgl.accessToken = mapboxAccessToken;
-
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZGFuaWVsYXJpZXRpIiwiYSI6ImNsdDdoeTVsZTAxcnMya25jcXhpb3F5czIifQ._ky2_tL4UyzLmrLkhzCv2Q';
 
     // Se la mappa non è stata ancora creata, creiamola
     if (!map) {
