@@ -12,3 +12,14 @@ jobs:
     steps:
     - name: Setta l'access token di Mapbox come variabile d'ambiente
       run: echo "MAPBOX_ACCESS_TOKEN=${{ secrets.MAPBOX_ACCESS_TOKEN }}" >> $GITHUB_ENV
+
+    - name: Esegui lo script JavaScript
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+      # Installa Puppeteer
+      run: npm install puppeteer
+      
+    - name: Esegui il file HTML
+      run: |
+        node -e 'const puppeteer = require("puppeteer"); (async () => { const browser = await puppeteer.launch(); const page = await browser.newPage(); await page.goto("file://${{ github.workspace }}/index.html"); await page.waitForTimeout(5000); await browser.close(); })();'
