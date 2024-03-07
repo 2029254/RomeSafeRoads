@@ -669,7 +669,7 @@ function showNumberOfAccidents(townHall, number) {
  choroplethMapSvg.append("circle")
     .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
     .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
-    .attr("r", 8) // Imposta il raggio del cerchio
+    .attr("r", 9) // Imposta il raggio del cerchio
     .style("font-family", "Lora")
     .style("stroke", "#d4d0c5") // Colore del bordo
     .style("stroke-width", "1px") // Spessore del bordo
@@ -682,16 +682,19 @@ function showNumberOfAccidents(townHall, number) {
     .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
     .attr("x", function() {
             // Verifica se il numero ha due cifre
-            if (number >= 10) {
-                return centroidInterested[0] - marginNumberX + 5.5;
-            } else {
-                return centroidInterested[0] - marginNumberX + 3;
-            }
+      if (townHall.toString() === "Municipio XIII" && number > 9 && number >= 10) {
+        return centroidInterested[0] - marginNumberX + 5.5;
+      } else if (number >= 10) {
+        return centroidInterested[0] - marginNumberX + 3;
+      } else {
+        return centroidInterested[0] - marginNumberX + 3;
+      }
+
     })
     .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
     .attr("text-anchor", "middle")
     //.style("fill", "white")
-    .style("font-size", "9px")
+    .style("font-size", "8px")
     .style("fill", "#524a32")
     .style("opacity", "0.8")
     .style("font-family", "Lora")
@@ -879,6 +882,7 @@ function colorizeMap(csvFileNameChoroplethMap) {
     dataAboutTownHall = data.filter(function (row) {
       return row['Municipio'];
     });
+
     // Carica i dati dei comuni di Roma
     fetch("dataset/source/choropleth-map/municipi.geojson")
         .then(response => response.json())

@@ -635,11 +635,14 @@ function onclickBar(d) {
 
         let incidentCounts = new Map();
         groupedByTownHall.forEach((data, municipio) => {
-          const count = data.length;
-          incidentCounts.set(municipio, count);
+          if (municipio !== "") {
+            const count = data.length;
+            incidentCounts.set(municipio, count);
+          }
         });
         setTimeout(function () {
           loader.style.display = "none";
+          console.log(incidentCounts)
           for (const [key, value] of incidentCounts) {
             showNumberOfAccidents(key, value);
           }
