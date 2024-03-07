@@ -53,10 +53,12 @@ radioButtons.forEach(function(radioButton) {
         if(switchBrushInput.value === "ON"){
           choroplethMapSvg.selectAll("*").remove();
           drawMapWithStreet(csvFileNameChoroplethMap);
+          drawLegendMap();
         } else {
             d3.selectAll("#map").style("visibility", "visible");
             console.log(csvFileNameChoroplethMap);
             drawMapWithStreet(csvFileNameChoroplethMap)
+            drawLegendMap();
         }
     }
   };
@@ -113,12 +115,14 @@ radioButtonsTwo.forEach(function(radioButton) {
           choroplethMapSvg.selectAll("*").remove();
           d3.selectAll("#map").style("visibility", "visible");
           drawMapWithStreet(csvFileNameChoroplethMap)
+          drawLegendMap();
           //drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
         } else {
             choroplethMapSvg.selectAll("*").remove();
             //removeMapWithStreet();
             d3.selectAll("#map").style("visibility", "visible");
             drawMapWithStreet(csvFileNameChoroplethMap)
+            drawLegendMap();
         }
     }
   };

@@ -1128,7 +1128,8 @@ function updateAllGraphs(formattedStartDate, formattedEndDate ) {
           choroplethMapSvg.selectAll("*").remove();
            d3.selectAll("#map").style("visibility", "visible");
             //console.log(csvFileNameChoroplethMap);
-           drawMapWithStreet(csvFileNameChoroplethMap)
+           drawMapWithStreet(csvFileNameChoroplethMap);
+           drawLegendMap();
       }
 
   scatterPlotpSvg.selectAll("*").remove();

@@ -1405,6 +1405,55 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       });
 }
 
+function drawLegendMap(){
+  choroplethMapSvg
+    .append("svg")
+    .attr("width", 100)
+    .attr("height", 250)
+    .attr("x", 150)
+    .attr("y", 250);
+
+  var legendCells = [];
+  legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
+
+  choroplethMapSvg.selectAll("rect")
+    .data(legendCells)
+    .enter()
+    .append("rect")
+    .attr("x",  500) // Posiziona le celle orizzontalmente
+    //.attr("y",  (d, i) => i * 31)
+    .attr("y",  (d,i) => 48 + 31 * i)
+    .attr("width", 8) // Larghezza delle celle
+    .attr("height", 30)
+    .style("fill", function (d,i) {
+      if(csvFileNameChoroplethMap.includes("general"))
+        return setLegendColorsChoroplethMapGeneral(legendCells[i])
+      else
+        return setLegendColorsChoroplethMap(legendCells[i])
+
+    }); // Colora le celle in base al valore
+
+  choroplethMapSvg.selectAll("text")
+    .data(legendCells)
+    .enter()
+    .append("text")
+    .attr("x", 518 ) // Posiziona le etichette al centro delle celle
+    .attr("y", (d, i) => i * 30.7 + 82 )
+    .style("font-family", "Lora")
+    .text((d) => `${d}`); // Testo dell'etichetta
+
+  choroplethMapSvg.selectAll("line")
+    .data(legendCells) // Ignora l'ultimo valore
+    .enter()
+    .append("line")
+    .attr("x1", 500)
+    .attr("y1", (d,i) => 78.5 + 31 * i) // Inizio della lineetta
+    .attr("x2", 511)
+    .attr("y2", (d,i) => 78.5 + 31 * i) // Fine della lineetta
+    .style("stroke", "black")
+    .style("stroke-width", "1px");
+}
+
 
 
 
