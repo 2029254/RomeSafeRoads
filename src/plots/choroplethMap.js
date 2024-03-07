@@ -107,6 +107,13 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                 console.log(d.properties.nome)
                 townHallClicked = true;
 
+              selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+              if (selectedRadioButton.id === "General")
+                csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+              else
+                csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
+
                 d3.csv(csvFileNameChoroplethMapNature, function (data) {
                   let dataResult = [];
                   data.filter(function (row) {
@@ -1012,6 +1019,12 @@ function colorizeMap(csvFileNameChoroplethMap) {
 
 
                             townHallClicked = true;
+                          selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+                          if (selectedRadioButton.id === "General")
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+                          else
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
 
                             d3.csv(csvFileNameChoroplethMapNature, function (data) {
                               let dataResult = [];
@@ -1284,6 +1297,13 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
 
 
                             townHallClicked = true;
+
+                          selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+                          if (selectedRadioButton.id === "General")
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+                          else
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
 
                             d3.csv(csvFileNameChoroplethMapNature, function (data) {
                               let dataResult = [];

@@ -310,9 +310,16 @@ function updatePlotsBasingOnSelectedYear(){
  // let removeAllButtons = document.querySelectorAll(".circular-button");
  // removeAllButtons.forEach(function(button) {button.remove();});
  // createHTMLButtons();
-
-  choroplethMapSvg.selectAll("*").remove();
-  drawChoroplethMap(csvFileNameChoroplethMap);
+  selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+  if(selectedRadioButtonTwo.id === "MapOne") {
+    choroplethMapSvg.selectAll("*").remove();
+    d3.selectAll("#map").style("visibility", "hidden");
+    drawChoroplethMap(csvFileNameChoroplethMap);
+  } else {
+    choroplethMapSvg.selectAll("*").remove();
+    d3.selectAll("#map").style("visibility", "visible");
+    drawMapWithStreet(csvFileNameChoroplethMap)
+  }
 
   timeSeriesSvg.selectAll("*").remove();
   drawTimeSeriesChart(csvFileNameTimeSeries);

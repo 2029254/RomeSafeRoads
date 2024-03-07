@@ -601,6 +601,12 @@ function onclickBar(d) {
         default:
           weatherResult.push("Nuvoloso", "Sereno", "Sole radente","Pioggia in atto", "Grandine in atto", "Nebbia", "Nevicata in atto", "Vento forte");
       }
+    selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+    if (selectedRadioButton.id === "General")
+      csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+    else
+      csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
 
       d3.csv(csvFileNameChoroplethMapNature, function (data) {
 
