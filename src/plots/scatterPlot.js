@@ -15,6 +15,7 @@ let heightScatter = 310;
 let widthScatter = 660;
 let brushIsActive = false;
 let selectedDots;
+var markers = [];
 
 function drawScatterPlot(csvFileNameScatterPlot) {
 
@@ -335,6 +336,8 @@ function brushed(d) {
     return;} // Se la selezione è nulla, esci dalla funzione
 
   choroplethMapSvg.selectAll("#localization").remove();
+  markers.forEach((marker) => marker.remove());
+  markers = [];
 
   extent = d3.event.selection;
   selectedDots = []; //qui metto tutti i punti selezionati
@@ -380,15 +383,39 @@ function brushed(d) {
 
       console.log(pointCoordinates[0] + " " + pointCoordinates[1])
     if (!coords.includes(pointCoordinates[0])) {
-      // Aggiungi punti alla mappa
-      choroplethMapSvg.append("circle")
-        .attr("id", "localization")
-        .attr("cx", projection(pointCoordinates)[0])
-        .attr("cy", projection(pointCoordinates)[1])
-        .attr("r", 3) // Imposta il raggio del cerchio
-        .style("stroke", "#525252")
-        .style("stroke-width", "0.1")
-        .style("fill", dotColor)
+      selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+      if(selectedRadioButtonTwo.id === "MapOne") {
+        // Aggiungi punti alla mappa
+        choroplethMapSvg.append("circle")
+          .attr("id", "localization")
+          .attr("cx", projection(pointCoordinates)[0])
+          .attr("cy", projection(pointCoordinates)[1])
+          .attr("r", 3) // Imposta il raggio del cerchio
+          .style("stroke", "#525252")
+          .style("stroke-width", "0.1")
+          .style("fill", dotColor)
+      } else {
+// Verifica che le coordinate non siano NaN
+        if (!isNaN(pointCoordinates[0]) && !isNaN(pointCoordinates[1])) {
+
+              const marker = new mapboxgl.Marker({
+                color: dotColor, // Imposta il colore del marker
+                scale: 0.5 // Imposta la scala del marker (0.5 renderà il marker la metà della dimensione originale)
+              })
+                .setLngLat([pointCoordinates[0], pointCoordinates[1]]) // Imposta la posizione del marker
+                .addTo(map); // Aggiungi il marker alla mappa
+              markers.push(marker)
+          /*
+          setTimeout(function() {
+            marker.remove();
+          }, 20000);
+
+           */
+        }
+
+        // Rimuovi il marker dopo 2 secondi (puoi regolare questo valore a tuo piacimento)
+
+      }
     }
   });
   setTimeout(function () {

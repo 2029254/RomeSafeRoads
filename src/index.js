@@ -317,8 +317,9 @@ function updatePlotsBasingOnSelectedYear(){
     drawChoroplethMap(csvFileNameChoroplethMap);
   } else {
     choroplethMapSvg.selectAll("*").remove();
-    d3.selectAll("#map").style("visibility", "visible");
     drawMapWithStreet(csvFileNameChoroplethMap)
+    d3.selectAll("#map").style("visibility", "visible");
+
   }
 
   timeSeriesSvg.selectAll("*").remove();
