@@ -666,40 +666,137 @@ function showNumberOfAccidents(townHall, number) {
     marginNumberCircleX = -2.5
   }
 
- choroplethMapSvg.append("circle")
-    .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
-    .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
-    .attr("r", 9) // Imposta il raggio del cerchio
-    .style("font-family", "Lora")
-    .style("stroke", "#d4d0c5") // Colore del bordo
-    .style("stroke-width", "1px") // Spessore del bordo
-    .style("fill", "white")
-    .style("opacity", "0.7")
-    .style("filter", "drop-shadow(0 1px 1px darkslategray)");
+    selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+    if(selectedRadioButtonTwo.id === "MapOne") {
+         choroplethMapSvg.append("circle")
+            .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
+            .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
+            .attr("r", 9) // Imposta il raggio del cerchio
+            .style("font-family", "Lora")
+            .style("stroke", "#d4d0c5") // Colore del bordo
+            .style("stroke-width", "1px") // Spessore del bordo
+            .style("fill", "white")
+            .style("opacity", "0.7")
+            .style("filter", "drop-shadow(0 1px 1px darkslategray)");
 
-  choroplethMapSvg.append("text")
-    .text(number)
-    .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
-    .attr("x", function() {
-            // Verifica se il numero ha due cifre
-      if (townHall.toString() === "Municipio XIII" && number > 9 && number >= 10) {
-        return centroidInterested[0] - marginNumberX + 5.5;
-      } else if (number >= 10) {
-        return centroidInterested[0] - marginNumberX + 3;
-      } else {
-        return centroidInterested[0] - marginNumberX + 3;
-      }
+          choroplethMapSvg.append("text")
+            .text(number)
+            .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
+            .attr("x", function() {
+              // Verifica se il numero ha due cifre
+              if (townHall.toString() === "Municipio XIII" && number > 9 && number >= 10) {
+                return centroidInterested[0] - marginNumberX + 5.5;
+              } else if (number >= 10) {
+                return centroidInterested[0] - marginNumberX + 3;
+              } else {
+                return centroidInterested[0] - marginNumberX + 3;
+              }
 
-    })
-    .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
-    .attr("text-anchor", "middle")
-    //.style("fill", "white")
-    .style("font-size", "8px")
-    .style("fill", "#524a32")
-    .style("opacity", "0.8")
-    .style("font-family", "Lora")
-    .style("font-weight", "bold");
+            })
+            .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
+            .attr("text-anchor", "middle")
+            //.style("fill", "white")
+            .style("font-size", "8px")
+            .style("fill", "#524a32")
+            .style("opacity", "0.8")
+            .style("font-family", "Lora")
+            .style("font-weight", "bold");
+
+    }
+    else {
+    //console.log("il municipio è: "+townHall)
+    //console.log("il numero è: "+number)
+
+    // Calcola l'offset in base al municipio
+    /*let offset = [0, 0];  // Offset di default
+    if (townHall === "Municipio VI") {
+        //offset = [15, 0];  // Imposta l'offset per il Municipio VI
+    } else if (townHall === "Municipio XV") {
+        //offset = [0, -3]; // Imposta l'offset per il Municipio XV
+    } else if (townHall === "Municipio XIII" && number > 9) {
+
+    }*/
+
+    // Carica i dati del GeoJSON utilizzando una richiesta AJAX
+    fetch('dataset/source/choropleth-map/municipi.geojson')
+        .then(response => response.json())
+        .then(data => {
+            // Trova la feature corrispondente al municipio specificato
+            var feature = data.features.find(feature => feature.properties.nome === townHall);
+            if (feature) {
+                // Calcola il centroide per la feature trovata
+                var centroid = turf.centroid(feature);
+
+                console.log("CENTROIDE")
+                console.log(centroid)
+
+                // Aggiungi il numero come proprietà al centroide
+                centroid.properties.number = number;
+                //console.log("Municipio: "+ townHall)
+                //console.log("OFFSET: " + (parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0])));
+                /*console.log("OFFSET: " + [
+                    parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0]),
+                    parseFloat(centroid.geometry.coordinates[1]) + parseFloat(offset[1])
+                ]);*/
+
+
+                centroidName = 'centroid' + generateRandomString(30);
+                // Aggiungi il centroide come punto sulla mappa con l'offset applicato
+                /*map.addSource(centroidName, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0]), parseFloat(centroid.geometry.coordinates[1]) + parseFloat(offset[1])]
+                        },
+                        'properties': {
+                            'number': number  // Assicurati di includere anche le proprietà se necessario
+                        }
+                    }
+                });*/
+
+                centroidName = 'centroid' + generateRandomString(30);
+                // Aggiungi il centroide come punto sulla mappa
+                map.addSource(centroidName, {
+                    'type': 'geojson',
+                    'data': centroid
+                });
+
+                map.addLayer({
+                    'id': 'centroid-layer'+generateRandomString(30),
+                    'type': 'circle',
+                    'source': centroidName,
+                    'paint': {
+                        'circle-radius': 9,
+                        'circle-color': 'white',
+                        'circle-opacity': 0.7
+                    }
+                });
+
+                // Aggiungi il numero come etichetta testuale per il punto
+                map.addLayer({
+                    'id': 'centroid-text-layer'+generateRandomString(30),
+                    'type': 'symbol',
+                    'source': centroidName,
+                    'layout': {
+                        'text-field': number.toString(),
+                        'text-font': ['Open Sans Regular'],
+                        'text-size': 8
+                    },
+                    'paint': {
+                        'text-color': '#524a32'
+                    }
+                });
+            } else {
+                console.error("Municipio non trovato nel GeoJSON.");
+            }
+        })
+        .catch(error => console.error('Errore nel caricamento dei dati del GeoJSON:', error));
 }
+
+}
+
 function fillOtherTownHalls(map){
   Array.from(centroidTownHalls.keys()).forEach(item => {
     let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
@@ -814,6 +911,7 @@ function drawMapWithStreet(csvFileNameChoroplethMap) {
                     'line-opacity': 0.5 // Opacità delle linee dei comuni
                 }
             });
+
 
         });
     } else {
@@ -1177,7 +1275,7 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
                     }
                 }
             });
-             console.log("ooooooooooooooooooooooo")
+             //console.log("ooooooooooooooooooooooo")
             data.features.forEach(function(element) {
              const randomSuffix = generateRandomString(30);
              console.log(randomSuffix)

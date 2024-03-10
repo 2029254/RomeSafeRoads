@@ -113,7 +113,7 @@ function drawAxesAndBars(csvFileName){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .style("cursor", function (d) {
         //Applica il pointer solo se buttonWeatherValue è "First"
-        if (/*(setBarColor(d.NumeroIncidenti) === "#d73027" || setBarColor(d.NumeroIncidenti) === "#fc8d59") &&*/ (buttonWeatherValue === "First" || buttonWeatherValue === "None")) return "pointer"
+        if ((buttonWeatherValue === "First" || buttonWeatherValue === "None" || switchBrushInput.value === "OFF")) return "pointer"
         else return "default"
         })
       .on("click", function (d) {onclickBar(d)})
@@ -507,7 +507,7 @@ function onclickBar(d) {
     console.log(d)
   // Aggiungi il loader al DOM
 
-  if (buttonWeatherValue==="First") {
+  if (buttonWeatherValue==="First" || switchBrushInput.value === "OFF") {
     let nnaturee = document.getElementById("nnaturee");
     nnaturee.style.display = 'block';
     nnaturee.textContent = "Nature: [" + d.NaturaIncidente.toString() + "]"
