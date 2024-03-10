@@ -718,79 +718,100 @@ function showNumberOfAccidents(townHall, number) {
     }*/
 
     // Carica i dati del GeoJSON utilizzando una richiesta AJAX
-    fetch('dataset/source/choropleth-map/municipi.geojson')
+      fetch('dataset/source/choropleth-map/municipi.geojson')
         .then(response => response.json())
         .then(data => {
-            // Trova la feature corrispondente al municipio specificato
-            var feature = data.features.find(feature => feature.properties.nome === townHall);
-            if (feature) {
-                // Calcola il centroide per la feature trovata
-                var centroid = turf.centroid(feature);
+          // Find the feature corresponding to the municipality
+          var feature = data.features.find(feature => feature.properties.nome === townHall);
 
-                console.log("CENTROIDE")
-                console.log(centroid)
+          if (feature) {
+            // Calculate the centroid
+            var centroid = turf.centroid(feature);
 
-                // Aggiungi il numero come proprietà al centroide
-                centroid.properties.number = number;
-                //console.log("Municipio: "+ townHall)
-                //console.log("OFFSET: " + (parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0])));
-                /*console.log("OFFSET: " + [
-                    parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0]),
-                    parseFloat(centroid.geometry.coordinates[1]) + parseFloat(offset[1])
-                ]);*/
+            console.log("Comune");
+            console.log(feature.properties.nome);
 
-
-                centroidName = 'centroid' + generateRandomString(30);
-                // Aggiungi il centroide come punto sulla mappa con l'offset applicato
-                /*map.addSource(centroidName, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [parseFloat(centroid.geometry.coordinates[0]) + parseFloat(offset[0]), parseFloat(centroid.geometry.coordinates[1]) + parseFloat(offset[1])]
-                        },
-                        'properties': {
-                            'number': number  // Assicurati di includere anche le proprietà se necessario
-                        }
-                    }
-                });*/
-
-                centroidName = 'centroid' + generateRandomString(30);
-                // Aggiungi il centroide come punto sulla mappa
-                map.addSource(centroidName, {
-                    'type': 'geojson',
-                    'data': centroid
-                });
-
-                map.addLayer({
-                    'id': 'centroid-layer'+generateRandomString(30),
-                    'type': 'circle',
-                    'source': centroidName,
-                    'paint': {
-                        'circle-radius': 9,
-                        'circle-color': 'white',
-                        'circle-opacity': 0.7
-                    }
-                });
-
-                // Aggiungi il numero come etichetta testuale per il punto
-                map.addLayer({
-                    'id': 'centroid-text-layer'+generateRandomString(30),
-                    'type': 'symbol',
-                    'source': centroidName,
-                    'layout': {
-                        'text-field': number.toString(),
-                        'text-font': ['Open Sans Regular'],
-                        'text-size': 8
-                    },
-                    'paint': {
-                        'text-color': '#524a32'
-                    }
-                });
-            } else {
-                console.error("Municipio non trovato nel GeoJSON.");
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio I") {
+              centroid.geometry.coordinates[0] += 0.01; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0;
             }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio VI") {
+              centroid.geometry.coordinates[0] -= 0.06; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XV") {
+              centroid.geometry.coordinates[0] += 0.05; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.04;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XI") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.02;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XII") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.0032;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio VIII") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0.01;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio X") {
+              centroid.geometry.coordinates[0] += 0.03; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0.02;
+            }
+
+            // Add the number as a property to the centroid
+            centroid.properties.number = number;
+
+            centroidName = 'centroid' + generateRandomString(30);
+
+            // Add the centroid as a point on the map
+            map.addSource(centroidName, {
+              'type': 'geojson',
+              'data': centroid
+            });
+
+            map.addLayer({
+              'id': 'centroid-layer' + generateRandomString(30),
+              'type': 'circle',
+              'source': centroidName,
+              'paint': {
+                'circle-radius': 9,
+                'circle-color': 'white',
+                'circle-opacity': 0.7
+              }
+            });
+
+            // Add the number as a text label for the point
+            map.addLayer({
+              'id': 'centroid-text-layer' + generateRandomString(30),
+              'type': 'symbol',
+              'source': centroidName,
+              'layout': {
+                'text-field': number.toString(),
+                'text-font': ['Open Sans Regular'],
+                'text-size': 8
+              },
+              'paint': {
+                'text-color': '#524a32'
+              }
+            });
+          } else {
+            console.error("Municipio non trovato nel GeoJSON.");
+          }
         })
         .catch(error => console.error('Errore nel caricamento dei dati del GeoJSON:', error));
 }
