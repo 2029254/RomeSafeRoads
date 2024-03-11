@@ -62,10 +62,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
       .attr("r", 5) // Raggio del cerchio
-      .attr("col", function(d) { return setPointColor(d.Deceduto); })
+      .attr("col", function(d) { return setPointColor(d); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
-      .style("fill", function(d) { return setPointColor(d.Deceduto); })
+      .style("fill", function(d) { return setPointColor(d); })
       .attr("pointer-events", "all")
       .on("mouseover",  function(d) {
         d3.select(this).transition()
@@ -219,10 +219,10 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
       .attr("r", 5) // Raggio del cerchio
-      .attr("col", function(d) { return setPointColor(d.Deceduto); })
+      .attr("col", function(d) { return setPointColor(d); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
-      .style("fill", function(d) { return setPointColor(d.Deceduto); })
+      .style("fill", function(d) { return setPointColor(d); })
       .attr("pointer-events", "all")
       .on("mouseover",  function(d) {
         d3.select(this).transition()
@@ -435,7 +435,7 @@ function setPointText(tipoVeicolo) {
     return "Unknown";
 }
 
-function setPointColor(tipoVeicolo) {
+function setPointColor(d) {
   /*
   if (tipoVeicolo === "Autovettura" || tipoVeicolo === "Car")
     return "#cab2d6"
@@ -446,64 +446,83 @@ function setPointColor(tipoVeicolo) {
   else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
     return "#a6cee3";
    */
-  if (tipoVeicolo === 0.0 || tipoVeicolo === '0.0' || tipoVeicolo === "Non-fatal accident")
+
+  if (d.Deceduto === 0.0 || d.Deceduto  === '0.0' || d  === "Non-fatal accident")
     return "#c9a18b"
   else return "#8bc8e8"
 
+/*
+ if (d.NaturaIncidente === "C1")
+   return "#8dd3c7"
+ else if (d.NaturaIncidente === "C2")
+   return "#ffffb3"
+ else if (d.NaturaIncidente === "C3")
+   return "#bebada"
+ else if (d.NaturaIncidente === "C4")
+   return "#fb8072"
+ else if (d.NaturaIncidente === "C5")
+   return "#80b1d3"
+ else if (d.NaturaIncidente === "C6")
+   return "#fdb462"
+ else if (d.NaturaIncidente === "C7")
+   return "#b3de69"
+ else if (d.NaturaIncidente === "C8")
+   return "#fccde5"
+ else return "#8bc8e8"
+*/
 }
-
 
 function drawScatterPlotLegend() {
 
-  let keys = ["Fatal accident", "Non-fatal accident"];
-  let size = 17;
+ let keys = ["Fatal accident", "Non-fatal accident"];
+ let size = 17;
 
-  scatterPlotpSvg.selectAll("mydots")
-    .data(keys)
-    .enter()
-    .append("rect")
-    .attr("x", 600)
-    .attr("y", function (d, i) {
-      console.log(250 + i * (size + 5))
-      return 250 + i * (size + 5)
-    }) // 30 is where the first dot appears. 25 is the distance between dots
-    .attr("width", size)
-    .attr("height", size)
-    .style("fill", function (d, i) {
-      return setPointColor(keys[i])
-    })
-    .style("stroke", "#524a32")
-    .style("stroke-width", 0.1);
+ scatterPlotpSvg.selectAll("mydots")
+   .data(keys)
+   .enter()
+   .append("rect")
+   .attr("x", 600)
+   .attr("y", function (d, i) {
+     console.log(250 + i * (size + 5))
+     return 250 + i * (size + 5)
+   }) // 30 is where the first dot appears. 25 is the distance between dots
+   .attr("width", size)
+   .attr("height", size)
+   .style("fill", function (d, i) {
+     return setPointColor(keys[i])
+   })
+   .style("stroke", "#524a32")
+   .style("stroke-width", 0.1);
 
 
-  scatterPlotpSvg.selectAll("mylabels")
-    .data(keys)
-    .enter()
-    .append("text")
-    .attr("x", 600 + size * 1.2)
-    .attr("y", function (d, i) {
-      return 250 + i * (size + 5) + (size / 2)
-    }) // 30 is where the first dot appears. 25 is the distance between dots
-    .text(function (d) {
-      return d
-    })
-    .style("fill", "#524a32")
-    .style("font-family", "Lora")
-    .style("font-size", "12px")
-    .attr("text-anchor", "left")
-    .style("alignment-baseline", "middle");
+ scatterPlotpSvg.selectAll("mylabels")
+   .data(keys)
+   .enter()
+   .append("text")
+   .attr("x", 600 + size * 1.2)
+   .attr("y", function (d, i) {
+     return 250 + i * (size + 5) + (size / 2)
+   }) // 30 is where the first dot appears. 25 is the distance between dots
+   .text(function (d) {
+     return d
+   })
+   .style("fill", "#524a32")
+   .style("font-family", "Lora")
+   .style("font-size", "12px")
+   .attr("text-anchor", "left")
+   .style("alignment-baseline", "middle");
 
 }
 
 // Funzione per determinare il quadrante
 function getQuadrant(x, y) {
-  if (x >= 0 && y >= 0) {
-    return 1; // Primo quadrante
-  } else if (x < 0 && y >= 0) {
-    return 2; // Secondo quadrante
-  } else if (x < 0 && y < 0) {
-    return 3; // Terzo quadrante
-  } else {
-    return 4; // Quarto quadrante
-  }
+ if (x >= 0 && y >= 0) {
+   return 1; // Primo quadrante
+ } else if (x < 0 && y >= 0) {
+   return 2; // Secondo quadrante
+ } else if (x < 0 && y < 0) {
+   return 3; // Terzo quadrante
+ } else {
+   return 4; // Quarto quadrante
+ }
 }

@@ -344,4 +344,6 @@ function updatePlotsBasingOnSelectedYear(){
     scatterPlotpSvg.style("opacity", 1);
   }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
 
+  nnaturee.style.display = 'none';
+
 }

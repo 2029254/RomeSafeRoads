@@ -937,45 +937,18 @@ function drawMapWithStreet(csvFileNameChoroplethMap) {
         });
     } else {
         // Se la mappa esiste già, rimuovi solo i layer aggiuntivi, ma lascia il layer di base
-       map.once('style.load', function() {
+
             // Rimuovi tutti i layer aggiuntivi
             const layers = map.getStyle().layers;
-            console.log(layers)
+         console.log("SONO NELL ELSEEEEEEEEEEEE")
+         console.log(layers)
             for (let i = 0; i < layers.length; i++) {
                 const layer = layers[i];
-                if (layer.id !== 'background' && layer.id !== 'municipi-layer') {
+                if (layer.id.startsWith('centroid-layer') || layer.id.startsWith('centroid-text-layer')) {
                     map.removeLayer(layer.id);
                 }
             }
 
-            // Rimuovi tutti i source aggiuntivi
-            const sources = Object.keys(map.getStyle().sources);
-            sources.forEach(function(source) {
-                if (source !== 'municipi') {
-                    map.removeSource(source);
-                }
-            });
-            //colorizeMap(csvFileNameChoroplethMap);
-
-            // Aggiungi di nuovo i dati dei confini municipali
-            map.addSource('municipi', {
-                'type': 'geojson',
-                'data': 'dataset/source/choropleth-map/municipi.geojson'
-            });
-
-            // Aggiungi di nuovo lo stile per i confini municipali
-            map.addLayer({
-                'id': 'municipi-layer',
-                'type': 'line',
-                'source': 'municipi',
-                'layout': {},
-                'paint': {
-                    'line-color': '#bdb49b',
-                    'line-width': 0.3,
-                    'line-opacity': 0.5 // Opacità delle linee dei comuni
-                }
-            });
-        });
     }
         if(switchBrushInput.value === "ON"){
           colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate)
