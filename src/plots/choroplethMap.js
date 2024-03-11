@@ -107,6 +107,13 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
                 console.log(d.properties.nome)
                 townHallClicked = true;
 
+              selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+              if (selectedRadioButton.id === "General")
+                csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+              else
+                csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
+
                 d3.csv(csvFileNameChoroplethMapNature, function (data) {
                   let dataResult = [];
                   data.filter(function (row) {
@@ -659,37 +666,158 @@ function showNumberOfAccidents(townHall, number) {
     marginNumberCircleX = -2.5
   }
 
- choroplethMapSvg.append("circle")
-    .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
-    .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
-    .attr("r", 8) // Imposta il raggio del cerchio
-    .style("font-family", "Lora")
-    .style("stroke", "#d4d0c5") // Colore del bordo
-    .style("stroke-width", "1px") // Spessore del bordo
-    .style("fill", "white")
-    .style("opacity", "0.7")
-    .style("filter", "drop-shadow(0 1px 1px darkslategray)");
+    selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+    if(selectedRadioButtonTwo.id === "MapOne") {
+         choroplethMapSvg.append("circle")
+            .attr("cx", centroidInterested[0] - marginNumberCircleX + 2.8)
+            .attr("cy", centroidInterested[1] + marginNumberY - 3.5)
+            .attr("r", 9) // Imposta il raggio del cerchio
+            .style("font-family", "Lora")
+            .style("stroke", "#d4d0c5") // Colore del bordo
+            .style("stroke-width", "1px") // Spessore del bordo
+            .style("fill", "white")
+            .style("opacity", "0.7")
+            .style("filter", "drop-shadow(0 1px 1px darkslategray)");
 
-  choroplethMapSvg.append("text")
-    .text(number)
-    .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
-    .attr("x", function() {
-            // Verifica se il numero ha due cifre
-            if (number >= 10) {
+          choroplethMapSvg.append("text")
+            .text(number)
+            .attr("id", "text-number-town-hall") // Assegna un ID univoco, ad esempio "uniqueID"
+            .attr("x", function() {
+              // Verifica se il numero ha due cifre
+              if (townHall.toString() === "Municipio XIII" && number > 9 && number >= 10) {
                 return centroidInterested[0] - marginNumberX + 5.5;
-            } else {
+              } else if (number >= 10) {
                 return centroidInterested[0] - marginNumberX + 3;
+              } else {
+                return centroidInterested[0] - marginNumberX + 3;
+              }
+
+            })
+            .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
+            .attr("text-anchor", "middle")
+            //.style("fill", "white")
+            .style("font-size", "8px")
+            .style("fill", "#524a32")
+            .style("opacity", "0.8")
+            .style("font-family", "Lora")
+            .style("font-weight", "bold");
+
+    }
+    else {
+    //console.log("il municipio è: "+townHall)
+    //console.log("il numero è: "+number)
+
+    // Calcola l'offset in base al municipio
+    /*let offset = [0, 0];  // Offset di default
+    if (townHall === "Municipio VI") {
+        //offset = [15, 0];  // Imposta l'offset per il Municipio VI
+    } else if (townHall === "Municipio XV") {
+        //offset = [0, -3]; // Imposta l'offset per il Municipio XV
+    } else if (townHall === "Municipio XIII" && number > 9) {
+
+    }*/
+
+    // Carica i dati del GeoJSON utilizzando una richiesta AJAX
+      fetch('dataset/source/choropleth-map/municipi.geojson')
+        .then(response => response.json())
+        .then(data => {
+          // Find the feature corresponding to the municipality
+          var feature = data.features.find(feature => feature.properties.nome === townHall);
+
+          if (feature) {
+            // Calculate the centroid
+            var centroid = turf.centroid(feature);
+
+            console.log("Comune");
+            console.log(feature.properties.nome);
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio I") {
+              centroid.geometry.coordinates[0] += 0.01; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0;
             }
-    })
-    .attr("y", centroidInterested[1] + marginNumberY) // Coordinata y del testo
-    .attr("text-anchor", "middle")
-    //.style("fill", "white")
-    .style("font-size", "9px")
-    .style("fill", "#524a32")
-    .style("opacity", "0.8")
-    .style("font-family", "Lora")
-    .style("font-weight", "bold");
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio VI") {
+              centroid.geometry.coordinates[0] -= 0.06; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XV") {
+              centroid.geometry.coordinates[0] += 0.05; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.04;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XI") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.02;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio XII") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] -= 0.0032;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio VIII") {
+              centroid.geometry.coordinates[0] += 0.00; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0.01;
+            }
+
+            // Adjust centroid coordinates conditionally (assuming right offset)
+            if (feature.properties.nome === "Municipio X") {
+              centroid.geometry.coordinates[0] += 0.03; // Adjust X-coordinate (longitude) for right offset
+              centroid.geometry.coordinates[1] += 0.02;
+            }
+
+            // Add the number as a property to the centroid
+            centroid.properties.number = number;
+
+            centroidName = 'centroid' + generateRandomString(30);
+
+            // Add the centroid as a point on the map
+            map.addSource(centroidName, {
+              'type': 'geojson',
+              'data': centroid
+            });
+
+            map.addLayer({
+              'id': 'centroid-layer' + generateRandomString(30),
+              'type': 'circle',
+              'source': centroidName,
+              'paint': {
+                'circle-radius': 9,
+                'circle-color': 'white',
+                'circle-opacity': 0.7
+              }
+            });
+
+            // Add the number as a text label for the point
+            map.addLayer({
+              'id': 'centroid-text-layer' + generateRandomString(30),
+              'type': 'symbol',
+              'source': centroidName,
+              'layout': {
+                'text-field': number.toString(),
+                'text-font': ['Open Sans Regular'],
+                'text-size': 8
+              },
+              'paint': {
+                'text-color': '#524a32'
+              }
+            });
+          } else {
+            console.error("Municipio non trovato nel GeoJSON.");
+          }
+        })
+        .catch(error => console.error('Errore nel caricamento dei dati del GeoJSON:', error));
 }
+
+}
+
 function fillOtherTownHalls(map){
   Array.from(centroidTownHalls.keys()).forEach(item => {
     let selectedTownHall = choroplethMapSvg.select(`path[id='${item}']`);
@@ -805,48 +933,22 @@ function drawMapWithStreet(csvFileNameChoroplethMap) {
                 }
             });
 
+
         });
     } else {
         // Se la mappa esiste già, rimuovi solo i layer aggiuntivi, ma lascia il layer di base
-       map.once('style.load', function() {
+
             // Rimuovi tutti i layer aggiuntivi
             const layers = map.getStyle().layers;
-            console.log(layers)
+         console.log("SONO NELL ELSEEEEEEEEEEEE")
+         console.log(layers)
             for (let i = 0; i < layers.length; i++) {
                 const layer = layers[i];
-                if (layer.id !== 'background' && layer.id !== 'municipi-layer') {
+                if (layer.id.startsWith('centroid-layer') || layer.id.startsWith('centroid-text-layer')) {
                     map.removeLayer(layer.id);
                 }
             }
 
-            // Rimuovi tutti i source aggiuntivi
-            const sources = Object.keys(map.getStyle().sources);
-            sources.forEach(function(source) {
-                if (source !== 'municipi') {
-                    map.removeSource(source);
-                }
-            });
-            //colorizeMap(csvFileNameChoroplethMap);
-
-            // Aggiungi di nuovo i dati dei confini municipali
-            map.addSource('municipi', {
-                'type': 'geojson',
-                'data': 'dataset/source/choropleth-map/municipi.geojson'
-            });
-
-            // Aggiungi di nuovo lo stile per i confini municipali
-            map.addLayer({
-                'id': 'municipi-layer',
-                'type': 'line',
-                'source': 'municipi',
-                'layout': {},
-                'paint': {
-                    'line-color': '#bdb49b',
-                    'line-width': 0.3,
-                    'line-opacity': 0.5 // Opacità delle linee dei comuni
-                }
-            });
-        });
     }
         if(switchBrushInput.value === "ON"){
           colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate)
@@ -872,6 +974,7 @@ function colorizeMap(csvFileNameChoroplethMap) {
     dataAboutTownHall = data.filter(function (row) {
       return row['Municipio'];
     });
+
     // Carica i dati dei comuni di Roma
     fetch("dataset/source/choropleth-map/municipi.geojson")
         .then(response => response.json())
@@ -1012,6 +1115,12 @@ function colorizeMap(csvFileNameChoroplethMap) {
 
 
                             townHallClicked = true;
+                          selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+                          if (selectedRadioButton.id === "General")
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+                          else
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
 
                             d3.csv(csvFileNameChoroplethMapNature, function (data) {
                               let dataResult = [];
@@ -1160,7 +1269,7 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
                     }
                 }
             });
-             console.log("ooooooooooooooooooooooo")
+             //console.log("ooooooooooooooooooooooo")
             data.features.forEach(function(element) {
              const randomSuffix = generateRandomString(30);
              console.log(randomSuffix)
@@ -1285,6 +1394,13 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
 
                             townHallClicked = true;
 
+                          selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
+
+                          if (selectedRadioButton.id === "General")
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNatureGeneral" + selectedYear + ".csv";
+                          else
+                            csvFileNameChoroplethMapNature = "dataset/processed/choroplethMap/choroplethMapNature" + selectedYear + ".csv";
+
                             d3.csv(csvFileNameChoroplethMapNature, function (data) {
                               let dataResult = [];
                               data.filter(function (row) {
@@ -1379,6 +1495,55 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
             console.error("Errore nel caricamento dei dati:", error);
         });
       });
+}
+
+function drawLegendMap(){
+  choroplethMapSvg
+    .append("svg")
+    .attr("width", 100)
+    .attr("height", 250)
+    .attr("x", 150)
+    .attr("y", 250);
+
+  var legendCells = [];
+  legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
+
+  choroplethMapSvg.selectAll("rect")
+    .data(legendCells)
+    .enter()
+    .append("rect")
+    .attr("x",  500) // Posiziona le celle orizzontalmente
+    //.attr("y",  (d, i) => i * 31)
+    .attr("y",  (d,i) => 48 + 31 * i)
+    .attr("width", 8) // Larghezza delle celle
+    .attr("height", 30)
+    .style("fill", function (d,i) {
+      if(csvFileNameChoroplethMap.includes("general"))
+        return setLegendColorsChoroplethMapGeneral(legendCells[i])
+      else
+        return setLegendColorsChoroplethMap(legendCells[i])
+
+    }); // Colora le celle in base al valore
+
+  choroplethMapSvg.selectAll("text")
+    .data(legendCells)
+    .enter()
+    .append("text")
+    .attr("x", 518 ) // Posiziona le etichette al centro delle celle
+    .attr("y", (d, i) => i * 30.7 + 82 )
+    .style("font-family", "Lora")
+    .text((d) => `${d}`); // Testo dell'etichetta
+
+  choroplethMapSvg.selectAll("line")
+    .data(legendCells) // Ignora l'ultimo valore
+    .enter()
+    .append("line")
+    .attr("x1", 500)
+    .attr("y1", (d,i) => 78.5 + 31 * i) // Inizio della lineetta
+    .attr("x2", 511)
+    .attr("y2", (d,i) => 78.5 + 31 * i) // Fine della lineetta
+    .style("stroke", "black")
+    .style("stroke-width", "1px");
 }
 
 

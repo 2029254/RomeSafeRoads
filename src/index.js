@@ -53,10 +53,12 @@ radioButtons.forEach(function(radioButton) {
         if(switchBrushInput.value === "ON"){
           choroplethMapSvg.selectAll("*").remove();
           drawMapWithStreet(csvFileNameChoroplethMap);
+          drawLegendMap();
         } else {
             d3.selectAll("#map").style("visibility", "visible");
             console.log(csvFileNameChoroplethMap);
             drawMapWithStreet(csvFileNameChoroplethMap)
+            drawLegendMap();
         }
     }
   };
@@ -113,12 +115,14 @@ radioButtonsTwo.forEach(function(radioButton) {
           choroplethMapSvg.selectAll("*").remove();
           d3.selectAll("#map").style("visibility", "visible");
           drawMapWithStreet(csvFileNameChoroplethMap)
+          drawLegendMap();
           //drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate);
         } else {
             choroplethMapSvg.selectAll("*").remove();
             //removeMapWithStreet();
             d3.selectAll("#map").style("visibility", "visible");
             drawMapWithStreet(csvFileNameChoroplethMap)
+            drawLegendMap();
         }
     }
   };
@@ -310,9 +314,17 @@ function updatePlotsBasingOnSelectedYear(){
  // let removeAllButtons = document.querySelectorAll(".circular-button");
  // removeAllButtons.forEach(function(button) {button.remove();});
  // createHTMLButtons();
+  selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+  if(selectedRadioButtonTwo.id === "MapOne") {
+    choroplethMapSvg.selectAll("*").remove();
+    d3.selectAll("#map").style("visibility", "hidden");
+    drawChoroplethMap(csvFileNameChoroplethMap);
+  } else {
+    choroplethMapSvg.selectAll("*").remove();
+    drawMapWithStreet(csvFileNameChoroplethMap)
+    d3.selectAll("#map").style("visibility", "visible");
 
-  choroplethMapSvg.selectAll("*").remove();
-  drawChoroplethMap(csvFileNameChoroplethMap);
+  }
 
   timeSeriesSvg.selectAll("*").remove();
   drawTimeSeriesChart(csvFileNameTimeSeries);
@@ -331,5 +343,7 @@ function updatePlotsBasingOnSelectedYear(){
     timeSeriesSvg.style("opacity", 1);
     scatterPlotpSvg.style("opacity", 1);
   }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+
+  nnaturee.style.display = 'none';
 
 }
