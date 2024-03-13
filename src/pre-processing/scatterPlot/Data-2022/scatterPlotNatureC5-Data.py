@@ -146,6 +146,23 @@ dataset_columns = dataset_columns.loc[dataset_columns['NaturaIncidente'].isin(['
 
 accidents_data_frame = pandas.DataFrame(dataset_columns)
 
+def assign_severity(row):
+    if row['Deceduto'] == 1:
+        return 5
+    elif row['NUM_FERITI'] > 4:
+        return 4
+    elif 2 < row['NUM_FERITI'] <= 4 and row['NUM_ILLESI'] < 3:
+        return 3
+    elif 1 < row['NUM_FERITI'] <= 3 and row['NUM_ILLESI'] < 2:
+        return 2
+    elif row['NUM_FERITI'] == 0:
+        return 1
+    else:
+        return 1  # Default value for rows not meeting any condition
+
+# Apply the function to create the 'severity' column
+accidents_data_frame['Severity'] = accidents_data_frame.apply(assign_severity, axis=1)
+
 # Riordina il DataFrame in base alla colonna 'Deceduto'
 accidents_data_frame = accidents_data_frame.sort_values(by='Deceduto')
 

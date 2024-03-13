@@ -38,10 +38,10 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -9;
-    var xMax = 9;
-    var yMin = -20;
-    var yMax = 25;
+    var xMin = -6;
+    var xMax = 16;
+    var yMin = -6;
+    var yMax = 10;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
@@ -61,7 +61,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .attr("id",  function (d) { return "dot-" + d.Longitude + "-" + d.Latitude})
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
-      .attr("r", 5) // Raggio del cerchio
+      .attr("r", 3) // Raggio del cerchio
       .attr("col", function(d) { return setPointColor(d); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
@@ -445,12 +445,12 @@ function setPointColor(d) {
     return "#fdbf6f";
   else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
     return "#a6cee3";
-   */
+
 
   if (d.Deceduto === 0.0 || d.Deceduto  === '0.0' || d  === "Non-fatal accident")
     return "#c9a18b"
   else return "#8bc8e8"
-
+  */
 /*
  if (d.NaturaIncidente === "C1")
    return "#8dd3c7"
@@ -470,6 +470,18 @@ function setPointColor(d) {
    return "#fccde5"
  else return "#8bc8e8"
 */
+
+  if (d.Severity === "1")
+    return "#8dd3c7"
+  else if (d.Severity === "2")
+    return "#ffffb3"
+  else if (d.Severity === "3")
+    return "#bebada"
+  else if (d.Severity === "4")
+    return "#fb8072"
+  else if (d.Severity === "5")
+    return "#80b1d3"
+  else return "#8bc8e8"
 }
 
 function drawScatterPlotLegend() {

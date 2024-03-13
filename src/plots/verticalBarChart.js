@@ -745,9 +745,41 @@ function onclickBar(d) {
           timeSeriesSvg.selectAll("*").remove();
           drawTimeSeriesChart(csvFileNameTimeSeries);
         }*/
-      scatterPlotpSvg.selectAll("*").remove();
-      drawScatterPlot("dataset/processed/scatterPlot/"+selectedYear+"/scatterPlotNature"+clickedNature+".csv");
-    }
+/*
+    const url = `http://localhost:5000/calculate_pca?nature=${clickedNature}&year=${selectedYear}`;
+
+    console.log("URL" + url)
+    fetch(url)
+      .then(response => {
+        console.log('Data received:', response); // Log per verificare i dati ricevuti
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        scatterPlotpSvg.selectAll("*").remove();
+        drawScatterPlot("dataset/processed/scatterPlot/PCA-real-time.csv");
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+
+
+ */
+
+    const url = `http://localhost:5000/calculate_pca?nature=${clickedNature}&year=${selectedYear}`;
+
+    axios.get(url)
+      .then(response => {
+        console.log('Data received:', response.data);
+        scatterPlotpSvg.selectAll("*").remove();
+        drawScatterPlot("dataset/processed/scatterPlot/PCA-real-time.csv");
+      })
+      .catch(error => {
+        console.error('There was a problem with the request:', error);
+      });
+  }
 }
 
 function setAccidentsNumberAndNatureAndYear(d) {

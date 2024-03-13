@@ -3,7 +3,7 @@ from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import StandardScaler
 
 dataset = pd.read_csv('dataset/processed/scatterPlot/PCA-Data-2022.csv')
-cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'UtilizzoProtezioni']
+cols = ['QualitaFondoStradale', 'IntensitaTraffico', 'NUM_FERITI', 'NUM_MORTI', 'NUM_ILLESI', 'NUM_RISERVATA', 'UtilizzoProtezioni', 'Severity']
 
 # define standard scaler
 scaler = StandardScaler()
@@ -16,6 +16,7 @@ principal_components = pca.components_
 df_components = pd.DataFrame(data=components, columns=['PC1', 'PC2'])
 
 df_components['Deceduto'] = dataset['Deceduto']
+df_components['Severity'] = dataset['Severity']
 df_components['TipoVeicolo'] = dataset['TipoVeicolo']
 df_components['Latitude'] = dataset['Latitude']
 df_components['Longitude'] = dataset['Longitude']

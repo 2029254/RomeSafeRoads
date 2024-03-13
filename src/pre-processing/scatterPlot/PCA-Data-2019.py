@@ -20,7 +20,7 @@ csv_2019 = [
 dataset_2019 = pandas.read_csv('dataset/source/accidents-2019/01-Gennaio.csv', sep=';', encoding='latin-1')
 
 # Import and concatenate CSV files for the first part
-dataset_2019PartOne = pandas.concat([pandas.read_csv(file, sep=';', encoding='latin-1') for file in csv_2019PartOne], ignore_index=True)
+dataset_2019PartOne = pandas.concat([pandas.read_csv(file, sep=';', encoding='latin-1') for file in csv_2019], ignore_index=True)
 
 
 # Concatenate the filtered CSV files for the complete dataset
@@ -145,6 +145,23 @@ dataset_columns['TipoVeicolo'] = dataset_columns['TipoVeicolo'].apply(group_vehi
 dataset_columns['TipoVeicolo'] = dataset_columns['TipoVeicolo'].fillna('Autovettura')
 
 accidents_data_frame = pandas.DataFrame(dataset_columns)
+
+def assign_severity(row):
+    if row['Deceduto'] == 1:
+        return 5
+    elif row['NUM_FERITI'] > 4:
+        return 4
+    elif 2 < row['NUM_FERITI'] <= 4 and row['NUM_ILLESI'] < 3:
+        return 3
+    elif 1 < row['NUM_FERITI'] <= 3 and row['NUM_ILLESI'] < 2:
+        return 2
+    elif row['NUM_FERITI'] == 0:
+        return 1
+    else:
+        return 1  # Default value for rows not meeting any condition
+
+# Apply the function to create the 'severity' column
+accidents_data_frame['Severity'] = accidents_data_frame.apply(assign_severity, axis=1)
 
 # Riordina il DataFrame in base alla colonna 'Deceduto'
 accidents_data_frame = accidents_data_frame.sort_values(by='Deceduto')
