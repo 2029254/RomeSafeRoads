@@ -16,14 +16,15 @@ let width = 500;
 let height = 300;
 let clickedBars = [];
 let clickedNature = "";
+let barClicked = false;
 
 
 let xScale, yScale, g, dataAboutYearSorted, tooltip;
 
 function drawColorsLegend(){
-
-  let keys = ["> 0 and \u2264 500", "> 500 and \u2264 1500", "> 1500 and \u2264 4000", "> 4000 and \u2264 9000",  "> 9000 and \u2264 15000", "> 15000"];
-  let size = 13;
+  //let keys = ["> 0 and \u2264 500", "> 500 and \u2264 1500", "> 1500 and \u2264 4000", "> 4000 and \u2264 9000",  "> 9000 and \u2264 15000", "> 15000"];
+  let keys = ["> 0 and \u2264 100", "> 100 and \u2264 300", "> 300 and \u2264 500","> 500 and \u2264 800" , "> 800 and \u2264 1500",  "> 1500 and \u2264 3500",  "> 3500 and \u2264 7500", "> 7500 and \u2264 15000" ,"> 15000"];
+  let size = 11;
 
   barChartSvg.selectAll("mydots")
     .data(keys)
@@ -65,7 +66,7 @@ function drawColorsLegend(){
     .enter()
     .append("text")
     .attr("x", 480 + size*1.2)
-    .attr("y", function(d,i){ return 180 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .attr("y", function(d,i){ return 200 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
     .text(function(d){ return d})
     .html(function(d) {
         let parts = d.split(" "); // Dividi la stringa in parti
@@ -113,10 +114,19 @@ function drawAxesAndBars(csvFileName){
       .style("stroke-width", 0.3) // Imposta la larghezza del bordo
       .style("cursor", function (d) {
         //Applica il pointer solo se buttonWeatherValue è "First"
-        if ((buttonWeatherValue === "First" || buttonWeatherValue === "None" || switchBrushInput.value === "OFF")) return "pointer"
+        console.log("BOH: "+(switchWeatherInput.value === "OFF" && switchBrushInput.value === "OFF"))
+        if (((buttonWeatherValue === "First" && switchBrushInput.value === "OFF") || (switchWeatherInput.value === "OFF" && switchBrushInput.value === "OFF") || buttonWeatherValue === "None" /*|| switchBrushInput.value === "OFF"*/)) return "pointer"
         else return "default"
         })
-      .on("click", function (d) {onclickBar(d)})
+        .on("click", function(d) {
+          if (
+            (buttonWeatherValue === "First" && switchBrushInput.value === "OFF") ||
+            (switchWeatherInput.value === "OFF" && switchBrushInput.value === "OFF") ||
+            buttonWeatherValue === "None"
+          ) {
+            onclickBar(d);
+          }
+        })
       .on("mouseover", handleMouseOver)
       .on("mouseout", function(d) {handleMouseOut(d)})
       .on("mousemove", handleMouseOver)
@@ -434,7 +444,45 @@ function drawVerticalBarChart(csvFileName) {
 }
 
 function setBarColor(accidentNumber) {
-  if (accidentNumber > 0 && accidentNumber <= 500)
+    if (accidentNumber > 0 && accidentNumber <= 100)
+        return "#1a9850"
+      else if (accidentNumber > 100 && accidentNumber <= 300)
+        return "#66bd63";
+      else if (accidentNumber > 300 && accidentNumber <= 500)
+        return "#a6d96a";
+      else if (accidentNumber > 500 && accidentNumber <= 800)
+        return "#d9ef8b";
+      else if (accidentNumber > 800 && accidentNumber <= 1500)
+        return "#ffffbf";
+      else if (accidentNumber > 1500 && accidentNumber <= 3500)
+        return "#fee08b";
+      else if (accidentNumber > 3500 && accidentNumber <= 7500)
+        return "#fdae61";
+      else if (accidentNumber > 7500 && accidentNumber <= 15000)
+        return "#f46d43";
+      else if (accidentNumber > 15000)
+        return "#d73027";
+      else if (accidentNumber.toString() === "> 0 and \u2264 100")
+        return "#1a9850"
+      else if (accidentNumber.toString() === "> 100 and \u2264 300")
+        return "#66bd63"
+      else if (accidentNumber.toString() === "> 300 and \u2264 500")
+        return "#a6d96a"
+      else if (accidentNumber.toString() === "> 500 and \u2264 800")
+        return "#d9ef8b"
+      else if (accidentNumber.toString() === "> 800 and \u2264 1500")
+        return "#ffffbf"
+      else if (accidentNumber.toString() === "> 1500 and \u2264 3500")
+        return "#fee08b"
+      else if (accidentNumber.toString() === "> 3500 and \u2264 7500")
+        return "#fdae61"
+      else if (accidentNumber.toString() === "> 7500 and \u2264 15000")
+        return "#f46d43"
+      else if (accidentNumber.toString() === "> 15000")
+        return "#d73027"
+
+
+  /*if (accidentNumber > 0 && accidentNumber <= 500)
     return "#1a9850"
   else if (accidentNumber > 500 && accidentNumber <= 1500)
     return "#91cf60";
@@ -457,7 +505,7 @@ function setBarColor(accidentNumber) {
   else if (accidentNumber.toString() === "> 9000 and \u2264 15000")
     return "#fc8d59"
   else if (accidentNumber.toString() === "> 15000")
-    return "#d73027"
+    return "#d73027"*/
 }
 function handleMouseOver(d) {
     //d3.select(this).style("fill", "grey");
@@ -505,21 +553,14 @@ let timer; // Variabile per il timer
 let isActive = false; // Variabile per tracciare lo stato del timer
 function onclickBar(d) {
     console.log(d)
+    barClicked = true;
+    //const size=14;
   // Aggiungi il loader al DOM
 
   if (buttonWeatherValue==="First" || switchBrushInput.value === "OFF") {
     let nnaturee = document.getElementById("nnaturee");
     nnaturee.style.display = 'block';
     nnaturee.textContent = "Nature: [" + d.NaturaIncidente.toString() + "]"
-
-    scatterPlotpSvg
-      .append("text")
-      .attr("id", "textfatal")
-      .attr("x", 600 ) // Posiziona le etichette al centro delle celle
-      .attr("y", 260 )
-      .style("font-family", "Lora")
-      .style("z-index", 999999999999999999999999999)
-      .text("Accidents of [" + d.NaturaIncidente.toString() + "]"); // Testo dell'etichetta
 
     let loader = document.getElementById("loaderC");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile

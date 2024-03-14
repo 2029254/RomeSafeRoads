@@ -1293,7 +1293,7 @@ function drawUnit(val) {
 function drawLegend(text, color, value) {
 
   keysLegends.push(text)
-  let size = 13;
+  let size = 11;
 
   if(vBarChart) { // Aggiungi un'area di testo per la legenda
     textElementTwo = legend.append("text")
@@ -1453,6 +1453,14 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Sunny").disabled = true;
       document.getElementById("Rainy").disabled = true;
       document.getElementById("Severe").disabled = true;
+            if (buttonWeatherValue !== "First") {
+              let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+              barChartSvg.selectAll("*").remove();
+              drawVerticalBarChart(csvFileNameVerticalBarChart);
+            } else {
+              barChartSvg.selectAll("*").remove();
+              drawVerticalBarChart(csvFileNameVerticalBarChart);
+            }
 
     } else if (switchBrushInput.value === "OFF"){
       document.getElementById("Cloudy").disabled = false;

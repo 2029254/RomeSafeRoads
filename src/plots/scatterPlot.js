@@ -499,7 +499,7 @@ function setPointColor(d) {
 function drawScatterPlotLegend() {
 
  let keys = ["Critical severity", "High severity", "Moderate severity", "Low severity", "Minimal severity"];
- let size = 16; //17
+ let size = 14; //17
 
  scatterPlotpSvg.selectAll("mydots")
    .data(keys)
@@ -519,23 +519,30 @@ function drawScatterPlotLegend() {
    .style("stroke", "#524a32")
    .style("stroke-width", 0.1);
 
-
+ if (barClicked) keys.push("Nature: [" + clickedNature + "]");
  scatterPlotpSvg.selectAll("mylabels")
    .data(keys)
    .enter()
    .append("text")
    .attr("x", 580 + size * 1.2)
    .attr("y", function (d, i) {
-     return 22 + i * (size + 5) + (size / 2)
+    if (d.startsWith("Nature")) return 30 + i * (size + 5) + (size / 2)
+    else return 22 + i * (size + 5) + (size / 2)
    }) // 30 is where the first dot appears. 25 is the distance between dots
    .text(function (d) {
      return d
    })
    .style("fill", "#524a32")
    .style("font-family", "Lora")
-   .style("font-size", "12px")
+   .style("font-size", function(d) {
+     return d.startsWith("Nature") ? "14px" : "12px";
+   })
    .attr("text-anchor", "left")
+  .style("font-weight", function(d) {
+    return d.startsWith("Nature") ? "bold" : "normal"; // Imposta il testo in grassetto solo se d inizia con "Nature"
+  })
    .style("alignment-baseline", "middle");
+   barClicked = false;
 
 }
 
