@@ -490,7 +490,7 @@ function setPointColor(d) {
   else if (d.Severity === "3" || d === "Moderate severity")
     return "#f5aeca"//"#8dd3c7"
   else if (d.Severity === "4" || d === "High severity")
-    return "#d8f022"
+    return "#d6f013"
   else if (d.Severity === "5" || d === "Critical severity")
     return "#be6bbf"//"#80b1d3"
   else return "#8bc8e8"
@@ -524,9 +524,12 @@ function drawScatterPlotLegend() {
    .data(keys)
    .enter()
    .append("text")
-   .attr("x", 580 + size * 1.2)
+   .attr("x", function (d, i) {
+    if (d.startsWith("Nature")) return 565 + size * 1.2
+    else return 580 + size * 1.2
+   })
    .attr("y", function (d, i) {
-    if (d.startsWith("Nature")) return 30 + i * (size + 5) + (size / 2)
+    if (d.startsWith("Nature")) return 40 + i * (size + 5) + (size / 2)
     else return 22 + i * (size + 5) + (size / 2)
    }) // 30 is where the first dot appears. 25 is the distance between dots
    .text(function (d) {
