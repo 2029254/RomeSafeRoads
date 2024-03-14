@@ -67,6 +67,17 @@ radioButtons.forEach(function(radioButton) {
 // Aggiungi un listener onchange a ciascun radio button
 radioButtonsTwo.forEach(function(radioButton) {
   radioButton.onchange = function() {
+    // Rimuovi l'area selezionata senza rimuovere completamente l'oggetto brush
+    brush.move(scatterPlotpSvg.select(".brush"), null);
+
+    // Itera su ogni elemento all'interno di allDots e applica lo stile
+    if (brushIsActive) {
+        allDots.forEach(function(dot) {
+          dot.style("stroke", "#f7f3eb");
+        });
+    }
+
+
     // Verifica se il radio button è stato selezionato
     selectedRadioButton = document.querySelector('#radiobuttons input[type="radio"]:checked');
     if (selectedRadioButton.id === "General")
@@ -314,17 +325,21 @@ function updatePlotsBasingOnSelectedYear(){
  // let removeAllButtons = document.querySelectorAll(".circular-button");
  // removeAllButtons.forEach(function(button) {button.remove();});
  // createHTMLButtons();
-  selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
-  if(selectedRadioButtonTwo.id === "MapOne") {
+  //selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
+  //if(selectedRadioButtonTwo.id === "MapOne") {
     choroplethMapSvg.selectAll("*").remove();
+    var rb = document.querySelector('input[name="fav_languag"][value="MapOne"]');
+    rb.checked = true;
     d3.selectAll("#map").style("visibility", "hidden");
     drawChoroplethMap(csvFileNameChoroplethMap);
-  } else {
+    choroplethMapSvg.selectAll("#localization").remove();
+    markers.forEach((marker) => marker.remove());
+    markers = [];
+  /*} else {
     choroplethMapSvg.selectAll("*").remove();
     drawMapWithStreet(csvFileNameChoroplethMap)
     d3.selectAll("#map").style("visibility", "visible");
-
-  }
+  }*/
 
   timeSeriesSvg.selectAll("*").remove();
   drawTimeSeriesChart(csvFileNameTimeSeries);
