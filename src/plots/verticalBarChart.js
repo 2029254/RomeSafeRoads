@@ -558,9 +558,9 @@ function onclickBar(d) {
   // Aggiungi il loader al DOM
 
   if (buttonWeatherValue==="First" || switchBrushInput.value === "OFF") {
-    let nnaturee = document.getElementById("nnaturee");
+    /*let nnaturee = document.getElementById("nnaturee");
     nnaturee.style.display = 'block';
-    nnaturee.textContent = "Nature: [" + d.NaturaIncidente.toString() + "]"
+    nnaturee.textContent = "Nature: [" + d.NaturaIncidente.toString() + "]"*/
 
     let loader = document.getElementById("loaderC");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
@@ -689,6 +689,9 @@ function onclickBar(d) {
           }
           fillOtherTownHalls(incidentCounts);
           choroplethMapSvg.style("opacity", 1);
+          let nnaturee = document.getElementById("nnaturee");
+          nnaturee.style.display = 'block';
+          nnaturee.textContent = "Selected nature: [" + d.NaturaIncidente.toString() + "]"
         }, 1500); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
 
       });
