@@ -811,3 +811,40 @@ input[type="radio"]:checked + label:before {
     /*border-radius: 70px;*/
     /*background-color: transparent !important;*/
 }
+
+/*#dropMenu {
+    position: relative;
+    left: 550px;
+    bottom: 170px;
+    width:50px;
+    height: 30px;
+    font-family: Lora, serif;
+    color: #524a32;
+    background-color: #f8f7f1;
+    font-size: 13px;
+}*/
+
+#dropMenu {
+    font-family: Lora, serif;
+    color: #524a32;
+    background-color: #f8f7f1;
+    width: 65px; /*43*/
+    height: 0px;
+}
+
+#dropMenu .form-select {
+    /* Rimuovi l'aspetto predefinito della freccia */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    /* Aggiungi un'icona personalizzata per la freccia */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    /* Imposta la posizione dell'icona della freccia */
+    background-position: right 2px center !important; /*  il valore era 5px Sposta l'icona verso destra */
+    background-repeat: no-repeat !important; /* Impedisci la ripetizione dell'icona */
+    /* Aggiusta il padding per dare spazio all'icona */
+    padding-right: 10px !important; /* Sposta l'icona più a destra */
+}
+
+
+
