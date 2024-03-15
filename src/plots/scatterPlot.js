@@ -43,7 +43,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
     var xMin = -6;
     var xMax = 18;
     var yMin = -6;
-    var yMax = 10;
+    var yMax = 18;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
@@ -200,7 +200,7 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
     var xMin = -6;
     var xMax = 18;
     var yMin = -6;
-    var yMax = 10;
+    var yMax = 18;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()

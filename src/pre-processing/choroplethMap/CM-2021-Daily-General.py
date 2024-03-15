@@ -30,7 +30,7 @@ for file in csv_2021:
 dataset = dataset_2021[(dataset_2021['Deceduto'] != -1) | (dataset_2021['Deceduto'] != '-1')]
 
 # Seleziona le colonne di interesse
-columns = ['Protocollo', 'Longitude', 'Latitude', 'DataOraIncidente']
+columns = ['Protocollo', 'Longitude', 'Latitude', 'DataOraIncidente', 'NaturaIncidente']
 dataset_columns = dataset[columns]
 
 
@@ -54,6 +54,40 @@ dataset_columns['Municipio'] = municipi
 
 dataset_columns['DataOraIncidente'] = pandas.to_datetime(dataset_columns['DataOraIncidente'], format='%d/%m/%Y %H:%M:%S',
                                                       errors='coerce')
+
+# creation of dictionary to group natures
+groups = {
+    'C1': ['Investimento di pedone'],
+    'C2': ['Scontro frontale fra veicoli in marcia',
+           'Scontro laterale fra veicoli in marcia'],
+    'C3': ['Veicolo in marcia contro veicolo in sosta',
+           'Veicolo in marcia contro veicolo fermo',
+           'Veicolo in marcia contro veicolo arresto'],
+    'C4': ['Tamponamento',
+           'Tamponamento Multiplo'],
+    'C5': ['Veicolo in marcia che urta buche nella carreggiata',
+           'Veicolo in marcia contro ostacolo fisso',
+           'Veicolo in marcia contro ostacolo accidentale',
+           'Veicolo in marcia contro treno',
+           'Veicolo in marcia contro animale'],
+    'C6': ['Infortunio per sola frenata improvvisa',
+           'Infortunio per caduta del veicolo'],
+    'C7': ['Fuoriuscita dalla sede stradale',
+           'Ribaltamento senza urto contro ostacolo fisso'],
+    'C8':  ['Scontro frontale/laterale DX fra veicoli in marcia',
+            'Scontro frontale/laterale SX fra veicoli in marcia']
+}
+
+
+# function to assign nature to a group
+def group_nature(x):
+    for key, values in groups.items():
+        if x in values:
+            return key
+
+
+# creation of new columns calling function groupNature
+dataset_columns['NaturaIncidente'] = dataset_columns['NaturaIncidente'].apply(group_nature)
 
 # Export dei risultati in un nuovo CSV per l'anno corrente
 dataset_columns.to_csv('dataset/processed/choroplethMap/choroplethMapDailyGeneral2021.csv', index=False)

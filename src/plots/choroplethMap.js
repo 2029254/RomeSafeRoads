@@ -348,7 +348,13 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
   d3.csv(csvFileNameChoroplethMapTwo, function (data) {
     var filteredData = data.filter(function (row) {
       var rowDataOraIncidente = row['DataOraIncidente'];
-      return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+      if(dropdownMenu.value!=="General") {
+        var rowDataNatura = row['NaturaIncidente']; // Aggiungo questa riga per ottenere il valore della colonna "Natura"
+        return (rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate) && (rowDataNatura === dropdownMenu.value);
+      }
+      else
+        return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+
     });
 
     groupedByTownHall = new Map();

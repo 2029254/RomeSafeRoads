@@ -923,8 +923,10 @@ function drawTimeSeriesChart(csvFileName){
 
         loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         choroplethMapSvg.style("opacity", 0.3);
-        loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
-        barChartSvg.style("opacity", 0.3);
+        if (dropdownMenu.value === "General") {
+          loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+          barChartSvg.style("opacity", 0.3);
+        }
         loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         scatterPlotpSvg.style("opacity", 0.3);
 
@@ -997,8 +999,10 @@ function brushedTimeSeries(d) {
     setTimeout(function () {
       loaderC.style.display = "none";
       choroplethMapSvg.style("opacity", 1);
-      loader.style.display = "none";
-      barChartSvg.style("opacity", 1);
+      if (dropdownMenu.value === "General") {
+        loader.style.display = "none";
+        barChartSvg.style("opacity", 1);
+      }
       loaderP.style.display = "none";
       scatterPlotpSvg.style("opacity", 1);
     }, 800);
@@ -1103,8 +1107,10 @@ function brushedTimeSeries(d) {
   setTimeout(function () {
     loaderC.style.display = "none";
     choroplethMapSvg.style("opacity", 1);
-    loader.style.display = "none";
-    barChartSvg.style("opacity", 1);
+    if (dropdownMenu.value === "General") {
+      loader.style.display = "none";
+      barChartSvg.style("opacity", 1);
+    }
     loaderP.style.display = "none";
     scatterPlotpSvg.style("opacity", 1);
   }, 800);
@@ -1113,10 +1119,12 @@ function brushedTimeSeries(d) {
 
 
 function updateAllGraphs(formattedStartDate, formattedEndDate ) {
-  barChartSvg.selectAll("*").remove();
-  drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
-  drawColorsLegend();
-  keysLegends = [];
+  if (dropdownMenu.value === "General") {
+    barChartSvg.selectAll("*").remove();
+    drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
+    drawColorsLegend();
+    keysLegends = [];
+  }
 
 
       selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
@@ -1422,7 +1430,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Imposta gli attributi per il menu a discesa (puoi personalizzare questo passaggio in base alle tue esigenze)
     dropdownMenu.addEventListener("change", function() {
-        console.log("Opzione selezionata: " + this.value);
+      timeSeriesSvg.selectAll("*").remove();
+      if (this.value !== "General")
+        drawTimeSeriesChart("dataset/processed/timeSeries/" + selectedYear + "/timeSeriesNature" + this.value + ".csv");
+      else
+        drawTimeSeriesChart(csvFileNameTimeSeries);
+
+      //drawScatterPlot(csvFileNameScatterPlot);
+
+      setTimeout(function () {
+        loaderS.style.display = "none";
+        timeSeriesSvg.style("opacity", 1);
+      }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+
+      console.log("Opzione selezionata: " + this.value);
         // Esegui altre azioni in base all'opzione selezionata, se necessario
     });
 
