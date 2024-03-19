@@ -7,7 +7,7 @@ var scatterPlotpSvg = d3.select("#scatterPlot")
   .classed("svg-content-responsive", true)
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
-  .append("g").attr("transform", "translate(100, 30)");
+  .append("g").attr("transform", "translate(115, 30)");
 
 let tooltipScatter;
 let dots;
@@ -16,11 +16,13 @@ let widthScatter = 660;
 let brushIsActive = false;
 let selectedDots;
 var markers = [];
+var brush;
+var allDots = [];
 
 function drawScatterPlot(csvFileNameScatterPlot) {
-
+   brushIsActive=false;
   // Crea un elemento di brush per la selezione
-  var brush = d3.brush()
+  brush = d3.brush()
     .extent([[0,0], [widthScatter, heightScatter]])
     //.on("start brush end", function(d) {  return brushed(d)})
     .on("start",  function(d) {
@@ -38,20 +40,20 @@ function drawScatterPlot(csvFileNameScatterPlot) {
   d3.csv(csvFileNameScatterPlot , function (data) {
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -9;
-    var xMax = 9;
-    var yMin = -20;
-    var yMax = 25;
+    var xMin = -6;
+    var xMax = 18;
+    var yMin = -6;
+    var yMax = 18;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
       .domain([xMin, xMax])
-      .range([0, 650]);
+      .range([0, 560]);
 
 // Definisci la scala per l'asse y
     var yScale = d3.scaleLinear()
       .domain([yMin, yMax])
-      .range([300, 0]);
+      .range([315, 0]);
 
 // Crea gli elementi circolari per il tuo scatterplot
     scatterPlotpSvg.selectAll("circle")
@@ -61,7 +63,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
       .attr("id",  function (d) { return "dot-" + d.Longitude + "-" + d.Latitude})
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
-      .attr("r", 5) // Raggio del cerchio
+      .attr("r", 3) // Raggio del cerchio
       .attr("col", function(d) { return setPointColor(d); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
@@ -72,7 +74,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
           .duration('100')
           .style("stroke", "#525252")
           .style("stroke-width", "0.3")
-          .attr("r", 7);
+          .attr("r", 5);
 
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
@@ -89,7 +91,7 @@ function drawScatterPlot(csvFileNameScatterPlot) {
           .style("stroke", "#f7f3eb")
           .style("stroke-width", "0.1")
           .duration('200')
-          .attr("r", 5);
+          .attr("r", 3);
 
          tooltipScatter.style("opacity", 0);
       })
@@ -195,20 +197,20 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
       });
 
     // Definisci i limiti del tuo scatterplot
-    var xMin = -9;
-    var xMax = 9;
-    var yMin = -20;
-    var yMax = 25;
+    var xMin = -6;
+    var xMax = 18;
+    var yMin = -6;
+    var yMax = 18;
 
 // Definisci la scala per l'asse x
     var xScale = d3.scaleLinear()
       .domain([xMin, xMax])
-      .range([0, 650]);
+      .range([0, 560]);
 
 // Definisci la scala per l'asse y
     var yScale = d3.scaleLinear()
       .domain([yMin, yMax])
-      .range([300, 0]);
+      .range([315, 0]);
 
 // Crea gli elementi circolari per il tuo scatterplot
     scatterPlotpSvg.selectAll("circle")
@@ -218,7 +220,7 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
       .attr("id",  function (d) { return "dot-" + d.Longitude + "-" + d.Latitude})
       .attr("cx", function (d) {return xScale(d.PC1);})
       .attr("cy", function (d) {return yScale(d.PC2);})
-      .attr("r", 5) // Raggio del cerchio
+      .attr("r", 3) // Raggio del cerchio
       .attr("col", function(d) { return setPointColor(d); })
       .style("stroke", "#f7f3eb")
       .style("stroke-width", "0.1")
@@ -229,7 +231,7 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
           .duration('100')
           .style("stroke", "#525252")
           .style("stroke-width", "0.3")
-          .attr("r", 7);
+          .attr("r", 5);
 
         tooltipScatter = d3.select("#popupScatterPlot");
         tooltipScatter.style("opacity", 0.9);
@@ -246,7 +248,7 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
           .style("stroke", "#f7f3eb")
           .style("stroke-width", "0.1")
           .duration('200')
-          .attr("r", 5);
+          .attr("r", 3);
 
          tooltipScatter.style("opacity", 0);
       })
@@ -327,11 +329,19 @@ function drawScatterFromTimeSeries(formattedStartDate, formattedEndDate) {
 }
 
 function brushed(d) {
+  brushIsActive=true;
   if (!d3.event.selection) {
     setTimeout(function () {
       loaderC.style.display = "none";
       choroplethMapSvg.style("opacity", 1);
       choroplethMapSvg.selectAll("circle").remove();
+      choroplethMapSvg.selectAll("#localization").remove();
+      markers.forEach((marker) => marker.remove());
+      markers = [];
+      brushIsActive=false;
+      allDots.forEach(function(dot) {
+          dot.style("stroke", "#f7f3eb");
+      });
       }, 800);
     return;} // Se la selezione è nulla, esci dalla funzione
 
@@ -341,7 +351,7 @@ function brushed(d) {
 
   extent = d3.event.selection;
   selectedDots = []; //qui metto tutti i punti selezionati
-  allDots = []; //qui metto tutti i punti del grafico
+  //allDots = []; //qui metto tutti i punti del grafico
 
   scatterPlotpSvg.selectAll('[id^="dot"]').each(function () {
 
@@ -354,7 +364,7 @@ function brushed(d) {
 
     if(isBrushed && !selectedDots.includes(mydot)){ //se il punto si trova nella selezione lo aggiungo a selectedDots
       selectedDots.push(mydot);
-      mydot.style("stroke", "#525252")
+      //mydot.style("stroke", "#525252")
       //console.log(mydot);
     } else { //se il punto non si trova nella selezione lo rimuovo da selectedDots
       let indexToRemove = selectedDots.indexOf(mydot);
@@ -400,11 +410,13 @@ function brushed(d) {
 
               const marker = new mapboxgl.Marker({
                 color: dotColor, // Imposta il colore del marker
-                scale: 0.5 // Imposta la scala del marker (0.5 renderà il marker la metà della dimensione originale)
+                scale: 0.4 // Imposta la scala del marker (0.5 renderà il marker la metà della dimensione originale)
+                //zoom: 'auto'
               })
                 .setLngLat([pointCoordinates[0], pointCoordinates[1]]) // Imposta la posizione del marker
                 .addTo(map); // Aggiungi il marker alla mappa
               markers.push(marker)
+
           /*
           setTimeout(function() {
             marker.remove();
@@ -445,12 +457,12 @@ function setPointColor(d) {
     return "#fdbf6f";
   else if (tipoVeicolo === "Ignoto" || tipoVeicolo === "Unknown")
     return "#a6cee3";
-   */
+
 
   if (d.Deceduto === 0.0 || d.Deceduto  === '0.0' || d  === "Non-fatal accident")
     return "#c9a18b"
   else return "#8bc8e8"
-
+  */
 /*
  if (d.NaturaIncidente === "C1")
    return "#8dd3c7"
@@ -470,47 +482,70 @@ function setPointColor(d) {
    return "#fccde5"
  else return "#8bc8e8"
 */
+
+  if (d.Severity === "1" || d === "Minimal severity")
+    return "#c9a18b"
+  else if (d.Severity === "2" || d === "Low severity")
+    return "#8dd3c7"//"#8bc8e8"
+  else if (d.Severity === "3" || d === "Moderate severity")
+    return "#f5aeca"//"#8dd3c7"
+  else if (d.Severity === "4" || d === "High severity")
+    return "#d6f013"
+  else if (d.Severity === "5" || d === "Critical severity")
+    return "#be6bbf"//"#80b1d3"
+  else return "#8bc8e8"
 }
 
 function drawScatterPlotLegend() {
 
- let keys = ["Fatal accident", "Non-fatal accident"];
- let size = 17;
+ let keys = ["Critical severity", "High severity", "Moderate severity", "Low severity", "Minimal severity"];
+ let size = 14; //17
 
  scatterPlotpSvg.selectAll("mydots")
    .data(keys)
    .enter()
    .append("rect")
-   .attr("x", 600)
+   .attr("x", 580)
    .attr("y", function (d, i) {
      console.log(250 + i * (size + 5))
-     return 250 + i * (size + 5)
+     return 20 + i * (size + 5)
    }) // 30 is where the first dot appears. 25 is the distance between dots
    .attr("width", size)
    .attr("height", size)
    .style("fill", function (d, i) {
+   console.log(d)
      return setPointColor(keys[i])
    })
    .style("stroke", "#524a32")
    .style("stroke-width", 0.1);
 
-
+ if (barClicked) keys.push("Selected nature: [" + clickedNature + "]");
  scatterPlotpSvg.selectAll("mylabels")
    .data(keys)
    .enter()
    .append("text")
-   .attr("x", 600 + size * 1.2)
+   .attr("x", function (d, i) {
+    if (d.startsWith("Selected")) return 565 + size * 1.2
+    else return 580 + size * 1.2
+   })
    .attr("y", function (d, i) {
-     return 250 + i * (size + 5) + (size / 2)
+    if (d.startsWith("Selected")) return 50 + i * (size + 5) + (size / 2)
+    else return 22 + i * (size + 5) + (size / 2)
    }) // 30 is where the first dot appears. 25 is the distance between dots
    .text(function (d) {
      return d
    })
    .style("fill", "#524a32")
    .style("font-family", "Lora")
-   .style("font-size", "12px")
+   .style("font-size", function(d) {
+     return d.startsWith("Selected") ? "14px" : "12px";
+   })
    .attr("text-anchor", "left")
+  .style("font-weight", function(d) {
+    return d.startsWith("Selected") ? "bold" : "normal"; // Imposta il testo in grassetto solo se d inizia con "Nature"
+  })
    .style("alignment-baseline", "middle");
+   barClicked = false;
 
 }
 

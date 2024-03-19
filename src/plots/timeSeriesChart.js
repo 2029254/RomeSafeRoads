@@ -923,8 +923,10 @@ function drawTimeSeriesChart(csvFileName){
 
         loaderC.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         choroplethMapSvg.style("opacity", 0.3);
-        loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
-        barChartSvg.style("opacity", 0.3);
+        if (dropdownMenu.value === "General") {
+          loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
+          barChartSvg.style("opacity", 0.3);
+        }
         loaderP.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
         scatterPlotpSvg.style("opacity", 0.3);
 
@@ -997,8 +999,10 @@ function brushedTimeSeries(d) {
     setTimeout(function () {
       loaderC.style.display = "none";
       choroplethMapSvg.style("opacity", 1);
-      loader.style.display = "none";
-      barChartSvg.style("opacity", 1);
+      if (dropdownMenu.value === "General") {
+        loader.style.display = "none";
+        barChartSvg.style("opacity", 1);
+      }
       loaderP.style.display = "none";
       scatterPlotpSvg.style("opacity", 1);
     }, 800);
@@ -1103,8 +1107,10 @@ function brushedTimeSeries(d) {
   setTimeout(function () {
     loaderC.style.display = "none";
     choroplethMapSvg.style("opacity", 1);
-    loader.style.display = "none";
-    barChartSvg.style("opacity", 1);
+    if (dropdownMenu.value === "General") {
+      loader.style.display = "none";
+      barChartSvg.style("opacity", 1);
+    }
     loaderP.style.display = "none";
     scatterPlotpSvg.style("opacity", 1);
   }, 800);
@@ -1113,10 +1119,12 @@ function brushedTimeSeries(d) {
 
 
 function updateAllGraphs(formattedStartDate, formattedEndDate ) {
-  barChartSvg.selectAll("*").remove();
-  drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
-  drawColorsLegend();
-  keysLegends = [];
+  if (dropdownMenu.value === "General") {
+    barChartSvg.selectAll("*").remove();
+    drawVerticalBarChartFromTimeSeries(formattedStartDate, formattedEndDate);
+    drawColorsLegend();
+    keysLegends = [];
+  }
 
 
       selectedRadioButtonTwo = document.querySelector('#radiobuttonsTwo input[type="radio"]:checked');
@@ -1293,7 +1301,7 @@ function drawUnit(val) {
 function drawLegend(text, color, value) {
 
   keysLegends.push(text)
-  let size = 13;
+  let size = 11;
 
   if(vBarChart) { // Aggiungi un'area di testo per la legenda
     textElementTwo = legend.append("text")
@@ -1356,6 +1364,7 @@ function drawLegend(text, color, value) {
 }
 var onLabel, offLabel, brushOnLabel, brushOffLabel, sliderSwitch, sliderBrushSwitch, sliderBrushSwitch, weatherOffLabel, weatherOnLabel;
 var flagWeatherCondition = false;
+var dropdownMenu, headerText;
 document.addEventListener('DOMContentLoaded', function() {
 
   // Primo switch
@@ -1384,10 +1393,81 @@ document.addEventListener('DOMContentLoaded', function() {
     weatherOffLabel = document.getElementById("weatheroff");
     var previousWeatherValue = false;
 
+
+    // Creazione del menu a discesa
+    dropdownMenu = document.createElement("select");
+    dropdownMenu.id = "weatherDropdown";
+    dropdownMenu.classList.add("form-select"); // Aggiungi la classe form-select al menu a discesa
+
+    // Aggiungi stili CSS per ridurre i margini interni del menu a discesa
+    dropdownMenu.style.padding = "2px 6px"; // Imposta il padding interno a 2px sopra/sotto e 4px a sinistra/destra
+    // Cambia la dimensione del testo nel menu a discesa
+    dropdownMenu.style.fontSize = "11px"; // Imposta la dimensione del testo a 16 pixel
+    // Imposta il colore del testo nel menu a discesa
+    dropdownMenu.style.color = "#524a32";
+    dropdownMenu.style.backgroundColor = "#f8f7f1";
+
+    // Aggiungi le opzioni al menu a discesa
+    var options = ["General", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8"]; // Elenca le opzioni del menu a discesa
+    for (var i = 0; i < options.length; i++) {
+        var option = document.createElement("option");
+        option.value = options[i];
+        option.text = options[i];
+        dropdownMenu.appendChild(option);
+    }
+
+    // Aggiungi il menu a discesa al div timeseries
+    var timeseriesDiv = document.getElementById("dropMenu");
+    timeseriesDiv.innerHTML = ""; // Rimuovi qualsiasi contenuto preesistente nel div
+    timeseriesDiv.appendChild(dropdownMenu);
+
+    // Imposta la posizione del menu a discesa
+    dropdownMenu.style.position = "relative"; // Imposta la posizione assoluta
+    dropdownMenu.style.left = "552px"; // Sposta l'elemento a 20 pixel dal bordo destro
+    dropdownMenu.style.bottom = "130px"; // Sposta l'elemento a 20 pixel dal bordo superiore
+    dropdownMenu.style.opacity = "0";
+
+
+    // Imposta gli attributi per il menu a discesa (puoi personalizzare questo passaggio in base alle tue esigenze)
+    dropdownMenu.addEventListener("change", function() {
+      timeSeriesSvg.selectAll("*").remove();
+      if (this.value !== "General")
+        drawTimeSeriesChart("dataset/processed/timeSeries/" + selectedYear + "/timeSeriesNature" + this.value + ".csv");
+      else
+        drawTimeSeriesChart(csvFileNameTimeSeries);
+
+      //drawScatterPlot(csvFileNameScatterPlot);
+
+      setTimeout(function () {
+        loaderS.style.display = "none";
+        timeSeriesSvg.style("opacity", 1);
+      }, 2000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
+
+      console.log("Opzione selezionata: " + this.value);
+        // Esegui altre azioni in base all'opzione selezionata, se necessario
+    });
+
+    // Creazione del paragrafo per l'intestazione
+    headerText = document.createElement("p");
+    headerText.textContent = "Select nature:";
+    headerText.style.color = "#524a32"; // Imposta il colore del testo
+    headerText.style.fontSize = "10px"; // Imposta la dimensione del testo
+    headerText.style.fontWeight = "bold"; // Imposta il testo in grassetto
+    headerText.style.width = "100px"; // Imposta la larghezza del paragrafo
+    // Imposta la posizione del menu a discesa
+    headerText.style.position = "relative"; // Imposta la posizione assoluta
+    headerText.style.left = "552px"; // Sposta l'elemento a 20 pixel dal bordo destro
+    headerText.style.bottom = "170px"; // Sposta l'elemento a 20 pixel dal bordo superiore
+    headerText.style.opacity = "0";
+    // Aggiungi l'intestazione sopra al menu a discesa
+    timeseriesDiv.append(headerText);
+
   switchInput.addEventListener('change', function() {
     let loaderS = document.getElementById("loaderS");
     loaderS.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
     timeSeriesSvg.style("opacity", 0.3);
+    dropdownMenu.style.opacity = "0";
+    headerText.style.opacity = "0";
     // Imposta il valore dell'input in base allo stato dello switch
     switchInput.value = this.checked ? "ON" : "OFF";
     // Assicurati che solo uno dei due switch sia attivo
@@ -1431,8 +1511,18 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function () {
       loaderS.style.display = "none";
       timeSeriesSvg.style("opacity", 1);
+      if (switchBrushInput.value === "OFF") {
+          dropdownMenu.style.opacity = "0";
+          headerText.style.opacity = "0";
+          dropdownMenu.value = "General";
+      }
+      else {
+        dropdownMenu.style.opacity = "1";
+        headerText.style.opacity = "1";
+      }
     }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
   });
+
 
   switchBrushInput.addEventListener('change', function() {
     let loaderS = document.getElementById("loaderS");
@@ -1441,6 +1531,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let loader = document.getElementById("loader");
     loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
     barChartSvg.style("opacity", 0.3);
+    dropdownMenu.style.opacity = "0.3";
+    headerText.style.opacity = "0.3";
     // Imposta il valore dell'input in base allo stato dello switch
     switchBrushInput.value = this.checked ? "ON" : "OFF";
     // Assicurati che solo uno dei due switch sia attivo
@@ -1453,8 +1545,27 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Sunny").disabled = true;
       document.getElementById("Rainy").disabled = true;
       document.getElementById("Severe").disabled = true;
-
+            if (buttonWeatherValue !== "First") {
+              let csvFileNameVerticalBarChart = "dataset/processed/weather/" + selectedYear + "/general-accidents/generalAccidents" + buttonWeatherValue + selectedYear + ".csv";
+              barChartSvg.selectAll("*").remove();
+              drawVerticalBarChart(csvFileNameVerticalBarChart);
+            } else {
+              barChartSvg.selectAll("*").remove();
+              drawVerticalBarChart(csvFileNameVerticalBarChart);
+            }
     } else if (switchBrushInput.value === "OFF"){
+        // Rimuovi il menu a discesa solo se esiste
+        if (dropdownMenu) {
+        console.log("ESISTOOOOOOOOOOO")
+            dropdownMenu.style.opacity = "0";
+            //dropdownMenu.remove(); // Rimuovi il menu a discesa
+        }
+
+        // Rimuovi l'intestazione solo se esiste
+        if (headerText) {
+            headerText.style.opacity = "0";
+            //headerText.remove(); // Rimuovi l'intestazione sopra al menu a discesa
+        }
       document.getElementById("Cloudy").disabled = false;
       document.getElementById("Sunny").disabled = false;
       document.getElementById("Rainy").disabled = false;
@@ -1498,6 +1609,15 @@ document.addEventListener('DOMContentLoaded', function() {
       timeSeriesSvg.style("opacity", 1);
       loader.style.display = "none";
       barChartSvg.style("opacity", 1);
+      if (switchBrushInput.value === "OFF") {
+          dropdownMenu.style.opacity = "0";
+          headerText.style.opacity = "0";
+          dropdownMenu.value = "General";
+      }
+      else {
+        dropdownMenu.style.opacity = "1";
+        headerText.style.opacity = "1";
+      }
     }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
   });
 
@@ -1510,6 +1630,8 @@ document.addEventListener('DOMContentLoaded', function() {
       let loader = document.getElementById("loader");
       loader.style.display = "block"; // Assicurati che il loader sia inizialmente visibile
       barChartSvg.style("opacity", 0.3);
+      dropdownMenu.style.opacity = "0";
+      headerText.style.opacity = "0";
       // Assicurati che solo uno dei due switch sia attivo
       if (!this.checked) {
         if (switchBrushInput.value === "ON") {
@@ -1569,6 +1691,15 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(function () {
         loader.style.display = "none";
         barChartSvg.style("opacity", 1);
+      if (switchBrushInput.value === "OFF") {
+          dropdownMenu.style.opacity = "0";
+          headerText.style.opacity = "0";
+          dropdownMenu.value = "General";
+      }
+      else {
+        dropdownMenu.style.opacity = "1";
+        headerText.style.opacity = "1";
+      }
       }, 1000); // Assicurati che questo timeout sia sincronizzato con l'animazione o il caricamento effettivo del grafico
     });
 

@@ -9,6 +9,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@latest/turf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 </head>
@@ -99,7 +100,7 @@
                 <label for="MapOne">Basic</label><br>
                 <input type="radio" id="MapTwo" name="fav_languag"value="MapTwo">
                 <label for="MapTwo">Advanced</label><br>
-                <p id="nnaturee" style=" font-weight: bold; margin-top: 20px; display: none"></p>
+                <p id="nnaturee" style=" font-weight: bold; margin-top: 30px; display: none; width: 160px;"></p>
             </div>
             <div id="choroplethMap" style="height: 0px; width: 0px;">
             </div>
@@ -158,6 +159,7 @@
         <div class="col" id="animThree">
             <div><p style="display:none;"></p></div>
                 <div id="timeSeries"></div>
+                <div id="dropMenu"></div>
                 <div id="loaderS"></div>
         </div>
         <div class="col" id="animFour">

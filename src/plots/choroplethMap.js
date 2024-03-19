@@ -295,7 +295,7 @@ function drawChoroplethMap(csvFileNameChoroplethMap) {
     .attr("y", 250);
 
     var legendCells = [];
-      legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
+      legendCells = [1, 2, 4, 8, 16, 500, 3500, 5000, 6500]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
@@ -348,7 +348,13 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
   d3.csv(csvFileNameChoroplethMapTwo, function (data) {
     var filteredData = data.filter(function (row) {
       var rowDataOraIncidente = row['DataOraIncidente'];
-      return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+      if(dropdownMenu.value!=="General") {
+        var rowDataNatura = row['NaturaIncidente']; // Aggiungo questa riga per ottenere il valore della colonna "Natura"
+        return (rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate) && (rowDataNatura === dropdownMenu.value);
+      }
+      else
+        return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+
     });
 
     groupedByTownHall = new Map();
@@ -444,7 +450,7 @@ function drawChoroplethMapFromTimeSeries(formattedStartDate, formattedEndDate) {
       .attr("y", 250);
 
         var legendCells = [];
-          legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
+          legendCells = [1, 2, 4, 8, 16, 500, 3500, 5000, 6500]; // Valori per le celle
 
       choroplethMapSvg.selectAll("rect")
         .data(legendCells)
@@ -521,9 +527,9 @@ function setBarColorChoroplethMapFromOtherCharts(d) {
       return "#9ecae1";
     else if (accidentsNumber > 8 && accidentsNumber <=  16)
       return "#6baed6";
-    else if (accidentsNumber > 16 && accidentsNumber <= 2000)
+    else if (accidentsNumber > 16 && accidentsNumber <= 500)
       return "#4292c6";
-    else if (accidentsNumber > 2000 && accidentsNumber <= 3500)
+    else if (accidentsNumber > 500 && accidentsNumber <= 3500)
       return "#2171b5";
     else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
       return "#08519c";
@@ -551,9 +557,9 @@ function setBarColorChoroplethMapGeneral(d) {
       return "#9ecae1";
     else if (accidentsNumber > 8 && accidentsNumber <=  16)
       return "#6baed6";
-    else if (accidentsNumber > 16 && accidentsNumber <= 2000)
+    else if (accidentsNumber > 16 && accidentsNumber <= 500)
       return "#4292c6";
-    else if (accidentsNumber > 2000 && accidentsNumber <= 3500)
+    else if (accidentsNumber > 500 && accidentsNumber <= 3500)
       return "#2171b5";
     else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
       return "#08519c";
@@ -584,9 +590,9 @@ function setBarColorChoroplethMap(d) {
       return "#9ecae1";
     else if (accidentsNumber > 8 && accidentsNumber <=  16)
       return "#6baed6";
-    else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
+    else if (accidentsNumber > 16 && accidentsNumber <= 500)
       return "#4292c6";
-    else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
+    else if (accidentsNumber > 500 && accidentsNumber <= 3500)
       return "#2171b5";
     else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
       return "#08519c";
@@ -609,9 +615,9 @@ function setLegendColorsChoroplethMapGeneral(accidentsNumber) {
       return "#9ecae1";
     else if (accidentsNumber > 8 && accidentsNumber <=  16)
       return "#6baed6";
-    else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
+    else if (accidentsNumber > 16 && accidentsNumber <= 500)
       return "#4292c6";
-    else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
+    else if (accidentsNumber > 500 && accidentsNumber <= 3500)
       return "#2171b5";
     else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
       return "#08519c";
@@ -632,9 +638,9 @@ function setLegendColorsChoroplethMap(accidentsNumber) {
       return "#9ecae1";
     else if (accidentsNumber > 8 && accidentsNumber <=  16)
       return "#6baed6";
-    else if (accidentsNumber > 1000 && accidentsNumber <= 2500)
+    else if (accidentsNumber > 16 && accidentsNumber <= 500)
       return "#4292c6";
-    else if (accidentsNumber > 2500 && accidentsNumber <= 3500)
+    else if (accidentsNumber > 500 && accidentsNumber <= 3500)
       return "#2171b5";
     else if (accidentsNumber > 3500 && accidentsNumber <= 5000)
       return "#08519c";
@@ -1036,12 +1042,15 @@ function colorizeMap(csvFileNameChoroplethMap) {
 
                 console.log(accidentsNumber); //Numero di incidenti per il municipio corrente
                 // Imposta l'opacità del layer corrente a 1 e degli altri a 0.3
-                map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
-                map.getStyle().layers.forEach(function(layer) {
-                    if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
-                        map.setPaintProperty(layer.id, 'fill-opacity', 0.4);
-                    }
-                });
+
+                 if (map.getZoom() <= 9 && !brushIsActive) {
+                    map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
+                    map.getStyle().layers.forEach(function(layer) {
+                        if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
+                            map.setPaintProperty(layer.id, 'fill-opacity', 0.4);
+                        }
+                    });
+                }
                 // Creazione e visualizzazione del tooltip
                 tooltipChor = d3.select("#popupChoropleth");
                 tooltipChor.style("opacity", 0.9);
@@ -1230,7 +1239,12 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
   d3.csv(csvFileNameChoroplethMapTwo, function (data) {
     var filteredData = data.filter(function (row) {
       var rowDataOraIncidente = row['DataOraIncidente'];
-      return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
+      if(dropdownMenu.value!=="General") {
+        var rowDataNatura = row['NaturaIncidente']; // Aggiungo questa riga per ottenere il valore della colonna "Natura"
+        return (rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate) && (rowDataNatura === dropdownMenu.value);
+      }
+      else
+        return rowDataOraIncidente >= formattedStartDate && rowDataOraIncidente <= formattedEndDate;
     });
 
     groupedByTownHall = new Map();
@@ -1506,7 +1520,7 @@ function drawLegendMap(){
     .attr("y", 250);
 
   var legendCells = [];
-  legendCells = [1, 2, 4, 8, 16, 2000, 3500, 5000, 6500]; // Valori per le celle
+  legendCells = [1, 2, 4, 8, 16, 500, 3500, 5000, 6500]; // Valori per le celle
 
   choroplethMapSvg.selectAll("rect")
     .data(legendCells)
