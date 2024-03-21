@@ -190,6 +190,9 @@ bucketButton.addEventListener("click", function () {
   weatherOffLabel.style.display = "none";
   onLabel.style.display = "none";
   offLabel.style.display = "block";
+  dropdownMenu.style.opacity = "0";
+  headerText.style.opacity = "0";
+  dropdownMenu.value = "General";
 
   sliderSwitch.classList.toggle('checked', switchInput.checked);
   sliderBrushSwitch.classList.toggle('checked', switchBrushInput.checked);

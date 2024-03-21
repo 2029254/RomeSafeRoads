@@ -831,6 +831,42 @@ function drawPoints(data, color) {
 function drawTimeSeriesChart(csvFileName){
   incidentiPerIntervallo = []
 
+      let result;
+      let value  = 21;
+              switch(dropdownMenu.value) {
+                case 'General':
+                    result = "General\naccidents"
+                    value = 15.5;
+                    break;
+                case 'C1':
+                   result = "Pedestrian hit";
+                   value = 15.5;
+                   break;
+                case 'C2':
+                   result = "Vehicles collision\n(moving)";
+                   break;
+                case 'C3':
+                   result ="Vehicles collision\nwith a stationary\nvehicle";
+                   value = 27;
+                   break;
+                case 'C4':
+                   result = "Rear-end collision";
+                   value = 15.5;
+                   break;
+                case 'C5':
+                   result = "Collision\nwith obstacle";
+                   break;
+                case 'C6':
+                   result = "Sudden braking\nand vehicle fall";
+                   break;
+                case 'C7':
+                   result = "Overturning and\nrun-off-road";
+                   break;
+                default:
+                   result = "Side/head-on\ncollision"
+              }
+
+
   d3.csv(csvFileName, function (data) {
     timeSeriesDataDaily = data.filter(function (row) {
       return row['DataOraIncidente', 'NumeroIncidenti'];
@@ -904,7 +940,8 @@ function drawTimeSeriesChart(csvFileName){
       timeSeriesSvg.selectAll("*").remove();
       if (selectedYear !== "2022") drawUnit(20); else drawUnit(0);
       keysLegends = []
-      drawLegend("General\naccidents", "#ded6bf", 15.5);
+      drawLegend(result, "#ded6bf", value);
+
       currentCsvFileName = "dataset/processed/timeSeries/timeSeriesData" + selectedYear + "Daily.csv";
       setAxesScale(timeSeriesData);
       drawAxes(timeSeriesData);
@@ -1328,8 +1365,14 @@ function drawLegend(text, color, value) {
     // Aggiungi un'area di testo per la legenda
     const textElement = legend.append("text")
       .attr("x", 587 + size * 1.2)
-      .attr("y", function(d,i){
-        return 108 + i*(size+5) + (size/2)}) // 30 is where the first dot appears. 25 is the distance between dots
+    .attr("y", function(d, i) {
+      if (switchBrushInput.value === "OFF") {
+        return 108 + i * (size + 5) + (size / 2);
+      } else {
+        if (dropdownMenu.value === "C1" || dropdownMenu.value ==="C4") return 114 + i * (size + 5) + (size / 2);
+        else return 108 + i * (size + 5) + (size / 2);
+      }
+    })
       .style("fill", "#524a32")
       .style("font-family", "Lora")
       .attr("text-anchor", "left");
@@ -1341,7 +1384,7 @@ function drawLegend(text, color, value) {
         .text(lines[i])
         .attr("x", 570 + size * 1.2)
         .attr("text-anchor", "left")
-    .attr("dy", i === 0 ? 0 : "1.1em");
+        .attr("dy", i === 0 ? 0 : "1.1em");
     }
   }
 
@@ -1430,6 +1473,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Imposta gli attributi per il menu a discesa (puoi personalizzare questo passaggio in base alle tue esigenze)
     dropdownMenu.addEventListener("change", function() {
+    //switchBrushInput.value = "ON"
+    console.log("IL VALOREEEEEE: "+dropdownMenu.value)
+    console.log("IL RBFRA: "+switchBrushInput.value)
       timeSeriesSvg.selectAll("*").remove();
       if (this.value !== "General")
         drawTimeSeriesChart("dataset/processed/timeSeries/" + selectedYear + "/timeSeriesNature" + this.value + ".csv");

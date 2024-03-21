@@ -1326,13 +1326,14 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
                 let accidentsNumber = townHallAndAccidentsNumber ? townHallAndAccidentsNumber : 0;
 
                 console.log(accidentsNumber); //Numero di incidenti per il municipio corrente
-                // Imposta l'opacità del layer corrente a 1 e degli altri a 0.3
-                map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
-                map.getStyle().layers.forEach(function(layer) {
-                    if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
-                        map.setPaintProperty(layer.id, 'fill-opacity', 0.4);
-                    }
-                });
+                 if (map.getZoom() <= 9 && !brushIsActive) {
+                    map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
+                    map.getStyle().layers.forEach(function(layer) {
+                        if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
+                            map.setPaintProperty(layer.id, 'fill-opacity', 0.4);
+                        }
+                    });
+                }
                 // Creazione e visualizzazione del tooltip
                 tooltipChor = d3.select("#popupChoropleth");
                 tooltipChor.style("opacity", 0.9);
