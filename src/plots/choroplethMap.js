@@ -1051,6 +1051,14 @@ function colorizeMap(csvFileNameChoroplethMap) {
                         }
                     });
                 }
+                else if (brushIsActive && map.getZoom() > 9) {
+                    map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
+                    map.getStyle().layers.forEach(function(layer) {
+                        if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
+                            map.setPaintProperty(layer.id, 'fill-opacity', 0.8);
+                        }
+                    });
+                }
                 // Creazione e visualizzazione del tooltip
                 tooltipChor = d3.select("#popupChoropleth");
                 tooltipChor.style("opacity", 0.9);
@@ -1334,6 +1342,15 @@ function colorizeMapFromTimeSeries(formattedStartDate, formattedEndDate) {
                         }
                     });
                 }
+                else if (brushIsActive && map.getZoom() > 9) {
+                    map.setPaintProperty('municipi-fill-' + municipioAttuale + "-" + stringaRandom, 'fill-opacity', 1);
+                    map.getStyle().layers.forEach(function(layer) {
+                        if (layer.id.startsWith('municipi-fill-') && layer.id !== 'municipi-fill-' + municipioAttuale + "-" + stringaRandom) {
+                            map.setPaintProperty(layer.id, 'fill-opacity', 0.8);
+                        }
+                    });
+                }
+
                 // Creazione e visualizzazione del tooltip
                 tooltipChor = d3.select("#popupChoropleth");
                 tooltipChor.style("opacity", 0.9);
